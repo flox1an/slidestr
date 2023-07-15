@@ -1,0 +1,63 @@
+#root {
+  overflow: hidden;
+}
+
+body {
+  overflow: hidden;
+}
+
+@keyframes showImage {
+  from {
+    scale: 1.2;
+    opacity: 0;
+  }
+
+  10% {
+    scale: 1.2;
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  to {
+    scale: 1;
+    opacity: 0;
+  }
+}
+
+.author-info a {
+  color: white;
+}
+
+.author-info {
+  position: absolute;
+  bottom: 2em;
+  left: 2em;
+  z-index: 200;
+}
+
+.author-info img {
+  border-radius: 8px;
+  margin-bottom: 0.5em;
+  display: block;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  scale: 1;
+  opacity: 0;
+  animation-duration: 12s;
+  animation-timing-function: ease-in;
+  animation-name: showImage;
+}
