@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { NDKFilter, NDKUser } from "@nostr-dev-kit/ndk";
 import AuthorProfile from "./AuthorProfile";
 import IconFullScreen from "./IconFullScreen";
+import useWindowSize from "./useWindowSize";
 
 type NostrImage = {
   url: string;
@@ -72,6 +73,7 @@ const App = () => {
   const images = useRef<NostrImage[]>([]);
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const upcommingImage = useRef<NostrImage>();
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     const postSubscription = ndk.subscribe(buildFilter());
@@ -133,9 +135,8 @@ const App = () => {
   }, []);
 
   const fullScreen = useMemo(
-    () =>
-      screen.width == window.innerWidth && screen.height == window.innerHeight,
-    [activeImages] // Hack to force update
+    () => document.fullscreenElement !== null,
+    [windowSize] // Hack to force update
   );
 
   const activeNpub = upcommingImage?.current?.author?.npub;
@@ -144,14 +145,7 @@ const App = () => {
   return (
     <>
       {!fullScreen && (
-        <div
-          style={{
-            position: "absolute",
-            top: "2em",
-            right: "2em",
-            zIndex: 200,
-          }}
-        >
+        <div className="controls">
           <button
             onClick={() =>
               document?.getElementById("root")?.requestFullscreen()

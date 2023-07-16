@@ -32,9 +32,9 @@ body {
 
 .author-info {
   position: absolute;
-  bottom: 2em;
-  left: 2em;
-  z-index: 200;  
+  bottom: 1em;
+  left: 1em;
+  z-index: 200;
 }
 
 .author-info img {
@@ -58,5 +58,21 @@ body {
   opacity: 0;
   animation-duration: 12s;
   animation-timing-function: ease-in;
-  animation-name: showImage 
+  animation-name: showImage;
+}
+
+.controls {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  z-index: 200;
+}
+
+.controls button {
+  background-color: transparent;
+  padding: 0.5em;
+}
+
+.controls button:hover {
+  background-color: rgba(0, 0, 0, 0.4);
 }
