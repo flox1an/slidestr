@@ -5,7 +5,6 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { NDKFilter, NDKUser } from "@nostr-dev-kit/ndk";
 import AuthorProfile from "./AuthorProfile";
 import IconFullScreen from "./IconFullScreen";
-import useWindowSize from "./useWindowSize";
 
 type NostrImage = {
   url: string;
@@ -73,7 +72,6 @@ const App = () => {
   const images = useRef<NostrImage[]>([]);
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const upcommingImage = useRef<NostrImage>();
-  const windowSize = useWindowSize();
 
   useEffect(() => {
     const postSubscription = ndk.subscribe(buildFilter());
@@ -134,10 +132,7 @@ const App = () => {
     };
   }, []);
 
-  const fullScreen = useMemo(
-    () => document.fullscreenElement !== null,
-    [windowSize] // Hack to force update
-  );
+  const fullScreen = document.fullscreenElement !== null;
 
   const activeNpub = upcommingImage?.current?.author?.npub;
   const activeProfile = activeNpub && getProfile(activeNpub);
