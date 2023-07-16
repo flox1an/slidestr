@@ -37,11 +37,15 @@ body {
   z-index: 200;
 }
 
-.author-info img {
-  border-radius: 8px;
+.author-image {
   margin-bottom: 0.5em;
   display: block;
   transition: opacity 1s ease-in-out;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
 }
 
 .slide {

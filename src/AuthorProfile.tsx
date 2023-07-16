@@ -8,23 +8,17 @@ type AvatarImageProps = {
 };
 
 const AuthorProfile = ({ src, author, npub }: AvatarImageProps) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
   return (
     <div className="author-info">
       <a href={`https://nostrapp.link/#${npub}`} target="_blank">
         <div>
           {src && (
-            <img
+            <div
+              className="author-image"
               style={{
-                opacity: imageLoaded ? 1 : 0,
+                backgroundImage: `url(${src})`,
               }}
-              onLoad={() => setImageLoaded(true)}
-              src={src}
-              alt={author}
-              width={64}
-              height={64}
-            ></img>
+            ></div>
           )}
           {author}
         </div>
