@@ -126,7 +126,7 @@ const App = () => {
       if (upcommingImage.current === undefined) animateImages();
     }, 500);
 
-    const intervalHandle = setInterval(() => animateImages(), 7000);
+    const intervalHandle = setInterval(() => animateImages(), 8000);
     return () => {
       clearInterval(intervalHandle);
     };
