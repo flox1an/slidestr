@@ -1,11 +1,12 @@
 import { useNDK } from "@nostr-dev-kit/ndk-react";
 import "./App.css";
 import { nip19 } from "nostr-tools";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NDKFilter, NDKUser } from "@nostr-dev-kit/ndk";
 import AuthorProfile from "./AuthorProfile";
 import IconFullScreen from "./IconFullScreen";
 import Slide from "./Slide";
+import { Helmet } from "react-helmet";
 
 type NostrImage = {
   url: string;
@@ -24,7 +25,9 @@ const parseUrl = () => {
   return { npub, tags };
 };
 
-const buildFilter = () => {
+const buildFilter = (
+  setTitle: React.Dispatch<React.SetStateAction<string>>
+) => {
   const filter: NDKFilter = {
     kinds: [1],
     limit: 1000,
@@ -37,7 +40,10 @@ const buildFilter = () => {
   } else {
     if (tags) {
       filter["#t"] = tags.split(",");
+      setTitle("#" + tags.replace(",", " #") + " | nostr-slideshow");
     } else {
+      setTitle("Random photos from popular hashtags | nostr-slideshow");
+
       // Default tags
       filter["#t"] = [
         "photography",
@@ -73,9 +79,10 @@ const App = () => {
   const images = useRef<NostrImage[]>([]);
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const upcommingImage = useRef<NostrImage>();
+  const [title, setTitle] = useState("nostr-slideshow");
 
   useEffect(() => {
-    const postSubscription = ndk.subscribe(buildFilter());
+    const postSubscription = ndk.subscribe(buildFilter(setTitle));
 
     postSubscription.on("event", (event) => {
       setPosts((oldPosts) => {
@@ -138,8 +145,20 @@ const App = () => {
   const activeNpub = upcommingImage?.current?.author?.npub;
   const activeProfile = activeNpub && getProfile(activeNpub);
 
+  useEffect(() => {
+    const {npub}=parseUrl();
+    if (npub && activeProfile && activeProfile.displayName) {
+      setTitle(
+        activeProfile.displayName || activeProfile.name + " | nostr-slideshow"
+      );
+    }
+  }, [activeProfile]);
+
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       {!fullScreen && (
         <div className="controls">
           <button
