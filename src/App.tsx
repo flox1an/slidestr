@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { NDKFilter, NDKUser } from "@nostr-dev-kit/ndk";
 import AuthorProfile from "./AuthorProfile";
 import IconFullScreen from "./IconFullScreen";
+import Slide from "./Slide";
 
 type NostrImage = {
   url: string;
@@ -160,13 +161,7 @@ const App = () => {
       )}
 
       {activeImages.map((image) => (
-        <div
-          key={image.url}
-          className="slide"
-          style={{
-            backgroundImage: `url(${image.url})`,
-          }}
-        ></div>
+        <Slide key={image.url} url={image.url} />
       ))}
     </>
   );

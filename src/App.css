@@ -26,6 +26,17 @@ body {
   }
 }
 
+
+@keyframes showAuthor {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .author-info a {
   color: white;
 }
@@ -46,6 +57,9 @@ body {
   width: 64px;
   height: 64px;
   border-radius: 12px;
+  animation-duration: .5s;
+  animation-timing-function: ease-in;
+  animation-name: showAuthor;
 }
 
 .slide {

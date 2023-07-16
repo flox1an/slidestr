@@ -1,5 +1,5 @@
-import { useState } from "react";
 import "./App.css";
+import useImageLoaded from "./useImageLoaded";
 
 type AvatarImageProps = {
   src?: string;
@@ -8,11 +8,12 @@ type AvatarImageProps = {
 };
 
 const AuthorProfile = ({ src, author, npub }: AvatarImageProps) => {
+  const avatarLoaded = useImageLoaded(src);
   return (
     <div className="author-info">
       <a href={`https://nostrapp.link/#${npub}`} target="_blank">
         <div>
-          {src && (
+          {avatarLoaded && (
             <div
               className="author-image"
               style={{
