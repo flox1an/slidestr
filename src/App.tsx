@@ -24,6 +24,12 @@ FEATURES:
 - Block certain authors / npbs? Maybe trust lookup @ nostr.band?
 - Add warning start page with localStorge to remember
 - Add config/settigns dialog
+- Support people lists and note lists 
+- flag/mute button?
+- Add to album button? Favorite button?
+- Prevent duplicates (shuffle?), prevent same author twice in a row
+- show content warning?
+- Support Deleted Events
 */
 
 type NostrImage = {
@@ -33,12 +39,14 @@ type NostrImage = {
 
 const buildFilter = (
   setTitle: React.Dispatch<React.SetStateAction<string>>,
+  until?: number,
   tags?: string,
   npub?: string
 ) => {
   const filter: NDKFilter = {
     kinds: [1],
-    limit: 1000,
+    limit: 50, // some relays have a low limit
+    until,
   };
 
   if (npub) {
@@ -84,8 +92,19 @@ const isReply = (event: any) => {
   );
 };
 
+const hasContentWarning = (event: any) => {
+  // ["content-warning", "NSFW: implied nudity"]
+  return (
+    event.tags.filter((t: string[]) => t[0] === "content-warning").length > 0
+  );
+};
+
+let oldest = Infinity;
+let maxFetchCount = 30;
+let eventsReceived = 0;
+
 const App = () => {
-  const { ndk, getProfile } = useNDK();
+  const { ndk, getProfile, loadNdk } = useNDK();
   const [posts, setPosts] = useState<any[]>([]);
   const images = useRef<NostrImage[]>([]);
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
@@ -93,13 +112,29 @@ const App = () => {
   const [title, setTitle] = useState("slidestr.net");
   const { tags, npub } = useParams();
 
-  useEffect(() => {
-    const postSubscription = ndk.subscribe(buildFilter(setTitle, tags, npub));
+  const fetch = () => {
+    const until = oldest < Infinity ? oldest : undefined;
+    const untilPerRelay: { [n: string]: number } = {};
+    eventsReceived = 0;
+    console.log(`starting fetch with until ${until}`);
+
+    const postSubscription = ndk.subscribe(
+      buildFilter(setTitle, until, tags, npub)
+    );
 
     postSubscription.on("event", (event) => {
+      eventsReceived++;
+      if (
+        untilPerRelay[event.relay.url] === undefined ||
+        event.created_at < untilPerRelay[event.relay.url]
+      ) {
+        untilPerRelay[event.relay.url] = event.created_at;
+      }
+
       setPosts((oldPosts) => {
         if (
           !isReply(event) &&
+          (npub !== undefined || !hasContentWarning(event)) &&  // only allow content warnings on profile content
           oldPosts.findIndex((p) => p.id === event.id) === -1
         ) {
           return [...oldPosts, event];
@@ -107,7 +142,30 @@ const App = () => {
         return oldPosts;
       });
     });
-    
+
+    postSubscription.on("notice", (notice) => {
+      console.log("NOTICE: ", notice);
+    });
+
+    if (maxFetchCount > 0) {
+      maxFetchCount--;
+      setTimeout(() => {
+        console.log(JSON.stringify(untilPerRelay));
+        console.log(`eventsReceived ${eventsReceived}`);
+
+        oldest = Math.max(...Object.values(untilPerRelay));
+        if (eventsReceived > 0) fetch();
+      }, 3000);
+    }
+  };
+
+  useEffect(() => {
+    loadNdk([
+      "wss://relay.nostr.band",
+      "wss://nos.lol",
+      "wss://relay.mostr.pub",
+    ]);
+    fetch();
   }, []);
 
   const animateImages = () => {
@@ -140,14 +198,12 @@ const App = () => {
         .map((url) => ({ url, author: p.author }));
     });
     console.log(images.current.length);
+
+    // Make sure we have an image to start with but only trigger once
+    if (upcommingImage.current === undefined) animateImages();
   }, [posts]);
 
   useEffect(() => {
-    setTimeout(() => {
-      // Make sure we have an image to start with but only trigger once
-      if (upcommingImage.current === undefined) animateImages();
-    }, 500);
-
     const intervalHandle = setInterval(() => animateImages(), 8000);
     return () => {
       clearInterval(intervalHandle);
