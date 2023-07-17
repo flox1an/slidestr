@@ -7,33 +7,41 @@ import AuthorProfile from "./AuthorProfile";
 import IconFullScreen from "./IconFullScreen";
 import Slide from "./Slide";
 import { Helmet } from "react-helmet";
+import { useParams } from "react-router-dom";
+/*
+FEATURES:
+- show tags 
+- show content text (how to beautify?, crop?)
+- jump to note
+- negative hashtag filter
+- login to use your own feed
+- login to use your your blocked/muted list
+- Keypoard shortcuts, arrow, spacebar
+- jump tu next image
+- jump to previous image????
+- pause?
+- Save-Mode and block NSFW content??
+
+
+
+
+
+*/
 
 type NostrImage = {
   url: string;
   author: NDKUser;
 };
 
-const parseUrl = () => {
-  let npub: string | undefined = undefined;
-  let tags: string | undefined = undefined;
-  if (window.location.pathname.startsWith("/npub")) {
-    npub = window.location.pathname.replace("/", "");
-  }
-  if (window.location.hash.startsWith("#")) {
-    tags = window.location.hash.replace("#", "");
-  }
-  return { npub, tags };
-};
-
 const buildFilter = (
-  setTitle: React.Dispatch<React.SetStateAction<string>>
+  setTitle: React.Dispatch<React.SetStateAction<string>>,
+  tags?: string,
+  npub?: string
 ) => {
   const filter: NDKFilter = {
     kinds: [1],
-    limit: 1000,
+    limit: 2000,
   };
-
-  const { npub, tags } = parseUrl();
 
   if (npub) {
     filter.authors = [nip19.decode(npub).data as string];
@@ -80,9 +88,10 @@ const App = () => {
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const upcommingImage = useRef<NostrImage>();
   const [title, setTitle] = useState("nostr-slideshow");
+  const { tags, npub } = useParams();
 
   useEffect(() => {
-    const postSubscription = ndk.subscribe(buildFilter(setTitle));
+    const postSubscription = ndk.subscribe(buildFilter(setTitle, tags, npub));
 
     postSubscription.on("event", (event) => {
       setPosts((oldPosts) => {
@@ -146,8 +155,11 @@ const App = () => {
   const activeProfile = activeNpub && getProfile(activeNpub);
 
   useEffect(() => {
-    const {npub}=parseUrl();
-    if (npub && activeProfile && activeProfile.displayName) {
+    if (
+      npub &&
+      activeProfile &&
+      (activeProfile.displayName || activeProfile.name)
+    ) {
       setTitle(
         activeProfile.displayName || activeProfile.name + " | nostr-slideshow"
       );
