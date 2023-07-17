@@ -21,6 +21,9 @@ FEATURES:
 - jump to previous image????
 - pause?
 - Save-Mode and block NSFW content??
+- Block certain authors / npbs? Maybe trust lookup @ nostr.band?
+- Add warning start page with localStorge to remember
+- Add config/settigns dialog
 */
 
 type NostrImage = {
@@ -43,9 +46,9 @@ const buildFilter = (
   } else {
     if (tags) {
       filter["#t"] = tags.split(",");
-      setTitle("#" + tags.replace(",", " #") + " | nostr-slideshow");
+      setTitle("#" + tags.replace(",", " #") + " | slidestr.net");
     } else {
-      setTitle("Random photos from popular hashtags | nostr-slideshow");
+      setTitle("Random photos from popular hashtags | slidestr.net");
 
       // Default tags
       filter["#t"] = [
@@ -87,7 +90,7 @@ const App = () => {
   const images = useRef<NostrImage[]>([]);
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const upcommingImage = useRef<NostrImage>();
-  const [title, setTitle] = useState("nostr-slideshow");
+  const [title, setTitle] = useState("slidestr.net");
   const { tags, npub } = useParams();
 
   useEffect(() => {
@@ -163,7 +166,7 @@ const App = () => {
       (activeProfile.displayName || activeProfile.name)
     ) {
       setTitle(
-        activeProfile.displayName || activeProfile.name + " | nostr-slideshow"
+        activeProfile.displayName || activeProfile.name + " | slidestr.net"
       );
     }
   }, [activeProfile]);
