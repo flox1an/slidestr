@@ -21,11 +21,6 @@ FEATURES:
 - jump to previous image????
 - pause?
 - Save-Mode and block NSFW content??
-
-
-
-
-
 */
 
 type NostrImage = {
@@ -40,7 +35,7 @@ const buildFilter = (
 ) => {
   const filter: NDKFilter = {
     kinds: [1],
-    limit: 2000,
+    limit: 1000,
   };
 
   if (npub) {
@@ -68,9 +63,14 @@ const buildFilter = (
   return filter;
 };
 
+const urlFix = (url: string) => {
+  // use cdn for nostr.build
+  return url.replace(/https?:\/\/nostr.build/, "https://cdn.nostr.build");
+};
+
 function extractImageUrls(text: string): string[] {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  return text.match(urlRegex) || [];
+  return (text.match(urlRegex) || []).map((u) => urlFix(u));
 }
 
 const isReply = (event: any) => {
@@ -104,6 +104,7 @@ const App = () => {
         return oldPosts;
       });
     });
+    
   }, []);
 
   const animateImages = () => {
@@ -135,6 +136,7 @@ const App = () => {
         )
         .map((url) => ({ url, author: p.author }));
     });
+    console.log(images.current.length);
   }, [posts]);
 
   useEffect(() => {
@@ -185,7 +187,7 @@ const App = () => {
 
       {activeProfile && (
         <AuthorProfile
-          src={activeProfile.image}
+          src={urlFix(activeProfile.image || "")}
           author={activeProfile.displayName || activeProfile.name}
           npub={activeNpub}
         ></AuthorProfile>
