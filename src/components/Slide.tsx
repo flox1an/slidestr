@@ -1,15 +1,16 @@
-import useImageLoaded from "./useImageLoaded";
+import useImageLoaded from "../utils/useImageLoaded";
 
 type SlideProps = {
   url: string;
+  paused: boolean;
 };
 
-const Slide = ({ url }: SlideProps) => {
+const Slide = ({ url, paused }: SlideProps) => {
   const loaded = useImageLoaded(url);
   return (
     loaded && (
       <div
-        className="slide"
+        className={`slide ${paused ? "paused" : ""}`}
         style={{
           backgroundImage: `url(${url})`,
         }}

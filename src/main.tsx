@@ -19,6 +19,10 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
+    path: "p/:npub",
+    element: <App />,
+  },
+  {
     path: "/:npub",
     element: <App />,
   },
