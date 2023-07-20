@@ -1,13 +1,21 @@
 import { useNDK } from "@nostr-dev-kit/ndk-react";
 import "./SlideShow.css";
-import { nip19 } from "nostr-tools";
 import React, { useEffect, useRef, useState } from "react";
-import { NDKFilter, NDKUser } from "@nostr-dev-kit/ndk";
 import AuthorProfile from "./AuthorProfile";
 import IconFullScreen from "./IconFullScreen";
 import Slide from "./Slide";
 import { Helmet } from "react-helmet";
 import useDebouncedEffect from "../utils/useDebouncedEffect";
+import {
+  NostrImage,
+  buildFilter,
+  extractImageUrls,
+  hasContentWarning,
+  isReply,
+  prepareContent,
+  urlFix,
+} from "./nostrImageDownload";
+import { appName } from "./env";
 
 /*
 FEATURES:
@@ -33,80 +41,6 @@ FEATURES:
 - Support Deleted Events
 */
 
-type NostrImage = {
-  url: string;
-  author: NDKUser;
-  content?: string;
-};
-
-const buildFilter = (
-  setTitle: React.Dispatch<React.SetStateAction<string>>,
-  until?: number,
-  tags?: string,
-  npub?: string
-) => {
-  const filter: NDKFilter = {
-    kinds: [1],
-    limit: 30, // some relays have a low limit
-    until,
-  };
-
-  if (npub) {
-    filter.authors = [nip19.decode(npub).data as string];
-  } else {
-    if (tags) {
-      filter["#t"] = tags.split(",");
-      setTitle("#" + tags.replace(",", " #") + " | slidestr.net");
-    } else {
-      setTitle("Random photos from popular hashtags | slidestr.net");
-
-      // Default tags
-      filter["#t"] = [
-        "photography",
-        "photostr",
-        "artstr",
-        "art",
-        "catstr",
-        "dogstr",
-        "nature",
-      ];
-    }
-  }
-
-  return filter;
-};
-
-const prepareContent = (content: string) => {
-  return content
-    .replace(/https?:\/\/[^\s]+/g, "") // remove all urls
-    .replace(/#[^\s]+/g, ""); // remove all tags
-};
-
-const urlFix = (url: string) => {
-  // use cdn for nostr.build
-  return url.replace(/https?:\/\/nostr.build/, "https://cdn.nostr.build");
-};
-
-function extractImageUrls(text: string): string[] {
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
-  return (text.match(urlRegex) || []).map((u) => urlFix(u));
-}
-
-const isReply = (event: any) => {
-  // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
-  return (
-    event.tags.filter((t: string[]) => t[0] === "e" && t[3] === "reply")
-      .length > 0
-  );
-};
-
-const hasContentWarning = (event: any) => {
-  // ["content-warning", "NSFW: implied nudity"]
-  return (
-    event.tags.filter((t: string[]) => t[0] === "content-warning").length > 0
-  );
-};
-
 let oldest = Infinity;
 let maxFetchCount = 20;
 let eventsReceived = 0;
@@ -122,7 +56,7 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
   const images = useRef<NostrImage[]>([]);
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const upcommingImage = useRef<NostrImage>();
-  const [title, setTitle] = useState("slidestr.net");
+  const [title, setTitle] = useState(appName);
   const [paused, setPaused] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeNpub, setActiveNpub] = useState<string | undefined>(undefined);
@@ -224,7 +158,7 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
 
     // Make sure we have an image to start with but only trigger once
     if (upcommingImage.current === undefined && images.current.length > 2) {
-        queueNextImage(1000);
+      queueNextImage(1000);
     }
   }, [posts]);
 
@@ -279,7 +213,7 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
       (activeProfile.displayName || activeProfile.name)
     ) {
       setTitle(
-        activeProfile.displayName || activeProfile.name + " | slidestr.net"
+        activeProfile.displayName || activeProfile.name + ` | ${appName}`
       );
     }
   }, [activeProfile]);
@@ -313,11 +247,23 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
         </div>
       )}
 
-      {loading && <div className="centerSymbol spin">
-      <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M256 96c38.4 0 73.7 13.5 101.3 36.1l-32.6 32.6c-4.6 4.6-5.9 11.5-3.5 17.4s8.3 9.9 14.8 9.9H448c8.8 0 16-7.2 16-16V64c0-6.5-3.9-12.3-9.9-14.8s-12.9-1.1-17.4 3.5l-34 34C363.4 52.6 312.1 32 256 32c-10.9 0-21.5 .8-32 2.3V99.2c10.3-2.1 21-3.2 32-3.2zM132.1 154.7l32.6 32.6c4.6 4.6 11.5 5.9 17.4 3.5s9.9-8.3 9.9-14.8V64c0-8.8-7.2-16-16-16H64c-6.5 0-12.3 3.9-14.8 9.9s-1.1 12.9 3.5 17.4l34 34C52.6 148.6 32 199.9 32 256c0 10.9 .8 21.5 2.3 32H99.2c-2.1-10.3-3.2-21-3.2-32c0-38.4 13.5-73.7 36.1-101.3zM477.7 224H412.8c2.1 10.3 3.2 21 3.2 32c0 38.4-13.5 73.7-36.1 101.3l-32.6-32.6c-4.6-4.6-11.5-5.9-17.4-3.5s-9.9 8.3-9.9 14.8V448c0 8.8 7.2 16 16 16H448c6.5 0 12.3-3.9 14.8-9.9s1.1-12.9-3.5-17.4l-34-34C459.4 363.4 480 312.1 480 256c0-10.9-.8-21.5-2.3-32zM256 416c-38.4 0-73.7-13.5-101.3-36.1l32.6-32.6c4.6-4.6 5.9-11.5 3.5-17.4s-8.3-9.9-14.8-9.9H64c-8.8 0-16 7.2-16 16l0 112c0 6.5 3.9 12.3 9.9 14.8s12.9 1.1 17.4-3.5l34-34C148.6 459.4 199.9 480 256 480c10.9 0 21.5-.8 32-2.3V412.8c-10.3 2.1-21 3.2-32 3.2z"/></svg>        
-      </div>}
+      {loading && (
+        <div className="centerSymbol spin">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="1em"
+            viewBox="0 0 512 512"
+          >
+            <path d="M256 96c38.4 0 73.7 13.5 101.3 36.1l-32.6 32.6c-4.6 4.6-5.9 11.5-3.5 17.4s8.3 9.9 14.8 9.9H448c8.8 0 16-7.2 16-16V64c0-6.5-3.9-12.3-9.9-14.8s-12.9-1.1-17.4 3.5l-34 34C363.4 52.6 312.1 32 256 32c-10.9 0-21.5 .8-32 2.3V99.2c10.3-2.1 21-3.2 32-3.2zM132.1 154.7l32.6 32.6c4.6 4.6 11.5 5.9 17.4 3.5s9.9-8.3 9.9-14.8V64c0-8.8-7.2-16-16-16H64c-6.5 0-12.3 3.9-14.8 9.9s-1.1 12.9 3.5 17.4l34 34C52.6 148.6 32 199.9 32 256c0 10.9 .8 21.5 2.3 32H99.2c-2.1-10.3-3.2-21-3.2-32c0-38.4 13.5-73.7 36.1-101.3zM477.7 224H412.8c2.1 10.3 3.2 21 3.2 32c0 38.4-13.5 73.7-36.1 101.3l-32.6-32.6c-4.6-4.6-11.5-5.9-17.4-3.5s-9.9 8.3-9.9 14.8V448c0 8.8 7.2 16 16 16H448c6.5 0 12.3-3.9 14.8-9.9s1.1-12.9-3.5-17.4l-34-34C459.4 363.4 480 312.1 480 256c0-10.9-.8-21.5-2.3-32zM256 416c-38.4 0-73.7-13.5-101.3-36.1l32.6-32.6c4.6-4.6 5.9-11.5 3.5-17.4s-8.3-9.9-14.8-9.9H64c-8.8 0-16 7.2-16 16l0 112c0 6.5 3.9 12.3 9.9 14.8s12.9 1.1 17.4-3.5l34-34C148.6 459.4 199.9 480 256 480c10.9 0 21.5-.8 32-2.3V412.8c-10.3 2.1-21 3.2-32 3.2z" />
+          </svg>
+        </div>
+      )}
 
-      {activeContent && <div className="bottomPanel show">{activeContent}</div>}
+      {activeContent && (
+        <div className="bottomPanel show">
+          <div className="caption">{activeContent}</div>
+        </div>
+      )}
       {activeProfile && (
         <AuthorProfile
           src={urlFix(activeProfile.image || "")}
