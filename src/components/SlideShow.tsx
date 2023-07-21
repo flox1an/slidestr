@@ -17,6 +17,7 @@ import {
   urlFix,
 } from "./nostrImageDownload";
 import { appName, nsfwPubKeys } from "./env";
+import Settings from "./Settings";
 
 /*
 FEATURES:
@@ -50,18 +51,21 @@ let eventsReceived = 0;
 type SlideShowProps = {
   tags?: string;
   npub?: string;
+  showNsfw: boolean;
 };
 
-const SlideShow = ({ tags, npub }: SlideShowProps) => {
+const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
   const { ndk, getProfile, loadNdk } = useNDK();
   const [posts, setPosts] = useState<any[]>([]);
   const images = useRef<NostrImage[]>([]);
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const [history, setHistory] = useState<NostrImage[]>([]);
 
+  const [paused, setPaused] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+
   const upcommingImage = useRef<NostrImage>();
   const [title, setTitle] = useState(appName);
-  const [paused, setPaused] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeNpub, setActiveNpub] = useState<string | undefined>(undefined);
   const [activeContent, setActiveContent] = useState<string | undefined>(
@@ -91,10 +95,11 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
       setPosts((oldPosts) => {
         if (
           !isReply(event) &&
-          (npub !== undefined || !hasContentWarning(event)) && // only allow content warnings on profile content
-          (npub !== undefined || !hasNsfwTag(event)) && // only allow nsfw on profile content
-          (npub !== undefined || !nsfwPubKeys.includes(event.pubkey.toLowerCase()) ) && // block nsfw authors
-          oldPosts.findIndex((p) => p.id === event.id) === -1
+          oldPosts.findIndex((p) => p.id === event.id) === -1 &&
+          (showNsfw ||
+            (!hasContentWarning(event) && // only allow content warnings on profile content
+              !hasNsfwTag(event))) && // only allow nsfw on profile content
+          !nsfwPubKeys.includes(event.pubkey.toLowerCase()) // block nsfw authors
         ) {
           return [...oldPosts, event];
         }
@@ -119,7 +124,6 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
   };
 
   useEffect(() => {
-    
     loadNdk([
       "wss://relay.nostr.band",
       "wss://nos.lol",
@@ -141,7 +145,10 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
       if (images.current.length > 0) {
         const randomImage =
           images.current[Math.floor(Math.random() * images.current.length)];
+
+        // TODO this creates potential duplicates when images are loaded from multiple relays
         images.current = images.current.filter((i) => i !== randomImage);
+
         setHistory((oldHistory) => [...oldHistory, randomImage]);
         newActiveImages.push(randomImage);
         upcommingImage.current = randomImage;
@@ -164,7 +171,9 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
           url,
           author: p.author.npub,
           content: prepareContent(p.content),
-          tags: p.tags.filter((t: string[]) => t[0] === "t").map((t: string[]) => t[1].toLowerCase()),
+          tags: p.tags
+            .filter((t: string[]) => t[0] === "t")
+            .map((t: string[]) => t[1].toLowerCase()),
         }));
     });
     console.log(images.current.length);
@@ -184,6 +193,9 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
     }
     if (event.key === "p" || event.key === " " || event.key === "P") {
       setPaused((p) => !p);
+    }
+    if (event.key === "Escape") {
+      setShowSettings((s) => !s);
     }
   };
 
@@ -240,6 +252,9 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
       <Helmet>
         <title>{title}</title>
       </Helmet>
+
+      {showSettings && <Settings></Settings>}
+
       {!fullScreen && (
         <div className="controls">
           <button

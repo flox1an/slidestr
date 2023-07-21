@@ -22,15 +22,15 @@ export const buildFilter = (
   };
 
   if (npub) {
-    
     filter.authors = [nip19.decode(npub).data as string];
   } else {
     if (tags) {
       setTitle("#" + tags.replace(",", " #") + ` | ${appName}`);
       filter["#t"] = tags.split(",");
     } else {
-      setTitle(`Random photos from popular hashtags | ${appName}`);
-      filter["#t"] = defaultHashTags;
+      // setTitle(`Random photos from popular hashtags | ${appName}`);
+      // filter["#t"] = defaultHashTags;
+      setTitle(`Random photos from global feed | ${appName}`);
     }
   }
 
