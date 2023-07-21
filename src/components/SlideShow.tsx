@@ -11,11 +11,12 @@ import {
   buildFilter,
   extractImageUrls,
   hasContentWarning,
+  hasNsfwTag,
   isReply,
   prepareContent,
   urlFix,
 } from "./nostrImageDownload";
-import { appName } from "./env";
+import { appName, nsfwPubKeys } from "./env";
 
 /*
 FEATURES:
@@ -39,6 +40,7 @@ FEATURES:
 - Prevent duplicates (shuffle?), prevent same author twice in a row
 - show content warning?
 - Support Deleted Events
+- Prevent duplicate images (shuffle? histroy?)
 */
 
 let oldest = Infinity;
@@ -55,6 +57,8 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
   const [posts, setPosts] = useState<any[]>([]);
   const images = useRef<NostrImage[]>([]);
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
+  const [history, setHistory] = useState<NostrImage[]>([]);
+
   const upcommingImage = useRef<NostrImage>();
   const [title, setTitle] = useState(appName);
   const [paused, setPaused] = useState(false);
@@ -88,6 +92,8 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
         if (
           !isReply(event) &&
           (npub !== undefined || !hasContentWarning(event)) && // only allow content warnings on profile content
+          (npub !== undefined || !hasNsfwTag(event)) && // only allow nsfw on profile content
+          (npub !== undefined || !nsfwPubKeys.includes(event.pubkey.toLowerCase()) ) && // block nsfw authors
           oldPosts.findIndex((p) => p.id === event.id) === -1
         ) {
           return [...oldPosts, event];
@@ -113,28 +119,34 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
   };
 
   useEffect(() => {
+    
     loadNdk([
       "wss://relay.nostr.band",
       "wss://nos.lol",
       "wss://relay.mostr.pub",
+      "wss://purplepag.es/", // needed for user profiles
+
+      //"wss://feeds.nostr.band/pics"
     ]);
     fetch();
   }, []);
 
   const animateImages = () => {
     setActiveImages((oldImages) => {
-      const newImages = [...oldImages];
-      if (newImages.length > 2) {
+      const newActiveImages = [...oldImages];
+      if (newActiveImages.length > 2) {
         // always keep 2 images
-        newImages.shift();
+        newActiveImages.shift();
       }
       if (images.current.length > 0) {
         const randomImage =
           images.current[Math.floor(Math.random() * images.current.length)];
-        newImages.push(randomImage);
+        images.current = images.current.filter((i) => i !== randomImage);
+        setHistory((oldHistory) => [...oldHistory, randomImage]);
+        newActiveImages.push(randomImage);
         upcommingImage.current = randomImage;
       }
-      return newImages;
+      return newActiveImages;
     });
   };
 
@@ -150,8 +162,9 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
         )
         .map((url) => ({
           url,
-          author: p.author,
+          author: p.author.npub,
           content: prepareContent(p.content),
+          tags: p.tags.filter((t: string[]) => t[0] === "t").map((t: string[]) => t[1].toLowerCase()),
         }));
     });
     console.log(images.current.length);
@@ -173,6 +186,10 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
       setPaused((p) => !p);
     }
   };
+
+  useEffect(() => {
+    console.log(history);
+  }, [history]);
 
   const queueNextImage = (waitTime = 8000) => {
     clearTimeout(timeoutHandle.current);
@@ -197,7 +214,7 @@ const SlideShow = ({ tags, npub }: SlideShowProps) => {
 
   useDebouncedEffect(
     () => {
-      setActiveNpub(upcommingImage?.current?.author?.npub);
+      setActiveNpub(upcommingImage?.current?.author);
       setActiveContent(upcommingImage?.current?.content);
     },
     [upcommingImage?.current],

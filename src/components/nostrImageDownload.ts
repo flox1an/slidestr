@@ -1,10 +1,11 @@
-import { NDKFilter, NDKUser } from "@nostr-dev-kit/ndk";
+import { NDKFilter } from "@nostr-dev-kit/ndk";
 import { nip19 } from "nostr-tools";
-import { appName, defaultHashTags } from "./env";
+import { appName, defaultHashTags, nfswTags } from "./env";
 
 export type NostrImage = {
   url: string;
-  author: NDKUser;
+  author: string;
+  tags: string[];
   content?: string;
 };
 
@@ -64,5 +65,13 @@ export const hasContentWarning = (event: any) => {
   // ["content-warning", "NSFW: implied nudity"]
   return (
     event.tags.filter((t: string[]) => t[0] === "content-warning").length > 0
+  );
+};
+
+export const hasNsfwTag = (event: any) => {
+  // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
+  return (
+    event.tags.filter((t: string[]) => t[0] === "t" && nfswTags.includes(t[1]))
+      .length > 0
   );
 };
