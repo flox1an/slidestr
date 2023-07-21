@@ -25,9 +25,6 @@
   animation: fadeIn 0.5s ease-in-out;
   z-index: 500;
   padding: 2em;
-}
-
-.settings form {
   display: flex;
   flex-direction: column;
   gap: 24px;

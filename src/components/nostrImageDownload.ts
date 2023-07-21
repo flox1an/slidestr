@@ -1,6 +1,6 @@
 import { NDKFilter } from "@nostr-dev-kit/ndk";
 import { nip19 } from "nostr-tools";
-import { appName, defaultHashTags, nfswTags } from "./env";
+import { appName, nfswTags } from "./env";
 
 export type NostrImage = {
   url: string;

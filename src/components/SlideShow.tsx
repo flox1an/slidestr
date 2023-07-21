@@ -1,6 +1,6 @@
 import { useNDK } from "@nostr-dev-kit/ndk-react";
 import "./SlideShow.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import AuthorProfile from "./AuthorProfile";
 import IconFullScreen from "./IconFullScreen";
 import Slide from "./Slide";
@@ -18,6 +18,7 @@ import {
 } from "./nostrImageDownload";
 import { appName, nsfwPubKeys } from "./env";
 import Settings from "./Settings";
+import { useSwipeable } from "react-swipeable";
 
 /*
 FEATURES:
@@ -48,18 +49,18 @@ let oldest = Infinity;
 let maxFetchCount = 20;
 let eventsReceived = 0;
 
-type SlideShowProps = {
+interface SlideShowProps extends Settings {
   tags?: string;
   npub?: string;
   showNsfw: boolean;
-};
+}
 
 const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
   const { ndk, getProfile, loadNdk } = useNDK();
   const [posts, setPosts] = useState<any[]>([]);
   const images = useRef<NostrImage[]>([]);
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
-  const [history, setHistory] = useState<NostrImage[]>([]);
+  const history = useRef<NostrImage[]>([]);
 
   const [paused, setPaused] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -71,7 +72,46 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
   const [activeContent, setActiveContent] = useState<string | undefined>(
     undefined
   );
-  const timeoutHandle = useRef(0);
+  const viewTimeoutHandle = useRef(0);
+  const fetchTimeoutHandle = useRef(0);
+
+  const queueNextImage = (waitTime = 8000) => {
+    clearTimeout(viewTimeoutHandle.current);
+    viewTimeoutHandle.current = setTimeout(() => {
+      if (!paused) {
+        setLoading(false);
+        animateImages();
+        queueNextImage();
+      }
+    }, waitTime);
+  };
+
+  const nextImage = () => {
+    setPaused(false);
+    setActiveImages([]);
+    queueNextImage(0);
+  };
+
+  const previousImage = () => {
+    setPaused(false);
+
+    console.log(history);
+    if (history.current.length > 1) {
+      const previousImage = history.current.pop(); // remove current image
+      previousImage && images.current.push(previousImage); // add current image back to the pool
+      const lastImage = history.current[history.current.length - 1]; // show preview image but leave in the history
+      if (lastImage) {
+        setActiveImages([lastImage]);
+        upcommingImage.current = lastImage;
+        queueNextImage(); // queue next image for 8s after showing this one
+      }
+    }
+  };
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => previousImage(),
+    onSwipedRight: () => nextImage(),
+  });
 
   const fetch = () => {
     const until = oldest < Infinity ? oldest : undefined;
@@ -93,13 +133,19 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
       }
 
       setPosts((oldPosts) => {
+        /*
+        console.log(oldPosts.length);
+        console.log(`received event ${event.id} ${event.created_at}`);
+        console.log(`isReply ${isReply(event)}`);
+        console.log(`showNsfw ${showNsfw} hasContentWarning ${hasContentWarning(event)} hasNsfwTag ${hasNsfwTag(event)} nsfwPubKeys ${nsfwPubKeys.includes(event.pubkey.toLowerCase())}`);
+        */
         if (
           !isReply(event) &&
           oldPosts.findIndex((p) => p.id === event.id) === -1 &&
           (showNsfw ||
             (!hasContentWarning(event) && // only allow content warnings on profile content
-              !hasNsfwTag(event))) && // only allow nsfw on profile content
-          !nsfwPubKeys.includes(event.pubkey.toLowerCase()) // block nsfw authors
+              !hasNsfwTag(event) && // only allow nsfw on profile content
+              !nsfwPubKeys.includes(event.pubkey.toLowerCase()))) // block nsfw authors
         ) {
           return [...oldPosts, event];
         }
@@ -113,7 +159,8 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
 
     if (maxFetchCount > 0) {
       maxFetchCount--;
-      setTimeout(() => {
+      clearTimeout(fetchTimeoutHandle.current);
+      fetchTimeoutHandle.current = setTimeout(() => {
         console.log(JSON.stringify(untilPerRelay));
         console.log(`eventsReceived ${eventsReceived}`);
 
@@ -132,10 +179,28 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
 
       //"wss://feeds.nostr.band/pics"
     ]);
-    fetch();
   }, []);
 
+  useEffect(() => {
+    // reset all
+    console.log(`resetting`);
+    setPosts([]);
+    setPaused(false);
+    maxFetchCount = 20;
+    eventsReceived = 0;
+    setActiveImages([]);
+    history.current = [];
+    images.current = [];
+    upcommingImage.current = undefined;
+    clearTimeout(fetchTimeoutHandle.current);
+    clearTimeout(viewTimeoutHandle.current);
+
+    fetch();
+  }, [showNsfw, tags, npub]);
+
   const animateImages = () => {
+    console.log(`animateImages`);
+
     setActiveImages((oldImages) => {
       const newActiveImages = [...oldImages];
       if (newActiveImages.length > 2) {
@@ -149,7 +214,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
         // TODO this creates potential duplicates when images are loaded from multiple relays
         images.current = images.current.filter((i) => i !== randomImage);
 
-        setHistory((oldHistory) => [...oldHistory, randomImage]);
+        history.current.push(randomImage);
         newActiveImages.push(randomImage);
         upcommingImage.current = randomImage;
       }
@@ -187,9 +252,10 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
   const onKeyDown = (event: KeyboardEvent) => {
     // console.log(event);
     if (event.key === "ArrowRight") {
-      setPaused(false);
-      setActiveImages([]);
-      queueNextImage(0);
+      nextImage();
+    }
+    if (event.key === "ArrowLeft") {
+      previousImage();
     }
     if (event.key === "p" || event.key === " " || event.key === "P") {
       setPaused((p) => !p);
@@ -203,19 +269,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
     console.log(history);
   }, [history]);
 
-  const queueNextImage = (waitTime = 8000) => {
-    clearTimeout(timeoutHandle.current);
-    timeoutHandle.current = setTimeout(() => {
-      if (!paused) {
-        setLoading(false);
-        animateImages();
-        queueNextImage();
-      }
-    }, waitTime);
-  };
-
   useEffect(() => {
-    queueNextImage();
     document.body.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
@@ -248,15 +302,29 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
   }, [activeProfile]);
 
   return (
-    <>
+    <div {...swipeHandlers} style={{ overflow: "hidden" }}>
       <Helmet>
         <title>{title}</title>
       </Helmet>
 
-      {showSettings && <Settings></Settings>}
+      {showSettings && (
+        <Settings
+          onClose={() => setShowSettings(false)}
+          settings={{ showNsfw }}
+        ></Settings>
+      )}
 
       {!fullScreen && (
         <div className="controls">
+          <button onClick={() => setShowSettings(true)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              viewBox="0 0 512 512"
+            >
+              <path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
+            </svg>
+          </button>
           <button
             onClick={() =>
               document?.getElementById("root")?.requestFullscreen()
@@ -307,7 +375,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
       {activeImages.map((image) => (
         <Slide key={image.url} url={image.url} paused={paused} />
       ))}
-    </>
+    </div>
   );
 };
 

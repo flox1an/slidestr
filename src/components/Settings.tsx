@@ -2,15 +2,25 @@ import { FormEvent, useState } from "react";
 import "./Settings.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-const Settings = () => {
-  const [showNsfw, setShowNsfw] = useState(false);
+
+type Settings = {
+    showNsfw: boolean;
+
+}
+type SettingsProps = {
+    onClose: () => void;
+    settings: Settings;
+
+};
+
+const Settings = ({onClose, settings} : SettingsProps) => {
+  const [showNsfw, setShowNsfw] = useState(settings.showNsfw);
   const navigate = useNavigate();
-  const [_, setSearchParams] = useSearchParams();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    //navigate(`/tags/foodstr?nsfw=${showNsfw}`);
-    setSearchParams({ nsfw: showNsfw.toString() });
+    navigate(`${window.location.pathname}?nsfw=${showNsfw}`);
+    onClose();
   };
 
   return (
@@ -38,7 +48,7 @@ const Settings = () => {
       </div>
       <div className="settings-footer">
         <button type="submit" className="btn btn-primary" onClick={onSubmit}>
-          Save
+          Save Settings
         </button>
       </div>
     </div>

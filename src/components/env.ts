@@ -63,6 +63,7 @@ export const nsfwPubKeys = [
   "npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv", // Erandis Vol
   "npub1y77j6jm5hw34xl5m85aumltv88arh2s7q383allkpfe4muarzc5qzfgru0", // sexy-models
   "npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq", // Welcome To The Jungle
+  "npub1kade5vf37snr4hv5hgstav6j5ygry6z09kkq0flp47p8cmeuz5zs7zz2an", // Aeontropy
 
 ].map((npub) => (nip19.decode(npub).data as string).toLowerCase());
 

@@ -115,6 +115,10 @@
   z-index: 200;
 }
 
+.controls button svg {
+  fill: white;
+}
+
 .controls button {
   background-color: transparent;
   padding: 0.5em;
