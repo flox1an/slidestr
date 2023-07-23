@@ -172,9 +172,12 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
 
   useEffect(() => {
     loadNdk([
+      "wss://relay.damus.io",
       "wss://relay.nostr.band",
       "wss://nos.lol",
       "wss://relay.mostr.pub",
+      "wss://nostr.wine",
+      // "wss://nostr1.current.fyi/",
       "wss://purplepag.es/", // needed for user profiles
       //"wss://feeds.nostr.band/pics",
     ]);

@@ -19,7 +19,7 @@ export const buildFilter = (
   const filter: NDKFilter = {
     kinds: [1],
     limit: 30, // some relays have a low limit
-    until,
+    until: until == -Infinity ? undefined : until,
   };
 
   if (npub) {
@@ -31,10 +31,11 @@ export const buildFilter = (
     } else {
       setTitle(`Random photos from popular hashtags | ${appName}`);
       filter["#t"] = defaultHashTags;
-      // setTitle(`Random photos from global feed | ${appName}`);
+      //setTitle(`Random photos from global feed | ${appName}`);
     }
   }
 
+  console.log("filter", filter);
   return filter;
 };
 
