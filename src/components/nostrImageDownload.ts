@@ -1,12 +1,13 @@
 import { NDKFilter } from "@nostr-dev-kit/ndk";
 import { nip19 } from "nostr-tools";
-import { appName, nfswTags } from "./env";
+import { appName, defaultHashTags, nfswTags } from "./env";
 
 export type NostrImage = {
   url: string;
   author: string;
   tags: string[];
   content?: string;
+  type: 'image' | 'video';
 };
 
 export const buildFilter = (
@@ -28,9 +29,9 @@ export const buildFilter = (
       setTitle("#" + tags.replace(",", " #") + ` | ${appName}`);
       filter["#t"] = tags.split(",");
     } else {
-      // setTitle(`Random photos from popular hashtags | ${appName}`);
-      // filter["#t"] = defaultHashTags;
-      setTitle(`Random photos from global feed | ${appName}`);
+      setTitle(`Random photos from popular hashtags | ${appName}`);
+      filter["#t"] = defaultHashTags;
+      // setTitle(`Random photos from global feed | ${appName}`);
     }
   }
 

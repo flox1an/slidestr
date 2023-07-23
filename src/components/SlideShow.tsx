@@ -109,8 +109,8 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
   };
 
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => previousImage(),
-    onSwipedRight: () => nextImage(),
+    onSwipedLeft: () => nextImage(),
+    onSwipedRight: () => previousImage(),
   });
 
   const fetch = () => {
@@ -176,8 +176,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
       "wss://nos.lol",
       "wss://relay.mostr.pub",
       "wss://purplepag.es/", // needed for user profiles
-
-      //"wss://feeds.nostr.band/pics"
+      //"wss://feeds.nostr.band/pics",
     ]);
   }, []);
 
@@ -229,13 +228,18 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
           (url) =>
             url.endsWith(".jpg") ||
             url.endsWith(".png") ||
+            url.endsWith(".gif") ||
             url.endsWith(".jpeg") ||
-            url.endsWith(".webp")
+            url.endsWith(".webp") ||
+            url.endsWith(".webm") ||
+            url.endsWith(".mp4")
         )
         .map((url) => ({
           url,
           author: p.author.npub,
           content: prepareContent(p.content),
+          type:
+            url.endsWith(".mp4") || url.endsWith(".webm") ? "video" : "image",
           tags: p.tags
             .filter((t: string[]) => t[0] === "t")
             .map((t: string[]) => t[1].toLowerCase()),
@@ -302,7 +306,11 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
   }, [activeProfile]);
 
   return (
-    <div {...swipeHandlers} style={{ overflow: "hidden" }}>
+    <div
+      {...swipeHandlers}
+      onClick={() => setPaused((p) => !p)}
+      style={{ overflow: "hidden" }}
+    >
       <Helmet>
         <title>{title}</title>
       </Helmet>
@@ -373,7 +381,12 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
       )}
 
       {activeImages.map((image) => (
-        <Slide key={image.url} url={image.url} paused={paused} />
+        <Slide
+          key={image.url}
+          url={image.url}
+          paused={paused}
+          type={image.type}
+        />
       ))}
     </div>
   );
