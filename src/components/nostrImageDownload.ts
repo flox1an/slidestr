@@ -18,8 +18,8 @@ export const buildFilter = (
 ) => {
   const filter: NDKFilter = {
     kinds: [1],
-    limit: 30, // some relays have a low limit
-    until: until == -Infinity ? undefined : until,
+   // limit: 20, // some relays have a low limit
+    //until: until == -Infinity ? undefined : until,
   };
 
   if (npub) {

@@ -23,15 +23,18 @@ export const nfswTags = [
   "erotic",
   "freethenipple",
   "friskyfriday",
+  "milf",
   "naked",
   "nakedart",
   "nasstr",
   "nsfw",
   "nude",
   "nudeart",
+  "orgasm",
   "pornhub",
   "pornstr",
   "pussy",
+  "sex",
   "suicidegirls",
   "tits",
   "titstr",
@@ -40,6 +43,7 @@ export const nfswTags = [
 export const nsfwPubKeys = [
   "npub13806pd9p833wkgyemeqddjzdksunlq9gszq4yjnhw4l57sjjhwlq6m79nj", // Orvalho
   "npub13n6ednsew67xk7hgse670z7849q5h8su5rgydxtl4lq3r5cx4ecqsd9af4", // Everybody, Every Body
+  "npub177wu03dgx6zt9a9hdey079prfw5lvj5dhm20z4k96tf6um6zjk7qyzdumj", // Eoun
   "npub19xwjw7f23nsmnsd0j72mvhrdswt4cp6urc5el2zuu8se3yfu87ess524je", // Gone Wild (NSFW)
   "npub1af9lxfzeq5rxmu9zz7d85tn2ex8zvvlx0duqcemcdhkz9cvlt29st3rcgd", // Happy Nut
   "npub1e4n8nah09he25slv00dz3kav3jsu5jvp83aya234ejumcmu2xseqwrp6pl", // Svenno(NSFW)
@@ -57,6 +61,7 @@ export const nsfwPubKeys = [
   "npub1kul999wnt8gwa6l2vyuewhnmmp25gq7dly9zmgsw52x8csmqjgts7278rx", // 𝓟𝓮𝓽𝓲𝓽𝓮 𝓟𝓻𝓲𝓷𝓬𝓮𝓼𝓼
   "npub1m5fdz9gqa2qeudpy47zllmv9gqe3zzj44dkt9lh2kes3mlex7e6se348vy", // Marble Sculture
   "npub1mgusda7ujnyuhhudwkyrp763k4dd9xspktekl0tg5v0j76yph8ssyrfdpm", // anisyia
+  "npub1nme4074q6yrqexdn5z625vhvv9j9e2qwwfcgdyg2utffhvdgrxfqn5ztgm", // Ay Papi
   "npub1pl0qa9x3n8wt55em0x3zwuy02rtl5t3jsretr0egjqgkx2f6jztqt0xwew", // nude
   "npub1rv08kght99a7xwckm0qpmzw09m5gwppequgqd8lwu74eakgaavwsp5cjtw", // CuratedNSFW
   "npub1suddec4n2jv50pgn9eea35r4k83ahr4mcj0zv2uec36w6jeuwagq82xjgl", // quiet.enjoyer

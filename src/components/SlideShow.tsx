@@ -1,6 +1,6 @@
 import { useNDK } from "@nostr-dev-kit/ndk-react";
 import "./SlideShow.css";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AuthorProfile from "./AuthorProfile";
 import IconFullScreen from "./IconFullScreen";
 import Slide from "./Slide";
@@ -45,8 +45,8 @@ FEATURES:
 - Prevent duplicate images (shuffle? histroy?)
 */
 
-let oldest = Infinity;
-let maxFetchCount = 20;
+// let oldest = Infinity;
+let maxFetchCount = 1;
 let eventsReceived = 0;
 
 interface SlideShowProps extends Settings {
@@ -69,6 +69,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
   const [title, setTitle] = useState(appName);
   const [loading, setLoading] = useState(true);
   const [activeNpub, setActiveNpub] = useState<string | undefined>(undefined);
+  const [slideShowStarted, setSlideShowStarted] = useState(false);
   const [activeContent, setActiveContent] = useState<string | undefined>(
     undefined
   );
@@ -114,24 +115,25 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
   });
 
   const fetch = () => {
-    const until = oldest < Infinity ? oldest : undefined;
-    const untilPerRelay: { [n: string]: number } = {};
+    //const until = oldest < Infinity ? oldest : undefined;
+    //const untilPerRelay: { [n: string]: number } = {};
     eventsReceived = 0;
-    console.log(`starting fetch with until ${until}`);
+    //console.log(`starting fetch with until ${until}`);
 
     const postSubscription = ndk.subscribe(
-      buildFilter(setTitle, until, tags, npub)
+      buildFilter(setTitle, /*until*/ undefined, tags, npub)
     );
 
     postSubscription.on("event", (event) => {
       eventsReceived++;
+      /*
       if (
         untilPerRelay[event.relay.url] === undefined ||
         event.created_at < untilPerRelay[event.relay.url]
       ) {
         untilPerRelay[event.relay.url] = event.created_at;
       }
-
+      */
       setPosts((oldPosts) => {
         /*
         console.log(oldPosts.length);
@@ -157,6 +159,10 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
       console.log("NOTICE: ", notice);
     });
 
+    return () => {
+      postSubscription.stop();
+    };
+    /*
     if (maxFetchCount > 0) {
       maxFetchCount--;
       clearTimeout(fetchTimeoutHandle.current);
@@ -168,6 +174,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
         if (eventsReceived > 0) fetch();
       }, 3000);
     }
+    */
   };
 
   useEffect(() => {
@@ -176,7 +183,9 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
       "wss://relay.nostr.band",
       "wss://nos.lol",
       "wss://relay.mostr.pub",
-      "wss://nostr.wine",
+      "wss://relay.shitforce.one/",
+
+      //"wss://nostr.wine",
       // "wss://nostr1.current.fyi/",
       "wss://purplepag.es/", // needed for user profiles
       //"wss://feeds.nostr.band/pics",
@@ -188,6 +197,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
     console.log(`resetting`);
     setPosts([]);
     setPaused(false);
+    setSlideShowStarted(false);
     maxFetchCount = 20;
     eventsReceived = 0;
     setActiveImages([]);
@@ -197,7 +207,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
     clearTimeout(fetchTimeoutHandle.current);
     clearTimeout(viewTimeoutHandle.current);
 
-    fetch();
+    return fetch();
   }, [showNsfw, tags, npub]);
 
   const animateImages = () => {
@@ -251,8 +261,9 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
     console.log(images.current.length);
 
     // Make sure we have an image to start with but only trigger once
-    if (upcommingImage.current === undefined && images.current.length > 2) {
-      queueNextImage(1000);
+    if (!slideShowStarted && images.current.length > 2) {
+      setSlideShowStarted(true);
+      queueNextImage(500);
     }
   }, [posts]);
 
