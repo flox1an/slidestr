@@ -39,7 +39,7 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
   return (
     <div className="settings" onClick={(e) => e.stopPropagation()}>
       <div className="settings-content">
-        <label htmlFor="tags">Tags (Comma separated)</label>
+        <label htmlFor="tags">Tags (Comma separated):</label>
         <input
           type="text"
           name="tags"
@@ -55,7 +55,7 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
           }
         />
 
-        <label htmlFor="npub">User Profile (Npub)</label>
+        <label htmlFor="npub">User Profile (Npub):</label>
         <input
           type="text"
           name="npub"

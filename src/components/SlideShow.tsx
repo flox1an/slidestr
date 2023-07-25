@@ -333,7 +333,7 @@ const SlideShow = (settings: Settings) => {
 
       {!fullScreen && (
         <div className="controls">
-          <button onClick={() => setShowSettings(true)}>
+          <button onClick={() => setShowSettings(s => !s)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="1em"

@@ -28,7 +28,9 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+
   max-width: 25em;
+  max-height: 25em;
 
 }
 
@@ -53,14 +55,14 @@
 .settings .settings-content label {
   display: block;
   margin-bottom: 0.5em;
+  color: #aaa;
 }
 .settings .settings-content input[type="text"] {
   display: block;
   width: 100%;
-  background-color: #000;
+  background-color: #111;
   border-radius: 8px;
-  border-color: #333;
-  border: solid 1px #444;
+  border: 1px solid #222;
   height: 2em;
   font-family: unset;
   font-size: unset;
@@ -68,8 +70,7 @@
   margin-bottom: 1em;
   padding-left: 0.5em;
   box-sizing: border-box;
-} 
-
+}
 
 .settings .settings-footer {
   flex-shrink: 1;
