@@ -12,10 +12,15 @@ const App = () => {
   const nsfw = searchParams.get("nsfw") === "true";
 
   console.log(`tags = ${tags}, npub = ${npub}, nsfw = ${nsfw}`);
+
   return (
     <>
       {disclaimerAccepted ? (
-        <SlideShow tags={tags} npub={npub} showNsfw={nsfw} />
+        <SlideShow
+          tags={tags?.split(",") || []}
+          npubs={npub ? [npub] : []}
+          showNsfw={nsfw}
+        />
       ) : (
         <Disclaimer
           disclaimerAccepted={disclaimerAccepted}

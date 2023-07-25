@@ -28,6 +28,8 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  max-width: 25em;
+
 }
 
 @media (max-width: 768px) {
@@ -47,6 +49,27 @@
 .settings .settings-content {
   flex-grow: 0;
 }
+
+.settings .settings-content label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+.settings .settings-content input[type="text"] {
+  display: block;
+  width: 100%;
+  background-color: #000;
+  border-radius: 8px;
+  border-color: #333;
+  border: solid 1px #444;
+  height: 2em;
+  font-family: unset;
+  font-size: unset;
+  padding: 0.1em;
+  margin-bottom: 1em;
+  padding-left: 0.5em;
+  box-sizing: border-box;
+} 
+
 
 .settings .settings-footer {
   flex-shrink: 1;

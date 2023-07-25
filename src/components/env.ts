@@ -41,6 +41,7 @@ export const nfswTags = [
 ];
 
 export const nsfwPubKeys = [
+  "npub12jedfuhk2wfr7syr38t2f55652khuyz9f88r63ftm0j2vudxq9sqq7677r", // Erikha
   "npub13806pd9p833wkgyemeqddjzdksunlq9gszq4yjnhw4l57sjjhwlq6m79nj", // Orvalho
   "npub13n6ednsew67xk7hgse670z7849q5h8su5rgydxtl4lq3r5cx4ecqsd9af4", // Everybody, Every Body
   "npub177wu03dgx6zt9a9hdey079prfw5lvj5dhm20z4k96tf6um6zjk7qyzdumj", // Eoun

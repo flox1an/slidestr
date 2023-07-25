@@ -49,13 +49,8 @@ FEATURES:
 let maxFetchCount = 1;
 let eventsReceived = 0;
 
-interface SlideShowProps extends Settings {
-  tags?: string;
-  npub?: string;
-  showNsfw: boolean;
-}
 
-const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
+const SlideShow = (settings: Settings) => {
   const { ndk, getProfile, loadNdk } = useNDK();
   const [posts, setPosts] = useState<any[]>([]);
   const images = useRef<NostrImage[]>([]);
@@ -121,7 +116,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
     //console.log(`starting fetch with until ${until}`);
 
     const postSubscription = ndk.subscribe(
-      buildFilter(setTitle, /*until*/ undefined, tags, npub)
+      buildFilter(setTitle, settings.tags, settings.npubs)
     );
 
     postSubscription.on("event", (event) => {
@@ -144,7 +139,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
         if (
           !isReply(event) &&
           oldPosts.findIndex((p) => p.id === event.id) === -1 &&
-          (showNsfw ||
+          (settings.showNsfw ||
             (!hasContentWarning(event) && // only allow content warnings on profile content
               !hasNsfwTag(event) && // only allow nsfw on profile content
               !nsfwPubKeys.includes(event.pubkey.toLowerCase()))) // block nsfw authors
@@ -208,7 +203,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
     clearTimeout(viewTimeoutHandle.current);
 
     return fetch();
-  }, [showNsfw, tags, npub]);
+  }, [settings]);
 
   const animateImages = () => {
     console.log(`animateImages`);
@@ -309,7 +304,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
 
   useEffect(() => {
     if (
-      npub &&
+      settings.npubs &&
       activeProfile &&
       (activeProfile.displayName || activeProfile.name)
     ) {
@@ -332,7 +327,7 @@ const SlideShow = ({ tags, npub, showNsfw = false }: SlideShowProps) => {
       {showSettings && (
         <Settings
           onClose={() => setShowSettings(false)}
-          settings={{ showNsfw }}
+          settings={settings}
         ></Settings>
       )}
 

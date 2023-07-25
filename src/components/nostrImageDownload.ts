@@ -12,9 +12,8 @@ export type NostrImage = {
 
 export const buildFilter = (
   setTitle: React.Dispatch<React.SetStateAction<string>>,
-  until?: number,
-  tags?: string,
-  npub?: string
+  tags: string[],
+  npubs: string[]
 ) => {
   const filter: NDKFilter = {
     kinds: [1],
@@ -22,12 +21,12 @@ export const buildFilter = (
     //until: until == -Infinity ? undefined : until,
   };
 
-  if (npub) {
-    filter.authors = [nip19.decode(npub).data as string];
+  if (npubs && npubs.length > 0) {
+    filter.authors = npubs.map(p => nip19.decode(p).data as string);
   } else {
-    if (tags) {
-      setTitle("#" + tags.replace(",", " #") + ` | ${appName}`);
-      filter["#t"] = tags.split(",");
+    if (tags && tags.length > 0) {
+      setTitle("#" + tags.join(" #") + ` | ${appName}`);
+      filter["#t"] = tags;
     } else {
       setTitle(`Random photos from popular hashtags | ${appName}`);
       filter["#t"] = defaultHashTags;
