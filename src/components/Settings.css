@@ -30,7 +30,7 @@
   gap: 24px;
 
   max-width: 25em;
-  max-height: 27em;
+  max-height: 28em;
 }
 
 @media (max-width: 768px) {
@@ -56,7 +56,9 @@
   margin-bottom: 0.5em;
   color: #aaa;
 }
-.settings .settings-content input[type="text"] {
+
+.settings .settings-content input[type="text"],
+.settings .settings-content textarea {
   display: block;
   width: 100%;
   background-color: #111;
@@ -69,6 +71,10 @@
   margin-bottom: 1em;
   padding-left: 0.5em;
   box-sizing: border-box;
+}
+
+.settings .settings-content textarea {
+  height: 5em;
 }
 
 .settings .settings-footer {

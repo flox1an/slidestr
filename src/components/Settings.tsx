@@ -25,9 +25,9 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
 
     const validTags = tags.filter((t) => t.length > 0);
     const validNpubs = npubs.filter((t) => t.length > 0);
-    
+
     if (validTags.length > 0) {
-      navigate(`/tags/${validTags.join(",")}${nsfwPostfix}`);
+      navigate(`/tags/${validTags.join("%2C")}${nsfwPostfix}`);
     } else if (validNpubs.length == 1) {
       navigate(`/p/${validNpubs[0]}${nsfwPostfix}`);
     } else {
@@ -42,20 +42,17 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
 
       <div className="settings-content">
         <label htmlFor="tags">Tags (Comma separated):</label>
-        <input
-          type="text"
+        <textarea
           name="tags"
+          rows={4}
           id="tags"
           value={tags.join(", ")}
           onChange={(e) =>
             setTags(
-              e.target.value
-                .split(",")
-                .map((t) => t.trim().toLowerCase())
-                
+              e.target.value.split(",").map((t) => t.trim().toLowerCase())
             )
           }
-        />
+        ></textarea>
 
         <label htmlFor="npub">User Profile (Npub):</label>
         <input
@@ -65,10 +62,7 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
           value={npubs.join(", ")}
           onChange={(e) =>
             setNpubs(
-              e.target.value
-                .split(",")
-                .map((t) => t.trim().toLowerCase())
-                
+              e.target.value.split(",").map((t) => t.trim().toLowerCase())
             )
           }
         />

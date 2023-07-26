@@ -29,18 +29,16 @@ const SlideView = ({ settings, images }: SlideViewProps) => {
     undefined
   );
 
-  /*
-
-    TODO set title
-      filter["#t"] = defaultHashTags;
-      setTitle("#" + tags.join(" #") + ` | ${appName}`);
-
+  useEffect(() => {
+    if (settings.tags && settings.tags.length > 0) {
+      setTitle("#" + settings.tags.join(" #") + ` | ${appName}`);
+    } else {
       setTitle(`Random photos from popular hashtags | ${appName}`);
-
-      */
+    }
+  }, [settings]);
 
   const queueNextImage = (waitTime: number) => {
-    console.log(`cleaining timeout in queueNextImage`)
+    console.log(`cleaining timeout in queueNextImage`);
     clearTimeout(viewTimeoutHandle.current);
     viewTimeoutHandle.current = setTimeout(() => {
       if (!paused) {
@@ -129,14 +127,13 @@ const SlideView = ({ settings, images }: SlideViewProps) => {
     if (event.key === "p" || event.key === " " || event.key === "P") {
       setPaused((p) => !p);
     }
-
   };
 
   useEffect(() => {
     document.body.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
-      console.log(`cleaining timeout in useEffect[] destructor `)
+      console.log(`cleaining timeout in useEffect[] destructor `);
       clearTimeout(viewTimeoutHandle.current);
     };
   }, []);
@@ -157,7 +154,7 @@ const SlideView = ({ settings, images }: SlideViewProps) => {
     history.current = [];
     upcommingImage.current = undefined;
 
-    console.log(`cleaining timeout in useEffect[settings] `)
+    console.log(`cleaining timeout in useEffect[settings] `);
     //clearTimeout(viewTimeoutHandle.current);
   }, [settings]);
 
@@ -165,7 +162,7 @@ const SlideView = ({ settings, images }: SlideViewProps) => {
 
   useEffect(() => {
     if (
-      settings.npubs &&
+      settings.npubs.length>0 &&
       activeProfile &&
       (activeProfile.displayName || activeProfile.name)
     ) {

@@ -14,8 +14,10 @@ const App = () => {
 
   console.log(`tags = ${tags}, npub = ${npub}, nsfw = ${nsfw}`);
 
-  const useTags = tags?.split(",") || defaultHashTags;
-  //if (npub == ) : defaultHashTags;
+  let useTags = tags?.split(",") || [];
+  if (npub == undefined && (useTags == undefined || useTags.length == 0)) { 
+    useTags = (defaultHashTags);
+  }
 
   return (
     <>
