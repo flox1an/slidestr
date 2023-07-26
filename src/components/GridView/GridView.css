@@ -1,0 +1,18 @@
+.imagegrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 1rem;
+  padding: 1rem;
+  width: 100vw;
+  height: 100vh;
+  overflow: scroll;
+  box-sizing: border-box;
+}
+
+.imagegrid .image {
+  border-radius: 0.5rem;
+  width: 100%;
+  object-fit: cover;
+  height: 200px;
+  cursor: pointer;
+}

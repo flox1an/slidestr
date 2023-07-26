@@ -1,36 +1,28 @@
 import { NDKFilter } from "@nostr-dev-kit/ndk";
 import { nip19 } from "nostr-tools";
-import { appName, defaultHashTags, nfswTags } from "./env";
+import { defaultHashTags, nfswTags } from "./env";
 
 export type NostrImage = {
   url: string;
   author: string;
   tags: string[];
   content?: string;
-  type: 'image' | 'video';
+  timestamp: number;
+  type: "image" | "video";
 };
 
-export const buildFilter = (
-  setTitle: React.Dispatch<React.SetStateAction<string>>,
-  tags: string[],
-  npubs: string[]
-) => {
+export const buildFilter = (tags: string[], npubs: string[]) => {
   const filter: NDKFilter = {
     kinds: [1],
-   // limit: 20, // some relays have a low limit
-    //until: until == -Infinity ? undefined : until,
   };
 
   if (npubs && npubs.length > 0) {
-    filter.authors = npubs.map(p => nip19.decode(p).data as string);
+    filter.authors = npubs.map((p) => nip19.decode(p).data as string);
   } else {
     if (tags && tags.length > 0) {
-      setTitle("#" + tags.join(" #") + ` | ${appName}`);
       filter["#t"] = tags;
     } else {
-      setTitle(`Random photos from popular hashtags | ${appName}`);
       filter["#t"] = defaultHashTags;
-      //setTitle(`Random photos from global feed | ${appName}`);
     }
   }
 
@@ -45,6 +37,9 @@ export const prepareContent = (content: string) => {
 };
 
 export const urlFix = (url: string) => {
+  // dont use cdn for mp4/webm
+  if (url == undefined || url.endsWith(".mp4") || url.endsWith(".webm")) return url;
+
   // use cdn for nostr.build
   return url.replace(/https?:\/\/nostr.build/, "https://cdn.nostr.build");
 };

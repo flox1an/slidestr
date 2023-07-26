@@ -1,11 +1,12 @@
-import useImageLoaded from "../utils/useImageLoaded";
+import useImageLoaded from "../../utils/useImageLoaded";
 
 type SlideImageProps = {
   url: string;
   paused: boolean;
+  style?: React.CSSProperties;
 };
 
-const SlideImage = ({ url, paused }: SlideImageProps) => {
+const SlideImage = ({ url, paused, style }: SlideImageProps) => {
   const loaded = useImageLoaded(url);
   return (
     loaded && (
@@ -13,10 +14,11 @@ const SlideImage = ({ url, paused }: SlideImageProps) => {
         className={`slide ${paused ? "paused" : ""}`}
         style={{
           backgroundImage: `url(${url})`,
+          ...style,
         }}
       ></div>
     )
   );
 };
 
-export default SlideImage
+export default SlideImage;
