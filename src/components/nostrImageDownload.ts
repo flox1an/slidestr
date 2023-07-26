@@ -8,6 +8,7 @@ export type NostrImage = {
   tags: string[];
   content?: string;
   timestamp: number;
+  noteId: string;
   type: "image" | "video";
 };
 
@@ -21,9 +22,7 @@ export const buildFilter = (tags: string[], npubs: string[]) => {
   } else {
     if (tags && tags.length > 0) {
       filter["#t"] = tags;
-    } else {
-      filter["#t"] = defaultHashTags;
-    }
+    } 
   }
 
   console.log("filter", filter);

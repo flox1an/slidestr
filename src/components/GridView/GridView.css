@@ -16,3 +16,11 @@
   height: 200px;
   cursor: pointer;
 }
+
+
+.imagegrid .image:hover {
+  filter: brightness(1.1);
+  outline: 1px solid #fff;
+  
+} 
+

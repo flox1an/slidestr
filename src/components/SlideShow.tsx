@@ -14,6 +14,8 @@ import { nsfwPubKeys } from "./env";
 import Settings from "./Settings";
 import SlideView from "./SlideView";
 import GridView from "./GridView";
+import { nip19 } from "nostr-tools";
+import IconFullScreen from "./IconFullScreen";
 
 /*
 FEATURES:
@@ -50,6 +52,7 @@ const SlideShow = (settings: Settings) => {
   const images = useRef<NostrImage[]>([]);
   const fetchTimeoutHandle = useRef(0);
   const [showGrid, setShowGrid] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const fetch = () => {
     eventsReceived = 0;
@@ -132,6 +135,7 @@ const SlideShow = (settings: Settings) => {
           type:
             url.endsWith(".mp4") || url.endsWith(".webm") ? "video" : "image",
           timestamp: p.created_at,
+          noteId: nip19.noteEncode(p.id),
           tags: p.tags
             .filter((t: string[]) => t[0] === "t")
             .map((t: string[]) => t[1].toLowerCase()),
@@ -144,19 +148,80 @@ const SlideShow = (settings: Settings) => {
     if (event.key === "g" || event.key === "G") {
       setShowGrid((p) => !p);
     }
+    if (event.key === "Escape") {
+      setShowSettings((s) => !s);
+    }
+    if (event.key === "f" || event.key === "F") {
+      document?.getElementById("root")?.requestFullscreen();
+    }
   };
 
   useEffect(() => {
-    document.body.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     };
   }, []);
 
-  return showGrid ? (
-    <GridView images={images.current} settings={settings}></GridView>
-  ) : (
-    <SlideView images={images.current} settings={settings}></SlideView>
+  const fullScreen = document.fullscreenElement !== null;
+
+  return (
+    <>
+      {showSettings && (
+        <Settings
+          onClose={() => setShowSettings(false)}
+          settings={settings}
+        ></Settings>
+      )}
+
+      <div className="controls">
+        <button onClick={() => setShowGrid((g) => !g)} title={showGrid ? 'Play random slideshow (G)' : 'view grid (G)'}>
+          {showGrid ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              viewBox="0 0 384 512"
+            >
+              <path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              viewBox="0 0 512 512"
+            >
+              <path d="M448 96V224H288V96H448zm0 192V416H288V288H448zM224 224H64V96H224V224zM64 288H224V416H64V288zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z" />
+            </svg>
+          )}
+        </button>
+
+        <button onClick={() => setShowSettings((s) => !s)}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="1em"
+            viewBox="0 0 512 512"
+          >
+            <path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
+          </svg>
+        </button>
+
+        {!fullScreen && (
+          <button
+            onClick={() =>
+              document?.getElementById("root")?.requestFullscreen()
+            }
+          >
+            <IconFullScreen />
+          </button>
+        )}
+      </div>
+
+      {showGrid ? (
+        <GridView images={images.current} settings={settings}></GridView>
+      ) : (
+        <SlideView images={images.current} settings={settings}></SlideView>
+      )}
+    </>
   );
 };
 

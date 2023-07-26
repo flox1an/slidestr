@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Settings from "../Settings";
 import { NostrImage } from "../nostrImageDownload";
 import "./GridView.css";
@@ -14,7 +14,19 @@ const isVideo = (url: string) => {
 };
 
 const addProxy = (url: string) => {
-  if (url.includes("imgur.com")) return url;
+  if (
+    url.includes("imgur.com") ||
+    url.includes("cdn.midjourney.com") ||
+    url.includes("wasabisys.com") ||
+    url.includes("files.mastodon.social") ||
+    url.includes("files.mastodon.online")  ||
+    url.includes("media.mastodon.scot") ||
+    url.includes("media.mas.to") ||
+    url.includes("smutlandia.com") ||
+    url.includes("file.misskey.design") 
+
+  )
+    return url;
   return "https://imgproxy.iris.to/insecure/rs:fill:200:200/plain/" + url;
 };
 
@@ -34,6 +46,7 @@ const GridView = ({ settings, images }: GridViewProps) => {
       {activeImage && (
         <Slide
           url={activeImage.url}
+          noteId={activeImage.noteId}
           type={activeImage.type}
           paused={false}
           onAnimationEnded={() => setActiveImage(undefined)}
@@ -45,6 +58,7 @@ const GridView = ({ settings, images }: GridViewProps) => {
           isVideo(image.url) ? (
             <video
               className="image"
+              data-node-id={image.noteId}
               key={image.url}
               src={image.url}
               controls
@@ -53,6 +67,7 @@ const GridView = ({ settings, images }: GridViewProps) => {
           ) : (
             <img
               onClick={() => setActiveImage(image)}
+              data-node-id={image.noteId}
               className="image"
               loading="lazy"
               key={image.url}

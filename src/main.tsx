@@ -11,6 +11,10 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
+    path: "global",
+    element: <App />,
+  },
+  {
     path: "tags/:tags",
     element: <App />,
   },

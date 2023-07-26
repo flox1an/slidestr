@@ -3,6 +3,7 @@ import SlideShow from "./components/SlideShow";
 import "./App.css";
 import Disclaimer from "./components/Disclaimer";
 import useDisclaimerState from "./utils/useDisclaimerState";
+import { defaultHashTags } from "./components/env";
 
 const App = () => {
   const { disclaimerAccepted, setDisclaimerAccepted } = useDisclaimerState();
@@ -13,14 +14,13 @@ const App = () => {
 
   console.log(`tags = ${tags}, npub = ${npub}, nsfw = ${nsfw}`);
 
+  const useTags = tags?.split(",") || defaultHashTags;
+  //if (npub == ) : defaultHashTags;
+
   return (
     <>
       {disclaimerAccepted ? (
-        <SlideShow
-          tags={tags?.split(",") || []}
-          npubs={npub ? [npub] : []}
-          showNsfw={nsfw}
-        />
+        <SlideShow tags={useTags} npubs={npub ? [npub] : []} showNsfw={nsfw} />
       ) : (
         <Disclaimer
           disclaimerAccepted={disclaimerAccepted}

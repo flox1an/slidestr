@@ -38,6 +38,8 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
 
   return (
     <div className="settings" onClick={(e) => e.stopPropagation()}>
+      <h2>Settings</h2>
+
       <div className="settings-content">
         <label htmlFor="tags">Tags (Comma separated):</label>
         <input

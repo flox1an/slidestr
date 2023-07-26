@@ -30,8 +30,7 @@
   gap: 24px;
 
   max-width: 25em;
-  max-height: 25em;
-
+  max-height: 27em;
 }
 
 @media (max-width: 768px) {
