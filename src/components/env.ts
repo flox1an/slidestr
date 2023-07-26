@@ -23,6 +23,9 @@ export const nfswTags = [
   "erotic",
   "freethenipple",
   "friskyfriday",
+  "humpday",
+  "kink",
+  "kinkstr",
   "milf",
   "naked",
   "nakedart",
@@ -36,6 +39,7 @@ export const nfswTags = [
   "pussy",
   "sex",
   "suicidegirls",
+  "thighstr",
   "tits",
   "titstr",
 ];
