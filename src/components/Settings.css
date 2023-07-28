@@ -57,7 +57,7 @@
   color: #aaa;
 }
 
-.settings .settings-content input[type="text"],
+.settings .settings-content input[type='text'],
 .settings .settings-content textarea {
   display: block;
   width: 100%;

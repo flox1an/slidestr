@@ -1,12 +1,12 @@
-import { DependencyList, EffectCallback, useEffect } from "react";
+import { DependencyList, EffectCallback, useEffect } from 'react';
 
 const useDebouncedEffect = (effect: EffectCallback, deps?: DependencyList, delay?: number) => {
-    useEffect(() => {
-        const handler = setTimeout(() => effect(), delay);
+  useEffect(() => {
+    const handler = setTimeout(() => effect(), delay);
 
-        return () => clearTimeout(handler);
+    return () => clearTimeout(handler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [...(deps || []), delay]);
-}
+  }, [...(deps || []), delay]);
+};
 
 export default useDebouncedEffect;

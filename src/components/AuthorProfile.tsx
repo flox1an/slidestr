@@ -1,5 +1,5 @@
-import "./SlideShow.css";
-import useImageLoaded from "../utils/useImageLoaded";
+import './SlideShow.css';
+import useImageLoaded from '../utils/useImageLoaded';
 
 type AvatarImageProps = {
   src?: string;

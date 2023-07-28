@@ -1,38 +1,38 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { NDKProvider } from "@nostr-dev-kit/ndk-react";
-import App from "./App";
-import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { NDKProvider } from '@nostr-dev-kit/ndk-react';
+import App from './App';
+import './index.css';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <App />,
   },
   {
-    path: "global",
+    path: 'global',
     element: <App />,
   },
   {
-    path: "tags/:tags",
+    path: 'tags/:tags',
     element: <App />,
   },
   {
-    path: "profile/:npub",
+    path: 'profile/:npub',
     element: <App />,
   },
   {
-    path: "p/:npub",
+    path: 'p/:npub',
     element: <App />,
   },
   {
-    path: "/:npub",
+    path: '/:npub',
     element: <App />,
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <NDKProvider>
     <RouterProvider router={router} />
   </NDKProvider>

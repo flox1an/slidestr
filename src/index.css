@@ -1,5 +1,5 @@
 :root {
-  font-family: "Outfit", sans-serif;
+  font-family: 'Outfit', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.5;
@@ -64,8 +64,7 @@ button {
   }
 }
 
-
-input[type="checkbox"] {
+input[type='checkbox'] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -76,8 +75,8 @@ input[type="checkbox"] {
   background-color: transparent;
 }
 
-input[type="checkbox"]:after {
-  content: " ";
+input[type='checkbox']:after {
+  content: ' ';
   position: relative;
   left: 40%;
   top: 20%;
@@ -89,7 +88,7 @@ input[type="checkbox"]:after {
   display: none;
 }
 
-input[type="checkbox"]:checked:after {
+input[type='checkbox']:checked:after {
   display: block;
 }
 
@@ -101,7 +100,6 @@ div.paper {
   gap: 10px;
   align-items: center;
 }
-
 
 .btn {
   border: none;
@@ -121,13 +119,15 @@ div.paper {
 .btn-border {
   border: 1px solid transparent;
   color: inherit;
-  background: linear-gradient(black, black) padding-box,
+  background:
+    linear-gradient(black, black) padding-box,
     linear-gradient(94.73deg, #2bd9ff 0%, #f838d9 100%) border-box;
   transition: 0.3s;
 }
 
 .btn-border:hover {
-  background: linear-gradient(black, black) padding-box,
+  background:
+    linear-gradient(black, black) padding-box,
     linear-gradient(94.73deg, #14b4d8 0%, #ba179f 100%) border-box;
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 declare global {
   interface Window {
@@ -10,9 +10,7 @@ const useDisclaimerState = () => {
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
 
   useEffect(() => {
-    const disclaimerAcceptedPreviously = JSON.parse(
-      localStorage.getItem("disclaimerAccepted") as string
-    );
+    const disclaimerAcceptedPreviously = JSON.parse(localStorage.getItem('disclaimerAccepted') as string);
     if (disclaimerAcceptedPreviously === true) {
       setDisclaimerAccepted(true);
     }
@@ -22,7 +20,7 @@ const useDisclaimerState = () => {
     disclaimerAccepted,
     setDisclaimerAccepted: (accepted: boolean) => {
       setDisclaimerAccepted(accepted);
-      localStorage.setItem("disclaimerAccepted", JSON.stringify(accepted));
+      localStorage.setItem('disclaimerAccepted', JSON.stringify(accepted));
     },
   };
 };

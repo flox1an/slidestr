@@ -1,6 +1,6 @@
-import { FormEvent, useState } from "react";
-import "./Settings.css";
-import { useNavigate } from "react-router-dom";
+import { FormEvent, useState } from 'react';
+import './Settings.css';
+import { useNavigate } from 'react-router-dom';
 
 type Settings = {
   showNsfw: boolean;
@@ -22,13 +22,13 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const nsfwPostfix = showNsfw ? "?nsfw=true" : "";
+    const nsfwPostfix = showNsfw ? '?nsfw=true' : '';
 
-    const validTags = tags.filter((t) => t.length > 0);
-    const validNpubs = npubs.filter((t) => t.length > 0);
+    const validTags = tags.filter(t => t.length > 0);
+    const validNpubs = npubs.filter(t => t.length > 0);
 
     if (validTags.length > 0) {
-      navigate(`/tags/${validTags.join("%2C")}${nsfwPostfix}`);
+      navigate(`/tags/${validTags.join('%2C')}${nsfwPostfix}`);
     } else if (validNpubs.length == 1) {
       navigate(`/p/${validNpubs[0]}${nsfwPostfix}`);
     } else {
@@ -38,7 +38,7 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
   };
 
   return (
-    <div className="settings" onClick={(e) => e.stopPropagation()}>
+    <div className="settings" onClick={e => e.stopPropagation()}>
       <h2>Settings</h2>
 
       <div className="settings-content">
@@ -47,12 +47,8 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
           name="tags"
           rows={4}
           id="tags"
-          value={tags.join(", ")}
-          onChange={(e) =>
-            setTags(
-              e.target.value.split(",").map((t) => t.trim().toLowerCase())
-            )
-          }
+          value={tags.join(', ')}
+          onChange={e => setTags(e.target.value.split(',').map(t => t.trim().toLowerCase()))}
         ></textarea>
 
         <label htmlFor="npub">User Profile (Npub):</label>
@@ -60,28 +56,15 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
           type="text"
           name="npub"
           id="npub"
-          value={npubs.join(", ")}
-          onChange={(e) =>
-            setNpubs(
-              e.target.value.split(",").map((t) => t.trim().toLowerCase())
-            )
-          }
+          value={npubs.join(', ')}
+          onChange={e => setNpubs(e.target.value.split(',').map(t => t.trim().toLowerCase()))}
         />
 
         <div className="content-warning">
           <div>
-            <input
-              name="nsfw"
-              type="checkbox"
-              checked={showNsfw}
-              onChange={(e) => setShowNsfw(e.target.checked)}
-            />
+            <input name="nsfw" type="checkbox" checked={showNsfw} onChange={e => setShowNsfw(e.target.checked)} />
           </div>
-          <label
-            htmlFor="nsfw"
-            onClick={() => setShowNsfw((n) => !n)}
-            style={{ userSelect: "none" }}
-          >
+          <label htmlFor="nsfw" onClick={() => setShowNsfw(n => !n)} style={{ userSelect: 'none' }}>
             <div className="warning">NSFW Content</div>
             Allow NSFW to be shown and ignore content warnings.
           </label>

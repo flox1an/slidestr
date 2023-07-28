@@ -19,13 +19,11 @@
 
 @media screen and (max-width: 600px) {
   .imagegrid {
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
 }
 
 .imagegrid .image:hover {
   filter: brightness(1.1);
   outline: 1px solid #fff;
-  
-} 
-
+}
