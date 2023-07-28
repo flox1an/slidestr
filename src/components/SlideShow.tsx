@@ -96,8 +96,7 @@ const SlideShow = (settings: Settings) => {
       'wss://nos.lol',
       'wss://relay.mostr.pub',
       'wss://relay.shitforce.one/',
-
-      //"wss://nostr.wine",
+      "wss://nostr.wine",
       // "wss://nostr1.current.fyi/",
       'wss://purplepag.es/', // needed for user profiles
       //"wss://feeds.nostr.band/pics",
