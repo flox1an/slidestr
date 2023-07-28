@@ -1,32 +1,12 @@
 import { useMemo, useState } from 'react';
 import Settings from '../Settings';
-import { NostrImage } from '../nostrImageDownload';
+import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
 import './GridView.css';
 import Slide from '../SlideView/Slide';
 
 type GridViewProps = {
   settings: Settings;
   images: NostrImage[];
-};
-
-const isVideo = (url: string) => {
-  return url.endsWith('.mp4') || url.endsWith('.webm');
-};
-
-const addProxy = (url: string) => {
-  if (
-    url.includes('imgur.com') ||
-    url.includes('cdn.midjourney.com') ||
-    url.includes('wasabisys.com') ||
-    url.includes('files.mastodon.social') ||
-    url.includes('files.mastodon.online') ||
-    url.includes('media.mastodon.scot') ||
-    url.includes('media.mas.to') ||
-    url.includes('smutlandia.com') ||
-    url.includes('file.misskey.design')
-  )
-    return url;
-  return 'https://imgproxy.iris.to/insecure/rs:fill:200:200/plain/' + url;
 };
 
 const GridView = ({ settings, images }: GridViewProps) => {
@@ -70,7 +50,7 @@ const GridView = ({ settings, images }: GridViewProps) => {
               className="image"
               loading="lazy"
               key={image.url}
-              src={addProxy(image.url)}
+              src={createImgProxyUrl(image.url)}
             ></img>
           )
         )}

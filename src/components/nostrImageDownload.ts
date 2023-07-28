@@ -62,3 +62,33 @@ export const hasNsfwTag = (event: any) => {
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
   return event.tags.filter((t: string[]) => t[0] === 't' && nfswTags.includes(t[1])).length > 0;
 };
+
+export const isImage = (url: string) => {
+  return (
+    url.endsWith('.jpg') ||
+    url.endsWith('.png') ||
+    url.endsWith('.gif') ||
+    url.endsWith('.jpeg') ||
+    url.endsWith('.webp')
+  );
+};
+
+export const isVideo = (url: string) => {
+  return url.endsWith('.mp4') || url.endsWith('.webm');
+};
+
+export const createImgProxyUrl = (url: string, width = 200, height = 200) => {
+  if (
+    url.includes('imgur.com') ||
+    url.includes('cdn.midjourney.com') ||
+    url.includes('wasabisys.com') ||
+    url.includes('files.mastodon.social') ||
+    url.includes('files.mastodon.online') ||
+    url.includes('media.mastodon.scot') ||
+    url.includes('media.mas.to') ||
+    url.includes('smutlandia.com') ||
+    url.includes('file.misskey.design')
+  )
+    return url;
+  return `https://imgproxy.iris.to/insecure/rs:fill:${width}:${height}/plain/${url}`;
+};
