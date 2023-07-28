@@ -14,7 +14,7 @@ export type NostrImage = {
 
 export const buildFilter = (tags: string[], npubs: string[]) => {
   const filter: NDKFilter = {
-    kinds: [1],
+    kinds: [1, 6],
   };
 
   if (npubs && npubs.length > 0) {

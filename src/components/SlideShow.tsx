@@ -10,15 +10,25 @@ import {
   isReply,
   prepareContent,
 } from "./nostrImageDownload";
-import { nsfwPubKeys } from "./env";
+import { nfswTags, nsfwNPubs, nsfwPubKeys } from "./env";
 import Settings from "./Settings";
 import SlideView from "./SlideView";
 import GridView from "./GridView";
 import { nip19 } from "nostr-tools";
 import IconFullScreen from "./IconFullScreen";
+import { uniqBy } from "lodash";
+import AdultContentInfo from "./AdultContentInfo";
 
 /*
 FEATURES:
+- dedupe urls
+- controls lighter
+- info for nsfw acc / tags
+- preview for videos
+- details view for the grid
+
+
+--------
 - show tags 
 - show content text (how to beautify?, crop?)
 - jump to note
@@ -116,44 +126,51 @@ const SlideShow = (settings: Settings) => {
   }, [settings]);
 
   useEffect(() => {
-    images.current = posts.flatMap((p) => {
-      return extractImageUrls(p.content)
-        .filter(
-          (url) =>
-            url.endsWith(".jpg") ||
-            url.endsWith(".png") ||
-            url.endsWith(".gif") ||
-            url.endsWith(".jpeg") ||
-            url.endsWith(".webp") ||
-            url.endsWith(".webm") ||
-            url.endsWith(".mp4")
-        )
-        .map((url) => ({
-          url,
-          author: p.author.npub,
-          content: prepareContent(p.content),
-          type:
-            url.endsWith(".mp4") || url.endsWith(".webm") ? "video" : "image",
-          timestamp: p.created_at,
-          noteId: nip19.noteEncode(p.id),
-          tags: p.tags
-            .filter((t: string[]) => t[0] === "t")
-            .map((t: string[]) => t[1].toLowerCase()),
-        }));
-    });
+    images.current = uniqBy(
+      posts.flatMap((p) => {
+        return extractImageUrls(p.content)
+          .filter(
+            (url) =>
+              url.endsWith(".jpg") ||
+              url.endsWith(".png") ||
+              url.endsWith(".gif") ||
+              url.endsWith(".jpeg") ||
+              url.endsWith(".webp") ||
+              url.endsWith(".webm") ||
+              url.endsWith(".mp4")
+          )
+          .map((url) => ({
+            url,
+            author: p.author.npub,
+            content: prepareContent(p.content),
+            type:
+              url.endsWith(".mp4") || url.endsWith(".webm") ? "video" : "image",
+            timestamp: p.created_at,
+            noteId: nip19.noteEncode(p.id),
+            tags: p.tags
+              .filter((t: string[]) => t[0] === "t")
+              .map((t: string[]) => t[1].toLowerCase()),
+          }));
+      }),
+      "url"
+    );
     console.log(images.current.length);
   }, [posts]);
 
   const onKeyDown = (event: KeyboardEvent) => {
+    if (showSettings) return;
+
     if (event.key === "g" || event.key === "G") {
       setShowGrid((p) => !p);
     }
     if (event.key === "Escape") {
       setShowSettings((s) => !s);
     }
+    /*
     if (event.key === "f" || event.key === "F") {
       document?.getElementById("root")?.requestFullscreen();
     }
+    */
   };
 
   useEffect(() => {
@@ -164,6 +181,15 @@ const SlideShow = (settings: Settings) => {
   }, []);
 
   const fullScreen = document.fullscreenElement !== null;
+
+  const showAdultContentWarning =
+    !settings.showNsfw && (
+    nfswTags.some((t) => settings.tags.includes(t)) ||
+    nsfwNPubs.some((p) => settings.npubs.includes(p)));
+
+  if (showAdultContentWarning) {
+    return <AdultContentInfo></AdultContentInfo>;
+  }
 
   return (
     <>

@@ -12,6 +12,9 @@ export const defaultHashTags = [
   "photography",
   "photostr",
   "streetphotography",
+  "tavelstr",
+  "gardening",
+  "gardenstr",
 ];
 
 export const nfswTags = [
@@ -44,7 +47,7 @@ export const nfswTags = [
   "titstr",
 ];
 
-export const nsfwPubKeys = [
+export const nsfwNPubs = [
   "npub12jedfuhk2wfr7syr38t2f55652khuyz9f88r63ftm0j2vudxq9sqq7677r", // Erikha
   "npub13806pd9p833wkgyemeqddjzdksunlq9gszq4yjnhw4l57sjjhwlq6m79nj", // Orvalho
   "npub13n6ednsew67xk7hgse670z7849q5h8su5rgydxtl4lq3r5cx4ecqsd9af4", // Everybody, Every Body
@@ -78,6 +81,11 @@ export const nsfwPubKeys = [
   "npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv", // Erandis Vol
   "npub1y77j6jm5hw34xl5m85aumltv88arh2s7q383allkpfe4muarzc5qzfgru0", // sexy-models
   "npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq", // Welcome To The Jungle
-].map((npub) => (nip19.decode(npub).data as string).toLowerCase());
+  "npub1csk2wg33ee9kutyps4nmevyv3putfegj7yd0emsp44ph32wvmamqs7uyan", // Lilura
+];
+
+export const nsfwPubKeys = nsfwNPubs.map((npub) =>
+  (nip19.decode(npub).data as string).toLowerCase()
+);
 
 export const spamAccounts = [];

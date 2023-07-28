@@ -126,7 +126,7 @@
 
 .controls button svg {
   fill: white;
-  opacity: 0.5;
+  opacity: 0.8;
   height: 1.5em;
   width: 2em;
   transform: fill 0.5s ease-in-out;

@@ -7,6 +7,7 @@ type Settings = {
   tags: string[];
   npubs: string[];
 };
+
 type SettingsProps = {
   onClose: () => void;
   settings: Settings;
