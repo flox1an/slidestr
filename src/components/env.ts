@@ -87,3 +87,15 @@ export const nsfwNPubs = [
 export const nsfwPubKeys = nsfwNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
 
 export const spamAccounts = [];
+
+export const defaultRelays = [
+  'wss://relay.damus.io',
+  'wss://relay.nostr.band',
+  'wss://nos.lol',
+  'wss://relay.mostr.pub',
+  'wss://relay.shitforce.one/',
+  'wss://nostr.wine',
+  // "wss://nostr1.current.fyi/",
+  'wss://purplepag.es/', // needed for user profiles
+  //"wss://feeds.nostr.band/pics",
+];

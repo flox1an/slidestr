@@ -5,14 +5,13 @@ import {
   NostrImage,
   buildFilter,
   extractImageUrls,
-  hasContentWarning,
-  hasNsfwTag,
   isImage,
+  isNsfwRelated,
   isReply,
   isVideo,
   prepareContent,
 } from './nostrImageDownload';
-import { nfswTags, nsfwNPubs, nsfwPubKeys } from './env';
+import { defaultRelays, nfswTags, nsfwNPubs } from './env';
 import Settings from './Settings';
 import SlideView from './SlideView';
 import GridView from './GridView';
@@ -23,6 +22,7 @@ import AdultContentInfo from './AdultContentInfo';
 import IconSettings from './Icons/IconSettings';
 import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
+import { NDKEvent } from '@nostr-dev-kit/ndk';
 
 /*
 FEATURES:
@@ -45,34 +45,23 @@ FEATURES:
 - Prevent duplicate images (shuffle? histroy?)
 */
 
-// let oldest = Infinity;
-let maxFetchCount = 1;
-let eventsReceived = 0;
-
 const SlideShow = (settings: Settings) => {
   const { ndk, loadNdk } = useNDK();
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<NDKEvent[]>([]);
   const images = useRef<NostrImage[]>([]);
   const fetchTimeoutHandle = useRef(0);
   const [showGrid, setShowGrid] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
   const fetch = () => {
-    eventsReceived = 0;
-
     const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs));
 
-    postSubscription.on('event', event => {
-      eventsReceived++;
-
+    postSubscription.on('event', (event: NDKEvent) => {
       setPosts(oldPosts => {
         if (
           !isReply(event) &&
-          oldPosts.findIndex(p => p.id === event.id) === -1 &&
-          (settings.showNsfw ||
-            (!hasContentWarning(event) && // only allow content warnings on profile content
-              !hasNsfwTag(event) && // only allow nsfw on profile content
-              !nsfwPubKeys.includes(event.pubkey.toLowerCase()))) // block nsfw authors
+          oldPosts.findIndex(p => p.id === event.id) === -1 && // not duplicate
+          (settings.showNsfw || !isNsfwRelated(event))
         ) {
           return [...oldPosts, event];
         }
@@ -90,28 +79,10 @@ const SlideShow = (settings: Settings) => {
   };
 
   useEffect(() => {
-    loadNdk([
-      'wss://relay.damus.io',
-      'wss://relay.nostr.band',
-      'wss://nos.lol',
-      'wss://relay.mostr.pub',
-      'wss://relay.shitforce.one/',
-      "wss://nostr.wine",
-      // "wss://nostr1.current.fyi/",
-      'wss://purplepag.es/', // needed for user profiles
-      //"wss://feeds.nostr.band/pics",
-    ]);
-  }, []);
-
-  useEffect(() => {
     // reset all
-    console.log(`resetting`);
     setPosts([]);
-    maxFetchCount = 20;
-    eventsReceived = 0;
     images.current = [];
     clearTimeout(fetchTimeoutHandle.current);
-
     return fetch();
   }, [settings]);
 
@@ -152,6 +123,7 @@ const SlideShow = (settings: Settings) => {
   };
 
   useEffect(() => {
+    loadNdk(defaultRelays);
     window.addEventListener('keydown', onKeyDown);
     return () => {
       window.removeEventListener('keydown', onKeyDown);

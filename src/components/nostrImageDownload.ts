@@ -1,6 +1,6 @@
-import { NDKFilter } from '@nostr-dev-kit/ndk';
+import { NDKEvent, NDKFilter } from '@nostr-dev-kit/ndk';
 import { nip19 } from 'nostr-tools';
-import { nfswTags } from './env';
+import { nfswTags, nsfwPubKeys } from './env';
 
 export type NostrImage = {
   url: string;
@@ -48,19 +48,27 @@ export const extractImageUrls = (text: string): string[] => {
   return (text.match(urlRegex) || []).map(u => urlFix(u));
 };
 
-export const isReply = (event: any) => {
+export const isReply = (event: NDKEvent) => {
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
   return event.tags.filter((t: string[]) => t[0] === 'e' && t[3] === 'reply').length > 0;
 };
 
-export const hasContentWarning = (event: any) => {
+export const hasContentWarning = (event: NDKEvent) => {
   // ["content-warning", "NSFW: implied nudity"]
   return event.tags.filter((t: string[]) => t[0] === 'content-warning').length > 0;
 };
 
-export const hasNsfwTag = (event: any) => {
+export const hasNsfwTag = (event: NDKEvent) => {
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
   return event.tags.filter((t: string[]) => t[0] === 't' && nfswTags.includes(t[1])).length > 0;
+};
+
+export const isNsfwRelated = (event: NDKEvent) => {
+  return (
+    hasContentWarning(event) || // block content warning
+    hasNsfwTag(event) || // block nsfw tags
+    nsfwPubKeys.includes(event.pubkey.toLowerCase()) // block nsfw authors
+  );
 };
 
 export const isImage = (url: string) => {
