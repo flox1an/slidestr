@@ -7,7 +7,7 @@ export type NostrImage = {
   author: string;
   tags: string[];
   content?: string;
-  timestamp: number;
+  timestamp?: number;
   noteId: string;
   type: 'image' | 'video';
 };
