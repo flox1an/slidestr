@@ -71,6 +71,7 @@
   width: 25em;
   overflow-y: auto;
   overflow-x: hidden;
+  max-height: 90vh;
 }
 
 .details-author {

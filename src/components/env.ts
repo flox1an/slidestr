@@ -18,6 +18,7 @@ export const defaultHashTags = [
 ];
 
 export const nfswTags = [
+  'adult',
   'ass',
   'blowjob',
   'boobstr',
@@ -29,6 +30,7 @@ export const nfswTags = [
   'humpday',
   'kink',
   'kinkstr',
+  'lolita',
   'milf',
   'naked',
   'nakedart',
@@ -36,6 +38,7 @@ export const nfswTags = [
   'nsfw',
   'nude',
   'nudeart',
+  'onlyfans',
   'orgasm',
   'pornhub',
   'pornstr',
@@ -45,7 +48,6 @@ export const nfswTags = [
   'thighstr',
   'tits',
   'titstr',
-  'lolita',
 ];
 
 export const nsfwNPubs = [
@@ -83,6 +85,8 @@ export const nsfwNPubs = [
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1csk2wg33ee9kutyps4nmevyv3putfegj7yd0emsp44ph32wvmamqs7uyan', // Lilura
   'npub10m75ad8pc6wtlt67f6wjeug4hpqurc68842ve5ne47u9lkjqa0lq8ja88s', // 313Chris:hellokitty_headbang:
+  'npub1nkw853ncf4nmsctujc3hdahwtm03hssrskc2t33qjqedxtpwupfqeukt53', // bpufa
+  'npub1hjdtj67ckrq0lzga2mchny3wmgn6rptp826djd6edgyru7x6dszq093c0a', // ai
 ];
 
 export const nsfwPublicKeys = nsfwNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());

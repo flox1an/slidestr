@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import AuthorProfile from '../AuthorProfile';
 import Slide from './Slide';
 import { NostrImage, urlFix } from '../nostrImageDownload';
@@ -13,7 +13,7 @@ import { Settings } from '../../utils/useNav';
 
 type SlideViewProps = {
   settings: Settings;
-  images: NostrImage[];
+  images: MutableRefObject<NostrImage[]>;
   setShowGrid: (showGrid: boolean) => void;
 };
 
@@ -37,7 +37,6 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
       setTitle(`Random photos from popular hashtags | ${appName}`);
     }
   }, [settings]);
-
   const queueNextImage = (waitTime: number) => {
     console.log(`cleaining timeout in queueNextImage`);
     clearTimeout(viewTimeoutHandle.current);
@@ -64,7 +63,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
 
     if (history.current.length > 1) {
       const previousImage = history.current.pop(); // remove current image
-      previousImage && images.push(previousImage); // add current image back to the pool
+      previousImage && images.current.push(previousImage); // add current image back to the pool
       const lastImage = history.current[history.current.length - 1]; // show preview image but leave in the history
       if (lastImage) {
         setActiveImages([lastImage]);
@@ -80,7 +79,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
   });
 
   const animateImages = () => {
-    console.log(`animateImages ${images.length}`);
+    console.log(`animateImages ${images.current.length}`);
 
     setActiveImages(activeImages => {
       const newActiveImages = [...activeImages];
@@ -90,12 +89,12 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
         newActiveImages.shift();
       }
 
-      //console.log(`images = ${images.length}`);
-      if (images.length > 0) {
-        const randomImage = images[Math.floor(Math.random() * images.length)];
+      console.log(`images = ${images.current.length}`);
+      if (images.current.length > 0) {
+        const randomImage = images.current[Math.floor(Math.random() * images.current.length)];
         //  console.log(`randomImage = ${randomImage.url}`);
         // TODO this creates potential duplicates when images are loaded from multiple relays
-        images = images.filter(i => i !== randomImage);
+        images.current = images.current.filter(i => i !== randomImage);
 
         history.current.push(randomImage);
         newActiveImages.push(randomImage);
@@ -106,14 +105,14 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
   };
 
   useEffect(() => {
-    console.log(`slideShowStarted = ${slideShowStarted}, images = ${images.length}`);
+    console.log(`slideShowStarted = ${slideShowStarted}, images = ${images.current.length}`);
     // Make sure we have an image to start with but only trigger once
-    if (!slideShowStarted && images.length > 2) {
+    if (!slideShowStarted && images.current.length > 2) {
       setSlideShowStarted(true);
       console.log('******* queueNextImage');
-      queueNextImage(10);
+      queueNextImage(500);
     }
-  }, [images]);
+  }, [images.current.length]);
 
   const onKeyDown = (event: KeyboardEvent) => {
     // console.log(event);

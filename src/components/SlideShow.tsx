@@ -169,7 +169,7 @@ const SlideShow = () => {
       {showGrid ? (
         <GridView images={images.current} settings={settings}></GridView>
       ) : (
-        <SlideView images={images.current} settings={settings} setShowGrid={setShowGrid}></SlideView>
+        <SlideView images={images} settings={settings} setShowGrid={setShowGrid}></SlideView>
       )}
     </>
   );
