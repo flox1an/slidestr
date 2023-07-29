@@ -1,4 +1,4 @@
-@keyframes showImage {
+@keyframes showGridImage {
   from {
     opacity: 0;
     visibility: visible;
@@ -39,7 +39,7 @@
 .imagegrid .image.show {
   animation-duration: 0.5s;
   animation-timing-function: ease-in;
-  animation-name: showImage;
+  animation-name: showGridImage;
   visibility: visible;
 }
 
