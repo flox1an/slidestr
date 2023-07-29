@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
-import Settings from '../Settings';
-import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
+import { useEffect, useMemo, useState } from 'react';
+import { NostrImage, isVideo } from '../nostrImageDownload';
 import './GridView.css';
-import Slide from '../SlideView/Slide';
+import DetailsView from './DetailsView';
+import GridImage from './GridImage';
+import { Settings } from '../../utils/useNav';
 
 type GridViewProps = {
   settings: Settings;
@@ -10,7 +11,7 @@ type GridViewProps = {
 };
 
 const GridView = ({ settings, images }: GridViewProps) => {
-  const [activeImage, setActiveImage] = useState<NostrImage | undefined>();
+  const [activeImageIdx, setActiveImageIdx] = useState<number | undefined>();
 
   const sortedImages = useMemo(
     () =>
@@ -20,20 +21,33 @@ const GridView = ({ settings, images }: GridViewProps) => {
     [images]
   );
 
+  const onKeyDown = (event: KeyboardEvent) => {
+    console.log(event);
+    if (event.key === 'ArrowRight') {
+      setActiveImageIdx(idx => (idx !== undefined && idx < sortedImages.length - 1 ? idx + 1 : idx));
+    }
+    if (event.key === 'ArrowLeft') {
+      setActiveImageIdx(idx => (idx !== undefined && idx > 0 ? idx - 1 : idx));
+    }
+    if (event.key === 'Escape') {
+      setActiveImageIdx(undefined);
+    }
+  };
+
+  useEffect(() => {
+    document.body.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.removeEventListener('keydown', onKeyDown);
+    };
+  }, []);
+
   return (
-    <>
-      {activeImage && (
-        <Slide
-          url={activeImage.url}
-          noteId={activeImage.noteId}
-          type={activeImage.type}
-          paused={false}
-          onAnimationEnded={() => setActiveImage(undefined)}
-          animationDuration={4}
-        ></Slide>
-      )}
+    <div className="gridview">
+      {activeImageIdx !== undefined ? (
+        <DetailsView images={sortedImages} activeImageIdx={activeImageIdx} setActiveImageIdx={setActiveImageIdx} />
+      ) : null}
       <div className="imagegrid">
-        {sortedImages.map(image =>
+        {sortedImages.map((image, idx) =>
           isVideo(image.url) ? (
             <video
               className="image"
@@ -44,18 +58,11 @@ const GridView = ({ settings, images }: GridViewProps) => {
               preload="none"
             />
           ) : (
-            <img
-              onClick={() => setActiveImage(image)}
-              data-node-id={image.noteId}
-              className="image"
-              loading="lazy"
-              key={image.url}
-              src={createImgProxyUrl(image.url)}
-            ></img>
+            <GridImage key={image.url} image={image} onClick={() => setActiveImageIdx(idx)}></GridImage>
           )
         )}
       </div>
-    </>
+    </div>
   );
 };
 

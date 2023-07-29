@@ -11,7 +11,7 @@ import {
   isVideo,
   prepareContent,
 } from './nostrImageDownload';
-import { defaultRelays, nfswTags, nsfwNPubs } from './env';
+import { blockedPublicKeys, defaultRelays, nfswTags, nsfwNPubs } from './env';
 import Settings from './Settings';
 import SlideView from './SlideView';
 import GridView from './GridView';
@@ -23,6 +23,7 @@ import IconSettings from './Icons/IconSettings';
 import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
 import { NDKEvent } from '@nostr-dev-kit/ndk';
+import useNav from '../utils/useNav';
 
 /*
 FEATURES:
@@ -45,13 +46,14 @@ FEATURES:
 - Prevent duplicate images (shuffle? histroy?)
 */
 
-const SlideShow = (settings: Settings) => {
+const SlideShow = () => {
   const { ndk, loadNdk } = useNDK();
   const [posts, setPosts] = useState<NDKEvent[]>([]);
   const images = useRef<NostrImage[]>([]);
   const fetchTimeoutHandle = useRef(0);
   const [showGrid, setShowGrid] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const { currentSettings: settings } = useNav();
 
   const fetch = () => {
     const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs));
@@ -59,6 +61,7 @@ const SlideShow = (settings: Settings) => {
     postSubscription.on('event', (event: NDKEvent) => {
       setPosts(oldPosts => {
         if (
+          !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
           !isReply(event) &&
           oldPosts.findIndex(p => p.id === event.id) === -1 && // not duplicate
           (settings.showNsfw || !isNsfwRelated(event))
@@ -112,8 +115,11 @@ const SlideShow = (settings: Settings) => {
     if (event.key === 'g' || event.key === 'G') {
       setShowGrid(p => !p);
     }
-    if (event.key === 'Escape') {
+    if (event.key === 's' || event.key === 'S') {
       setShowSettings(s => !s);
+    }
+    if (event.key === 'Escape') {
+      setShowSettings(false);
     }
     /*
     if (event.key === "f" || event.key === "F") {
@@ -124,9 +130,9 @@ const SlideShow = (settings: Settings) => {
 
   useEffect(() => {
     loadNdk(defaultRelays);
-    window.addEventListener('keydown', onKeyDown);
+    document.body.addEventListener('keydown', onKeyDown);
     return () => {
-      window.removeEventListener('keydown', onKeyDown);
+      document.body.removeEventListener('keydown', onKeyDown);
     };
   }, []);
 
@@ -163,7 +169,7 @@ const SlideShow = (settings: Settings) => {
       {showGrid ? (
         <GridView images={images.current} settings={settings}></GridView>
       ) : (
-        <SlideView images={images.current} settings={settings}></SlideView>
+        <SlideView images={images.current} settings={settings} setShowGrid={setShowGrid}></SlideView>
       )}
     </>
   );

@@ -7,16 +7,17 @@ import { useNDK } from '@nostr-dev-kit/ndk-react';
 import useDebouncedEffect from '../../utils/useDebouncedEffect';
 import { useSwipeable } from 'react-swipeable';
 import { Helmet } from 'react-helmet';
-import Settings from '../Settings';
 import IconPause from '../Icons/IconPause';
 import IconSpinner from '../Icons/IconSpinner';
+import { Settings } from '../../utils/useNav';
 
 type SlideViewProps = {
   settings: Settings;
   images: NostrImage[];
+  setShowGrid: (showGrid: boolean) => void;
 };
 
-const SlideView = ({ settings, images }: SlideViewProps) => {
+const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
   const { getProfile } = useNDK();
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const history = useRef<NostrImage[]>([]);
@@ -130,7 +131,7 @@ const SlideView = ({ settings, images }: SlideViewProps) => {
   useEffect(() => {
     document.body.addEventListener('keydown', onKeyDown);
     return () => {
-      window.removeEventListener('keydown', onKeyDown);
+      document.body.removeEventListener('keydown', onKeyDown);
       console.log(`cleaining timeout in useEffect[] destructor `);
       clearTimeout(viewTimeoutHandle.current);
     };
@@ -189,6 +190,7 @@ const SlideView = ({ settings, images }: SlideViewProps) => {
       )}
       {activeProfile && (
         <AuthorProfile
+          setShowGrid={setShowGrid}
           src={urlFix(activeProfile.image || '')}
           author={activeProfile.displayName || activeProfile.name}
           npub={activeNpub}

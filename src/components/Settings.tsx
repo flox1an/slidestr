@@ -1,38 +1,29 @@
 import { FormEvent, useState } from 'react';
 import './Settings.css';
-import { useNavigate } from 'react-router-dom';
-
-type Settings = {
-  showNsfw: boolean;
-  tags: string[];
-  npubs: string[];
-};
+import useNav, { Settings } from '../utils/useNav';
 
 type SettingsProps = {
   onClose: () => void;
   settings: Settings;
 };
 
-const Settings = ({ onClose, settings }: SettingsProps) => {
+const SettingsDialog = ({ onClose, settings }: SettingsProps) => {
   const [showNsfw, setShowNsfw] = useState(settings.showNsfw || false);
   const [tags, setTags] = useState(settings.tags || []);
   const [npubs, setNpubs] = useState(settings.npubs || []);
-
-  const navigate = useNavigate();
+  const { nav, currentSettings } = useNav();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const nsfwPostfix = showNsfw ? '?nsfw=true' : '';
-
     const validTags = tags.filter(t => t.length > 0);
     const validNpubs = npubs.filter(t => t.length > 0);
 
     if (validTags.length > 0) {
-      navigate(`/tags/${validTags.join('%2C')}${nsfwPostfix}`);
+      nav({ ...currentSettings, tags: validTags, npubs: [], showNsfw });
     } else if (validNpubs.length == 1) {
-      navigate(`/p/${validNpubs[0]}${nsfwPostfix}`);
+      nav({ ...currentSettings, tags: [], npubs: validNpubs, showNsfw });
     } else {
-      navigate(`/${nsfwPostfix}`);
+      nav({ ...currentSettings, tags: [], npubs: [], showNsfw });
     }
     onClose();
   };
@@ -79,4 +70,4 @@ const Settings = ({ onClose, settings }: SettingsProps) => {
   );
 };
 
-export default Settings;
+export default SettingsDialog;

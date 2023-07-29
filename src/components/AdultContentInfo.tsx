@@ -1,18 +1,17 @@
-import { useNavigate } from 'react-router-dom';
 import './Disclaimer.css';
 import { MouseEvent } from 'react';
+import useNav from '../utils/useNav';
 
 const AdultContentInfo = () => {
-  const navigate = useNavigate();
+  const { nav, currentSettings } = useNav();
 
   const proceed = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const nsfwPostfix = '?nsfw=true';
-    navigate(`${window.location.pathname}${nsfwPostfix}`);
+    nav({ ...currentSettings, showNsfw: true });
   };
   const goBack = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    navigate(`/`);
+    nav({ npubs: [], tags: [], showNsfw: false });
   };
 
   return (

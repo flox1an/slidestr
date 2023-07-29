@@ -1,6 +1,6 @@
 import { NDKEvent, NDKFilter } from '@nostr-dev-kit/ndk';
 import { nip19 } from 'nostr-tools';
-import { nfswTags, nsfwPubKeys } from './env';
+import { nfswTags, nsfwPublicKeys } from './env';
 
 export type NostrImage = {
   url: string;
@@ -67,7 +67,7 @@ export const isNsfwRelated = (event: NDKEvent) => {
   return (
     hasContentWarning(event) || // block content warning
     hasNsfwTag(event) || // block nsfw tags
-    nsfwPubKeys.includes(event.pubkey.toLowerCase()) // block nsfw authors
+    nsfwPublicKeys.includes(event.pubkey.toLowerCase()) // block nsfw authors
   );
 };
 

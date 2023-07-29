@@ -45,6 +45,7 @@ export const nfswTags = [
   'thighstr',
   'tits',
   'titstr',
+  'lolita',
 ];
 
 export const nsfwNPubs = [
@@ -78,13 +79,21 @@ export const nsfwNPubs = [
   'npub1ulafm4d3n7ukl7yzg4hfnhfjut74nym5p83e3d67l3j62yc6ysqqrancw2', // naked
   'npub1ve4ztpqvlgu3v6hgrvc4lrdl2ernue7lq2h8tcgaksrkxlm7gnsqkjmz4e', // bluntkaraoke
   'npub1wmsn8fch7kwt987jcdx06uuapn6pwzau59pvy0ql5d3xlmnxa2csj3c5p4', // StefsPicks
-  'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
   'npub1y77j6jm5hw34xl5m85aumltv88arh2s7q383allkpfe4muarzc5qzfgru0', // sexy-models
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1csk2wg33ee9kutyps4nmevyv3putfegj7yd0emsp44ph32wvmamqs7uyan', // Lilura
+  'npub10m75ad8pc6wtlt67f6wjeug4hpqurc68842ve5ne47u9lkjqa0lq8ja88s', // 313Chris:hellokitty_headbang:
 ];
 
-export const nsfwPubKeys = nsfwNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
+export const nsfwPublicKeys = nsfwNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
+
+export const blockedNPubs = [
+  'npub1awxh85c5wasj60d42uvmzuza2uvjazff9m7skg2vf7x2f8gykwkqykxktf', // AIイラスト',
+  'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
+  'npub1kf8sau5dejmcmfmzzj256rv728p5w7s0wytdyz8ypa0ne0y6k0vswhgu9w', // noname
+];
+
+export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
 
 export const spamAccounts = [];
 
@@ -97,5 +106,6 @@ export const defaultRelays = [
   'wss://nostr.wine',
   // "wss://nostr1.current.fyi/",
   'wss://purplepag.es/', // needed for user profiles
+  'wss://n-word.sharivegas.com/', // needed for mostr.pub profiles
   //"wss://feeds.nostr.band/pics",
 ];
