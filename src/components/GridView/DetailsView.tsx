@@ -23,6 +23,14 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
 
   return (
     <div className="details">
+      <div
+        className="closeButton"
+        onClick={() => {
+          setActiveImageIdx(undefined);
+        }}
+      >
+        ✕
+      </div>
       <div className="details-contents">
         <img className="detail-image" src={currentImage?.url}></img>
         <div className="detail-description">

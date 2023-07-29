@@ -22,7 +22,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const history = useRef<NostrImage[]>([]);
   const [paused, setPaused] = useState(false);
-  const upcommingImage = useRef<NostrImage>();
+  const upcomingImage = useRef<NostrImage>();
   const [loading, setLoading] = useState(true);
   const viewTimeoutHandle = useRef(0);
   const [title, setTitle] = useState(appName);
@@ -38,7 +38,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
     }
   }, [settings]);
   const queueNextImage = (waitTime: number) => {
-    console.log(`cleaining timeout in queueNextImage`);
+    console.log(`cleaning timeout in queueNextImage`);
     clearTimeout(viewTimeoutHandle.current);
     viewTimeoutHandle.current = setTimeout(() => {
       if (!paused) {
@@ -67,7 +67,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
       const lastImage = history.current[history.current.length - 1]; // show preview image but leave in the history
       if (lastImage) {
         setActiveImages([lastImage]);
-        upcommingImage.current = lastImage;
+        upcomingImage.current = lastImage;
         queueNextImage(8000); // queue next image for 8s after showing this one
       }
     }
@@ -98,7 +98,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
 
         history.current.push(randomImage);
         newActiveImages.push(randomImage);
-        upcommingImage.current = randomImage;
+        upcomingImage.current = randomImage;
       }
       return newActiveImages;
     });
@@ -131,17 +131,17 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
     document.body.addEventListener('keydown', onKeyDown);
     return () => {
       document.body.removeEventListener('keydown', onKeyDown);
-      console.log(`cleaining timeout in useEffect[] destructor `);
+      console.log(`cleaning timeout in useEffect[] destructor `);
       clearTimeout(viewTimeoutHandle.current);
     };
   }, []);
 
   useDebouncedEffect(
     () => {
-      setActiveNpub(upcommingImage?.current?.author);
-      setActiveContent(upcommingImage?.current?.content);
+      setActiveNpub(upcomingImage?.current?.author);
+      setActiveContent(upcomingImage?.current?.content);
     },
-    [upcommingImage?.current],
+    [upcomingImage?.current],
     2000
   );
 
@@ -150,9 +150,9 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
     setSlideShowStarted(false);
     setActiveImages([]);
     history.current = [];
-    upcommingImage.current = undefined;
+    upcomingImage.current = undefined;
 
-    console.log(`cleaining timeout in useEffect[settings] `);
+    console.log(`cleaning timeout in useEffect[settings] `);
     //clearTimeout(viewTimeoutHandle.current);
   }, [settings]);
 

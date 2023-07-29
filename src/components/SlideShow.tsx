@@ -42,8 +42,8 @@ FEATURES:
 - Prevent duplicates (shuffle?), prevent same author twice in a row
 - show content warning?
 - Support Deleted Events
-- Support reposts and replies (incl. filter in settings)
-- Prevent duplicate images (shuffle? histroy?)
+- Support re-posts and replies (incl. filter in settings)
+- Prevent duplicate images (shuffle? history?)
 */
 
 const SlideShow = () => {
