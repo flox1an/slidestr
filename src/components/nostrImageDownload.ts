@@ -1,4 +1,4 @@
-import { NDKEvent, NDKFilter } from '@nostr-dev-kit/ndk';
+import { NDKFilter, NDKKind, NDKTag } from '@nostr-dev-kit/ndk';
 import { nip19 } from 'nostr-tools';
 import { nfswTags, nsfwPublicKeys } from './env';
 
@@ -11,6 +11,18 @@ export type NostrImage = {
   noteId: string;
   type: 'image' | 'video';
 };
+
+export interface NostrEvent {
+  created_at: number;
+  content: string;
+  tags: NDKTag[];
+  kind?: NDKKind | number;
+  pubkey: string;
+  id?: string;
+  sig?: string;
+  isRepost: boolean;
+  isReply: boolean;
+}
 
 export const buildFilter = (tags: string[], npubs: string[]) => {
   const filter: NDKFilter = {
@@ -48,26 +60,26 @@ export const extractImageUrls = (text: string): string[] => {
   return (text.match(urlRegex) || []).map(u => urlFix(u));
 };
 
-export const isReply = (event: NDKEvent) => {
+export const isReply = ({ tags }: { tags: NDKTag[] }) => {
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
-  return event.tags.filter((t: string[]) => t[0] === 'e' && t[3] === 'reply').length > 0;
+  return tags.filter((t: string[]) => t[0] === 'e' && t[3] === 'reply').length > 0;
 };
 
-export const hasContentWarning = (event: NDKEvent) => {
+export const hasContentWarning = ({ tags }: { tags: NDKTag[] }) => {
   // ["content-warning", "NSFW: implied nudity"]
-  return event.tags.filter((t: string[]) => t[0] === 'content-warning').length > 0;
+  return tags.filter((t: string[]) => t[0] === 'content-warning').length > 0;
 };
 
-export const hasNsfwTag = (event: NDKEvent) => {
+export const hasNsfwTag = ({ tags }: { tags: NDKTag[] }) => {
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
-  return event.tags.filter((t: string[]) => t[0] === 't' && nfswTags.includes(t[1])).length > 0;
+  return tags.filter((t: string[]) => t[0] === 't' && nfswTags.includes(t[1])).length > 0;
 };
 
-export const isNsfwRelated = (event: NDKEvent) => {
+export const isNsfwRelated = ({ tags, pubkey }: { tags: NDKTag[]; pubkey: string }) => {
   return (
-    hasContentWarning(event) || // block content warning
-    hasNsfwTag(event) || // block nsfw tags
-    nsfwPublicKeys.includes(event.pubkey.toLowerCase()) // block nsfw authors
+    hasContentWarning({ tags }) || // block content warning
+    hasNsfwTag({ tags }) || // block nsfw tags
+    nsfwPublicKeys.includes(pubkey.toLowerCase()) // block nsfw authors
   );
 };
 

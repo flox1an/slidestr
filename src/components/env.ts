@@ -38,8 +38,10 @@ export const nfswTags = [
   'nsfw',
   'nude',
   'nudeart',
+  'nudes',
   'onlyfans',
   'orgasm',
+  'porn',
   'pornhub',
   'pornstr',
   'pussy',
@@ -48,6 +50,7 @@ export const nfswTags = [
   'thighstr',
   'tits',
   'titstr',
+  'xxx',
 ];
 
 export const nsfwNPubs = [
@@ -87,6 +90,7 @@ export const nsfwNPubs = [
   'npub10m75ad8pc6wtlt67f6wjeug4hpqurc68842ve5ne47u9lkjqa0lq8ja88s', // 313Chris:hellokitty_headbang:
   'npub1nkw853ncf4nmsctujc3hdahwtm03hssrskc2t33qjqedxtpwupfqeukt53', // bpufa
   'npub1hjdtj67ckrq0lzga2mchny3wmgn6rptp826djd6edgyru7x6dszq093c0a', // ai
+  'npub1peq5ds2jaj5en35xgl6r6rxvvk9eh4ppzhs4mpdh9s5y8ffdwl5q7nmyda', // Furry Artworks 18+
 ];
 
 export const nsfwPublicKeys = nsfwNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());

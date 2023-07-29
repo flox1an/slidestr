@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { NostrImage, isVideo } from '../nostrImageDownload';
+import { NostrImage, isVideo, urlFix } from '../nostrImageDownload';
 import './GridView.css';
 import DetailsView from './DetailsView';
 import GridImage from './GridImage';
 import { Settings } from '../../utils/useNav';
+import { useNDK } from '@nostr-dev-kit/ndk-react';
+import AuthorProfile from '../AuthorProfile';
 
 type GridViewProps = {
   settings: Settings;
@@ -12,6 +14,7 @@ type GridViewProps = {
 
 const GridView = ({ settings, images }: GridViewProps) => {
   const [activeImageIdx, setActiveImageIdx] = useState<number | undefined>();
+  const { getProfile } = useNDK();
 
   const sortedImages = useMemo(
     () =>
@@ -41,6 +44,8 @@ const GridView = ({ settings, images }: GridViewProps) => {
     };
   }, []);
 
+  const activeProfile = settings.npubs.length == 1 && getProfile(settings.npubs[0]);
+
   return (
     <div className="gridview">
       {activeImageIdx !== undefined ? (
@@ -62,6 +67,13 @@ const GridView = ({ settings, images }: GridViewProps) => {
           )
         )}
       </div>
+      {activeProfile && (
+        <AuthorProfile
+          src={urlFix(activeProfile.image || '')}
+          author={activeProfile.displayName || activeProfile.name}
+          npub={activeProfile.npub}
+        ></AuthorProfile>
+      )}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { useNDK } from '@nostr-dev-kit/ndk-react';
 import './SlideShow.css';
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  NostrEvent,
   NostrImage,
   buildFilter,
   extractImageUrls,
@@ -22,16 +23,15 @@ import AdultContentInfo from './AdultContentInfo';
 import IconSettings from './Icons/IconSettings';
 import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
-import { NDKEvent } from '@nostr-dev-kit/ndk';
 import useNav from '../utils/useNav';
-
 /*
 FEATURES:
-- why do we always start with the same image?
-- details view for the grid
+- always update title (grid and slideshow, maybe details too?)
+- settings dialog needs a close button
 - show content text (how to beautify?, crop?)
 - show tags 
 - preview for videos
+- add respost/reply filter to the settings dialog
 - jump to note
 - negative hashtag filter
 - login to use your own feed
@@ -48,7 +48,7 @@ FEATURES:
 
 const SlideShow = () => {
   const { ndk, loadNdk } = useNDK();
-  const [posts, setPosts] = useState<NDKEvent[]>([]);
+  const [posts, setPosts] = useState<NostrEvent[]>([]);
   const images = useRef<NostrImage[]>([]);
   const fetchTimeoutHandle = useRef(0);
   const [showGrid, setShowGrid] = useState(false);
@@ -58,11 +58,21 @@ const SlideShow = () => {
   const fetch = () => {
     const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs));
 
-    postSubscription.on('event', (event: NDKEvent) => {
+    postSubscription.on('event', (event: NostrEvent) => {
       setPosts(oldPosts => {
+        event.isReply = isReply(event);
+
+        if (event.kind === 6) {
+          const repostedEvent = JSON.parse(event.content);
+          if (repostedEvent) {
+            event = repostedEvent;
+            event.isRepost = true;
+          }
+        }
+
         if (
           !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
-          !isReply(event) &&
+          !event.isReply &&
           oldPosts.findIndex(p => p.id === event.id) === -1 && // not duplicate
           (settings.showNsfw || !isNsfwRelated(event))
         ) {
@@ -96,11 +106,11 @@ const SlideShow = () => {
           .filter(url => isImage(url) || isVideo(url))
           .map(url => ({
             url,
-            author: p.author.npub,
+            author: nip19.npubEncode(p.pubkey),
             content: prepareContent(p.content),
             type: isVideo(url) ? 'video' : 'image',
             timestamp: p.created_at,
-            noteId: nip19.noteEncode(p.id),
+            noteId: p.id ? nip19.noteEncode(p.id) : '',
             tags: p.tags.filter((t: string[]) => t[0] === 't').map((t: string[]) => t[1].toLowerCase()),
           }));
       }),
