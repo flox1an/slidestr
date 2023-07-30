@@ -1,0 +1,46 @@
+.tag-editor .tag {
+  display: inline-block;
+  padding: 0em 0.6em;
+  margin-right: 0.4em;
+  border-radius: 24px;
+  background-color: #444;
+  color: white;
+  line-height: 2.2em;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 0.4em;
+  min-width: 3em;
+  text-align: center;
+  user-select: none;
+}
+.tag-editor .tag.selected {
+  background-color: #7600ff;
+}
+
+.tag-editor .tag:hover {
+  background-color: #555;
+}
+
+.tag-editor .tag.selected:hover {
+  background-color: #7322ff;
+}
+
+.tag-editor .tag input[type='text'] {
+  display: inline-block;
+  margin: 0.3em;
+  box-sizing: border-box;
+  width: initial;
+}
+
+.tag-editor .delete-tag {
+  display: inline-block;
+  margin-left: 0.3em;
+  margin-right: 0.1em;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.tag-editor .delete-tag:hover {
+  color: white;
+}

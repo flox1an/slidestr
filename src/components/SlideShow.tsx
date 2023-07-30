@@ -24,6 +24,7 @@ import IconSettings from './Icons/IconSettings';
 import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
 import useNav from '../utils/useNav';
+import SearchDialog from './TagEditor';
 /*
 FEATURES:
 - always update title (grid and slideshow, maybe details too?)
@@ -162,7 +163,7 @@ const SlideShow = () => {
 
   return (
     <>
-      {showSettings && <Settings onClose={() => setShowSettings(false)} settings={settings}></Settings>}
+      {showSettings && <Settings onClose={() => setShowSettings(false)}></Settings>}
 
       <div className="controls">
         <button onClick={() => setShowGrid(g => !g)} title={showGrid ? 'Play random slideshow (G)' : 'view grid (G)'}>

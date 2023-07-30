@@ -1,28 +1,29 @@
 import { FormEvent, useState } from 'react';
 import './Settings.css';
-import useNav, { Settings } from '../utils/useNav';
+import useNav from '../utils/useNav';
 import CloseButton from './CloseButton/CloseButton';
+import TagEditor, { Tag } from './TagEditor';
 
 type SettingsProps = {
   onClose: () => void;
-  settings: Settings;
 };
 
-const SettingsDialog = ({ onClose, settings }: SettingsProps) => {
-  const [showNsfw, setShowNsfw] = useState(settings.showNsfw || false);
-  const [tags, setTags] = useState(settings.tags || []);
-  const [npubs, setNpubs] = useState(settings.npubs || []);
+const SettingsDialog = ({ onClose }: SettingsProps) => {
   const { nav, currentSettings } = useNav();
+  const [showNsfw, setShowNsfw] = useState(currentSettings.showNsfw || false);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>(
+    currentSettings.tags.map(tag => ({ name: tag, selected: true, deletable: false }))
+  );
+  const [npubs, setNpubs] = useState(currentSettings.npubs || []);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const validTags = tags.filter(t => t.length > 0);
     const validNpubs = npubs.filter(t => t.length > 0);
-
-    if (validTags.length > 0) {
-      nav({ ...currentSettings, tags: validTags, npubs: [], showNsfw });
-    } else if (validNpubs.length == 1) {
+    const validTags = selectedTags.filter(t => t.selected).map(t => t.name);
+    if (validNpubs.length == 1) {
       nav({ ...currentSettings, tags: [], npubs: validNpubs, showNsfw });
+    } else if (validTags.length > 0) {
+      nav({ ...currentSettings, tags: validTags, npubs: [], showNsfw });
     } else {
       nav({ ...currentSettings, tags: [], npubs: [], showNsfw });
     }
@@ -35,22 +36,18 @@ const SettingsDialog = ({ onClose, settings }: SettingsProps) => {
       <CloseButton onClick={onClose}></CloseButton>
 
       <div className="settings-content">
-        <label htmlFor="tags">Tags (Comma separated):</label>
-        <textarea
-          name="tags"
-          rows={4}
-          id="tags"
-          value={tags.join(', ')}
-          onChange={e => setTags(e.target.value.split(',').map(t => t.trim().toLowerCase()))}
-        ></textarea>
+        <label htmlFor="tags">Images for tags:</label>
+        <TagEditor selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
 
-        <label htmlFor="npub">User Profile (Npub):</label>
+        <label htmlFor="npub">Images for user profile (npub):</label>
         <input
           type="text"
           name="npub"
           id="npub"
           value={npubs.join(', ')}
           onChange={e => setNpubs(e.target.value.split(',').map(t => t.trim().toLowerCase()))}
+          onKeyDown={e => e.stopPropagation()}
+          onKeyUp={e => e.stopPropagation()}
         />
 
         <div className="content-warning">

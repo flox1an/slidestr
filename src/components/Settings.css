@@ -16,7 +16,7 @@
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
-  justify-content: center;
+  /*justify-content: center;*/
   align-items: center;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -29,8 +29,8 @@
   flex-direction: column;
   gap: 24px;
 
-  max-width: 25em;
-  max-height: 28em;
+  max-width: 35em;
+  max-height: 35em;
 }
 
 @media (max-width: 768px) {
@@ -68,7 +68,6 @@
   font-family: unset;
   font-size: unset;
   padding: 0.1em;
-  margin-bottom: 1em;
   padding-left: 0.5em;
   box-sizing: border-box;
 }
@@ -95,5 +94,13 @@
   color: #ff563f;
   font-weight: 500;
   font-size: 1.2rem;
-  margin-bottom: 0.5em;
+}
+
+.settings h2 {
+  margin: 0px;
+  padding: 0px;
+}
+
+.settings .settings-content > * {
+  margin-bottom: 2em;
 }
