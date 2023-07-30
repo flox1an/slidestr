@@ -30,6 +30,8 @@ FEATURES:
 - add respost/reply filter to the settings dialog
 - Support re-posts and replies (incl. filter in settings)
 - show tags 
+- Suche der People Browser????
+- Actions: Repost, Reply, Block, Mute, Follow, Unfollow, Add to Album
 - preview for videos
 - jump to note
 - negative hashtag filter
@@ -61,10 +63,14 @@ const SlideShow = () => {
         event.isReply = isReply(event);
 
         if (event.kind === 6 && event.content) {
-          const repostedEvent = JSON.parse(event.content);
-          if (repostedEvent) {
-            event = repostedEvent;
-            event.isRepost = true;
+          try {
+            const repostedEvent = JSON.parse(event.content);
+            if (repostedEvent) {
+              event = repostedEvent;
+              event.isRepost = true;
+            }
+          } catch (e) {
+            // ingore, the content is no valid json
           }
         }
 
