@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import './Settings.css';
 import useNav, { Settings } from '../utils/useNav';
+import CloseButton from './CloseButton/CloseButton';
 
 type SettingsProps = {
   onClose: () => void;
@@ -31,6 +32,7 @@ const SettingsDialog = ({ onClose, settings }: SettingsProps) => {
   return (
     <div className="settings" onClick={e => e.stopPropagation()}>
       <h2>Settings</h2>
+      <CloseButton onClick={onClose}></CloseButton>
 
       <div className="settings-content">
         <label htmlFor="tags">Tags (Comma separated):</label>

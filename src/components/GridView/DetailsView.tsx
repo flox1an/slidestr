@@ -5,6 +5,7 @@ import DetailsAuthor from './Author';
 import { useMemo } from 'react';
 import uniq from 'lodash/uniq';
 import useNav from '../../utils/useNav';
+import CloseButton from '../CloseButton/CloseButton';
 
 type DetailsViewProps = {
   images: NostrImage[];
@@ -23,14 +24,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
 
   return (
     <div className="details">
-      <div
-        className="closeButton"
-        onClick={() => {
-          setActiveImageIdx(undefined);
-        }}
-      >
-        ✕
-      </div>
+      <CloseButton onClick={() => setActiveImageIdx(undefined)}></CloseButton>
       <div className="details-contents">
         <img className="detail-image" src={currentImage?.url}></img>
         <div className="detail-description">
