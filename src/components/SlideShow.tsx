@@ -27,11 +27,10 @@ import useNav from '../utils/useNav';
 /*
 FEATURES:
 - always update title (grid and slideshow, maybe details too?)
-- settings dialog needs a close button
-- show content text (how to beautify?, crop?)
+- add respost/reply filter to the settings dialog
+- Support re-posts and replies (incl. filter in settings)
 - show tags 
 - preview for videos
-- add respost/reply filter to the settings dialog
 - jump to note
 - negative hashtag filter
 - login to use your own feed
@@ -42,7 +41,6 @@ FEATURES:
 - Prevent duplicates (shuffle?), prevent same author twice in a row
 - show content warning?
 - Support Deleted Events
-- Support re-posts and replies (incl. filter in settings)
 - Prevent duplicate images (shuffle? history?)
 */
 
@@ -62,7 +60,7 @@ const SlideShow = () => {
       setPosts(oldPosts => {
         event.isReply = isReply(event);
 
-        if (event.kind === 6) {
+        if (event.kind === 6 && event.content) {
           const repostedEvent = JSON.parse(event.content);
           if (repostedEvent) {
             event = repostedEvent;
