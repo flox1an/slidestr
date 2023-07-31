@@ -71,6 +71,7 @@ export const nfswTags = [
   'nasstr',
   'nsfw',
   'nude',
+  'nodestr',
   'nudeart',
   'nudes',
   'onlyfans',
@@ -125,6 +126,9 @@ export const nsfwNPubs = [
   'npub1nkw853ncf4nmsctujc3hdahwtm03hssrskc2t33qjqedxtpwupfqeukt53', // bpufa
   'npub1hjdtj67ckrq0lzga2mchny3wmgn6rptp826djd6edgyru7x6dszq093c0a', // ai
   'npub1peq5ds2jaj5en35xgl6r6rxvvk9eh4ppzhs4mpdh9s5y8ffdwl5q7nmyda', // Furry Artworks 18+
+  'npub1qg550au9hqmpgye4kfrtj7yt85dn60ty5hk0hcm7pktq6g6mzugsufnfcx', // Poppy Clements
+  'npub16932qv3sz53t9fdlm2n7scct5ahe9fy9vsct36qd0wcwxm94gyks47dcg6', // Preggers
+  'npub16ye5pezunzcx8y0ecjquks0sr5jkj6lrhfjyu2n9qxt5cxgzrvcqgnvx8s', // Aru Moon
 ];
 
 export const nsfwPublicKeys = nsfwNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());

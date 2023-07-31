@@ -62,7 +62,7 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
       </div>
       <div className="settings-footer">
         <button type="submit" className="btn btn-primary" onClick={onSubmit}>
-          Save Settings
+          Apply settings
         </button>
       </div>
     </div>

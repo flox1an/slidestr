@@ -3,6 +3,7 @@ import './TagEditor.css';
 import useNav from '../utils/useNav';
 import uniq from 'lodash/uniq';
 import { visibleHashTags } from './env';
+import useUserTags from '../utils/useUserTags';
 
 type TagEditorProps = {
   selectedTags: Tag[];
@@ -19,27 +20,23 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
   const { currentSettings } = useNav();
 
   const [editMode, setEditMode] = useState(false);
-  const [userTags, setUserTags] = useState<string[]>([]);
+  const [userTags, setUserTags] = useUserTags();
 
   useEffect(() => {
     const previousSelected = selectedTags.filter(tag => tag.selected).map(tag => tag.name);
     const previousDeletable = selectedTags.filter(tag => tag.deletable).map(tag => tag.name);
 
-    //add currentSettings.tags to userTags
+    const tags = uniq([...userTags, ...visibleHashTags, ...currentSettings.tags]).sort();
 
-    const tags = uniq([...userTags, ...visibleHashTags, ...currentSettings.tags])
-      .sort()
-      .map(name => ({ name, selected: false }));
     const selected = tags.map(tag => ({
-      ...tag,
-      selected: previousSelected.includes(tag.name),
-      deletable: previousDeletable.includes(tag.name),
+      name: tag,
+      selected: previousSelected.includes(tag),
+      deletable: previousDeletable.includes(tag) || userTags.includes(tag),
     }));
     setSelectedTags([...selected]);
   }, [currentSettings, userTags]);
 
-  const selectTag = (e: any) => {
-    const tagName = e.target.innerText;
+  const selectTag = (tagName: string) => {
     const tag = selectedTags.find(tag => tag.name === tagName);
     if (tag) {
       tag.selected = !tag.selected;
@@ -59,13 +56,14 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
 
   const deleteTag = (tagName: string) => {
     const tags = selectedTags.filter(tag => tag.name !== tagName);
+    setUserTags(userTags.filter(t => t !== tagName));
     setSelectedTags([...tags]);
   };
 
   return (
     <div className="tag-editor">
       {selectedTags.map(tag => (
-        <div className={`tag ${tag.selected ? 'selected' : ''}`} key={tag.name} onClick={e => selectTag(e)}>
+        <div className={`tag ${tag.selected ? 'selected' : ''}`} key={tag.name} onClick={() => selectTag(tag.name)}>
           {tag.name}
           {tag.deletable && (
             <span className="delete-tag" onClick={() => deleteTag(tag.name)}>

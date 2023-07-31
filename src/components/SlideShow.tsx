@@ -24,9 +24,14 @@ import IconSettings from './Icons/IconSettings';
 import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
 import useNav from '../utils/useNav';
-import SearchDialog from './TagEditor';
 /*
 FEATURES:
+- fix issues with user/settings tags not being clickable
+- add option to view global without filter 
+- add radiobutton or tabs to choose either user or tag filter
+- improve mobile support
+- widescreen mobile details view should be 2 columns
+- how to get back from a filtered user/tag to the full feed?
 - always update title (grid and slideshow, maybe details too?)
 - add respost/reply filter to the settings dialog
 - Support re-posts and replies (incl. filter in settings)

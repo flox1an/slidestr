@@ -121,7 +121,7 @@
 .controls button svg {
   fill: white;
   opacity: 0.8;
-  height: 1.5em;
+  height: 1.8em;
   width: 2em;
   transform: fill 0.5s ease-in-out;
 }
@@ -171,22 +171,6 @@
   max-width: 80%;
   text-align: center;
   margin: auto;
-}
-
-@media screen and (max-width: 960px) {
-  .bottomPanel .caption {
-    font-size: 1.5em;
-  }
-  .controls button svg {
-    height: 1.3em;
-    width: 1.3em;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .bottomPanel .caption {
-    font-size: 1em;
-  }
 }
 
 .centerSymbol {
