@@ -38,11 +38,9 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
     }
   }, [settings]);
   const queueNextImage = (waitTime: number) => {
-    console.log(`cleaning timeout in queueNextImage`);
     clearTimeout(viewTimeoutHandle.current);
     viewTimeoutHandle.current = setTimeout(() => {
       if (!paused) {
-        console.log(`queueNextImage: setting loading to false`);
         setLoading(false);
         animateImages();
         queueNextImage(8000);
@@ -58,8 +56,6 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
 
   const previousImage = () => {
     setPaused(false);
-
-    console.log(history);
 
     if (history.current.length > 1) {
       const previousImage = history.current.pop(); // remove current image
@@ -89,7 +85,6 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
         newActiveImages.shift();
       }
 
-      console.log(`images = ${images.current.length}`);
       if (images.current.length > 0) {
         const randomImage = images.current[Math.floor(Math.random() * images.current.length)];
         //  console.log(`randomImage = ${randomImage.url}`);
@@ -105,11 +100,11 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
   };
 
   useEffect(() => {
-    console.log(`slideShowStarted = ${slideShowStarted}, images = ${images.current.length}`);
+    // console.log(`slideShowStarted = ${slideShowStarted}, images = ${images.current.length}`);
+    
     // Make sure we have an image to start with but only trigger once
     if (!slideShowStarted && images.current.length > 2) {
       setSlideShowStarted(true);
-      console.log('******* queueNextImage');
       queueNextImage(500);
     }
   }, [images.current.length]);

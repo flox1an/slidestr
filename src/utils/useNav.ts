@@ -20,7 +20,7 @@ const useNav = () => {
 
     let useTags = tags?.split(',') || [];
     if (npub == undefined && (useTags == undefined || useTags.length == 0)) {
-      useTags = []; // defaultHashTags;
+      useTags = defaultHashTags;
     }
 
     return {

@@ -126,7 +126,6 @@ const SlideShow = () => {
       }),
       'url'
     );
-    console.log(images.current.length);
   }, [posts]);
 
   const onKeyDown = (event: KeyboardEvent) => {
