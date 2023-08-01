@@ -25,11 +25,17 @@
   background-color: #7322ff;
 }
 
+.tag-editor .tag.action {
+  background-color: white;
+  color: black;
+}
+
 .tag-editor .tag input[type='text'] {
   display: inline-block;
   margin: 0.3em;
   box-sizing: border-box;
   width: initial;
+  outline: none;
 }
 
 .tag-editor .delete-tag {

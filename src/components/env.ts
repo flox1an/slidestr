@@ -132,6 +132,7 @@ export const nsfwNPubs = [
   'npub1y77j6jm5hw34xl5m85aumltv88arh2s7q383allkpfe4muarzc5qzfgru0', // sexy-models
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
+  'npub1j70jp36nshq4zknnwgeamux8hdgzhf0yw50rpll0egw6cvnglalsuldjwe', // cy₿erleolao
 ];
 
 export const nsfwPublicKeys = nsfwNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());

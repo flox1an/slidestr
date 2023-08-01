@@ -3,10 +3,13 @@ import './Settings.css';
 import useNav from '../utils/useNav';
 import CloseButton from './CloseButton/CloseButton';
 import TagEditor, { Tag } from './TagEditor';
+import { defaultHashTags } from './env';
 
 type SettingsProps = {
   onClose: () => void;
 };
+
+type Mode = 'all' | 'tags' | 'user';
 
 const SettingsDialog = ({ onClose }: SettingsProps) => {
   const { nav, currentSettings } = useNav();
@@ -15,18 +18,25 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
     currentSettings.tags.map(tag => ({ name: tag, selected: true, deletable: false }))
   );
   const [npubs, setNpubs] = useState(currentSettings.npubs || []);
+  const [mode, setMode] = useState<Mode>(
+    currentSettings.npubs.length == 1 ? 'user' : currentSettings.tags.length > 0 ? 'tags' : 'all'
+  );
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     const validNpubs = npubs.filter(t => t.length > 0);
     const validTags = selectedTags.filter(t => t.selected).map(t => t.name);
-    if (validNpubs.length == 1) {
+
+    if (mode == 'user' && validNpubs.length == 1) {
       nav({ ...currentSettings, tags: [], npubs: validNpubs, showNsfw });
-    } else if (validTags.length > 0) {
+    } else if (mode == 'tags' && validTags.length > 0) {
       nav({ ...currentSettings, tags: validTags, npubs: [], showNsfw });
+    } else if (mode == 'tags') {
+      nav({ ...currentSettings, tags: defaultHashTags, npubs: [], showNsfw });
     } else {
       nav({ ...currentSettings, tags: [], npubs: [], showNsfw });
     }
+
     onClose();
   };
 
@@ -36,20 +46,37 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
       <CloseButton onClick={onClose}></CloseButton>
 
       <div className="settings-content">
-        <label htmlFor="tags">Images for tags:</label>
-        <TagEditor selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
-
-        <label htmlFor="npub">Images for user profile (npub):</label>
-        <input
-          type="text"
-          name="npub"
-          id="npub"
-          value={npubs.join(', ')}
-          onChange={e => setNpubs(e.target.value.split(',').map(t => t.trim().toLowerCase()))}
-          onKeyDown={e => e.stopPropagation()}
-          onKeyUp={e => e.stopPropagation()}
-        />
-
+        <div className="settings-mode">
+          <div className={mode == 'tags' ? 'active' : ''} onClick={() => setMode('tags')}>
+            By tags
+          </div>
+          <div className={mode == 'user' ? 'active' : ''} onClick={() => setMode('user')}>
+            By user profile
+          </div>
+          <div className={mode == 'all' ? 'active' : ''} onClick={() => setMode('all')}>
+            All of nostr
+          </div>
+        </div>
+        {mode == 'tags' && (
+          <>
+            <label htmlFor="tags"></label>
+            <TagEditor selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+          </>
+        )}
+        {mode == 'user' && (
+          <>
+            <label htmlFor="npub">Images for user profile (npub):</label>
+            <input
+              type="text"
+              name="npub"
+              id="npub"
+              value={npubs.join(', ')}
+              onChange={e => setNpubs(e.target.value.split(',').map(t => t.trim().toLowerCase()))}
+              onKeyDown={e => e.stopPropagation()}
+              onKeyUp={e => e.stopPropagation()}
+            />
+          </>
+        )}
         <div className="content-warning">
           <div>
             <input name="nsfw" type="checkbox" checked={showNsfw} onChange={e => setShowNsfw(e.target.checked)} />

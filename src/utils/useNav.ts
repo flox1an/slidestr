@@ -18,10 +18,7 @@ const useNav = () => {
 
     console.log(`tags = ${tags}, npub = ${npub}, nsfw = ${nsfw}`);
 
-    let useTags = tags?.split(',') || [];
-    if (npub == undefined && (useTags == undefined || useTags.length == 0)) {
-      useTags = defaultHashTags;
-    }
+    const useTags = tags?.split(',') || [];
 
     return {
       tags: useTags,

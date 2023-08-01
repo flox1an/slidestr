@@ -121,7 +121,7 @@ const SlideShow = () => {
             type: isVideo(url) ? 'video' : 'image',
             timestamp: p.created_at,
             noteId: p.id ? nip19.noteEncode(p.id) : '',
-            tags: p.tags.filter((t: string[]) => t[0] === 't').map((t: string[]) => t[1].toLowerCase()),
+            tags: p.tags?.filter((t: string[]) => t[0] === 't').map((t: string[]) => t[1].toLowerCase()) || [],
           }));
       }),
       'url'

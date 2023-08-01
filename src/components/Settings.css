@@ -103,4 +103,24 @@
 
 .settings .settings-content > * {
   margin-bottom: 1em;
+  width: 28em;
+}
+
+.settings .settings-mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 2em;
+}
+
+.settings .settings-mode > div {
+  padding: 0.5em;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+}
+
+.settings .settings-mode > div.active {
+  border-bottom: 1px solid #7600ff;
 }

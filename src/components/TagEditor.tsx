@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './TagEditor.css';
 import useNav from '../utils/useNav';
 import uniq from 'lodash/uniq';
@@ -7,7 +7,7 @@ import useUserTags from '../utils/useUserTags';
 
 type TagEditorProps = {
   selectedTags: Tag[];
-  setSelectedTags: (tags: Tag[]) => void;
+  setSelectedTags: React.Dispatch<React.SetStateAction<Tag[]>>;
 };
 
 export type Tag = {
@@ -60,6 +60,8 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
     setSelectedTags([...tags]);
   };
 
+  const isATagSelected = useMemo(() => selectedTags.some(tag => tag.selected), [selectedTags]);
+
   return (
     <div className="tag-editor">
       {selectedTags.map(tag => (
@@ -72,7 +74,7 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
           )}
         </div>
       ))}
-      <div className="tag" onClick={() => setEditMode(true)}>
+      <div className="tag action" onClick={() => setEditMode(true)}>
         +
         {editMode && (
           <input
@@ -88,6 +90,11 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
           />
         )}
       </div>
+      {isATagSelected && (
+        <div className="tag action" onClick={() => setSelectedTags(tags => tags.map(s => ({ ...s, selected: false })))}>
+          none
+        </div>
+      )}
     </div>
   );
 };

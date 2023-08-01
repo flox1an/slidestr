@@ -101,7 +101,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
 
   useEffect(() => {
     // console.log(`slideShowStarted = ${slideShowStarted}, images = ${images.current.length}`);
-    
+
     // Make sure we have an image to start with but only trigger once
     if (!slideShowStarted && images.current.length > 2) {
       setSlideShowStarted(true);
