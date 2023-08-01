@@ -31,7 +31,7 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
     const selected = tags.map(tag => ({
       name: tag,
       selected: previousSelected.includes(tag),
-      deletable: previousDeletable.includes(tag) || userTags.includes(tag),
+      deletable: (previousDeletable.includes(tag) || userTags.includes(tag)) && !currentSettings.tags.includes(tag),
     }));
     setSelectedTags([...selected]);
   }, [currentSettings, userTags]);
