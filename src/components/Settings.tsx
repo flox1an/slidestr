@@ -4,6 +4,8 @@ import useNav from '../utils/useNav';
 import CloseButton from './CloseButton/CloseButton';
 import TagEditor, { Tag } from './TagEditor';
 import { defaultHashTags } from './env';
+import { useNDK } from '@nostr-dev-kit/ndk-react';
+import { createImgProxyUrl } from './nostrImageDownload';
 
 type SettingsProps = {
   onClose: () => void;
@@ -13,6 +15,7 @@ type Mode = 'all' | 'tags' | 'user';
 
 const SettingsDialog = ({ onClose }: SettingsProps) => {
   const { nav, currentSettings } = useNav();
+  const { getProfile } = useNDK();
   const [showNsfw, setShowNsfw] = useState(currentSettings.showNsfw || false);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     currentSettings.tags.map(tag => ({ name: tag, selected: true, deletable: false }))
@@ -40,9 +43,11 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
     onClose();
   };
 
+  const activeProfile = npubs.length > 0 ? getProfile(npubs[0]) : undefined;
+
   return (
     <div className="settings" onClick={e => e.stopPropagation()}>
-      <h2>Settings</h2>
+      <h2>Browse settings</h2>
       <CloseButton onClick={onClose}></CloseButton>
 
       <div className="settings-content">
@@ -75,6 +80,19 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
               onKeyDown={e => e.stopPropagation()}
               onKeyUp={e => e.stopPropagation()}
             />
+            {activeProfile && (
+              <div className="details-author">
+                <div
+                  className="author-image"
+                  style={{
+                    backgroundImage: activeProfile?.image
+                      ? `url(${createImgProxyUrl(activeProfile?.image, 80, 80)})`
+                      : 'none',
+                  }}
+                ></div>
+                {activeProfile?.displayName || activeProfile?.name}
+              </div>
+            )}
           </>
         )}
         <div className="content-warning">

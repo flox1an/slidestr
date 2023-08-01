@@ -1,7 +1,7 @@
 import { NostrImage } from '../nostrImageDownload';
 import './DetailsView.css';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
-import DetailsAuthor from './Author';
+import DetailsAuthor from './DetailsAuthor';
 import { useMemo } from 'react';
 import uniq from 'lodash/uniq';
 import useNav from '../../utils/useNav';

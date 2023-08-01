@@ -20,16 +20,14 @@ const DetailsAuthor = ({ profile, npub, setActiveImageIdx }: DetailsAuthorProps)
         npub && nav({ ...currentSettings, tags: [], npubs: [npub] });
       }}
     >
-      <>
-        <div
-          className="author-image"
-          style={{
-            backgroundImage: profile?.image ? `url(${createImgProxyUrl(profile?.image, 80, 80)})` : 'none',
-          }}
-        ></div>
+      <div
+        className="author-image"
+        style={{
+          backgroundImage: profile?.image ? `url(${createImgProxyUrl(profile?.image, 80, 80)})` : 'none',
+        }}
+      ></div>
 
-        {profile?.displayName || profile?.name}
-      </>
+      {profile?.displayName || profile?.name}
     </div>
   );
 };
