@@ -32,7 +32,6 @@
   object-fit: cover;
   height: 200px;
   cursor: pointer;
-
   visibility: hidden;
 }
 

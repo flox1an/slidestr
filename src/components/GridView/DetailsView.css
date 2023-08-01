@@ -73,6 +73,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 90vh;
+  padding-bottom: 1em;
 }
 
 .details-author {
@@ -86,6 +87,7 @@
 @media screen and (max-width: 768px) {
   .details {
     overflow-y: scroll;
+    align-items: normal;
   }
   .details-contents {
     grid-template-columns: 1fr;
@@ -94,6 +96,7 @@
   .detail-description {
     max-width: 100%;
     width: 100%;
+    overflow: visible;
   }
 }
 

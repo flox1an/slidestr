@@ -40,13 +40,6 @@
   }
 }
 
-@media (max-width: 576px) {
-  .settings {
-    width: 95vw;
-    height: 95vh;
-  }
-}
-
 .settings .settings-content {
   flex-grow: 0;
 }
@@ -103,7 +96,7 @@
 
 .settings .settings-content > * {
   margin-bottom: 1em;
-  width: 28em;
+  max-width: 28em;
 }
 
 .settings .settings-mode {
