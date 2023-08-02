@@ -24,10 +24,14 @@ export interface NostrEvent {
   isReply: boolean;
 }
 
-export const buildFilter = (tags: string[], npubs: string[]) => {
+export const buildFilter = (tags: string[], npubs: string[], withReposts = false) => {
   const filter: NDKFilter = {
-    kinds: [1, 6],
+    kinds: [1],
   };
+
+  if (withReposts) {
+    filter.kinds?.push(6);
+  }
 
   if (npubs && npubs.length > 0) {
     filter.authors = npubs.map(p => nip19.decode(p).data as string);

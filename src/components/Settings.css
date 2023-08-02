@@ -89,6 +89,12 @@
   font-size: 1.2rem;
 }
 
+
+.settings  .replies, .settings .reposts {
+  display: flex;
+  gap: 12px;
+}
+
 .settings h2 {
   margin: 0px;
   padding: 0px;

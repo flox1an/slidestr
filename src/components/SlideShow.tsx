@@ -60,7 +60,7 @@ const SlideShow = () => {
   const { currentSettings: settings } = useNav();
 
   const fetch = () => {
-    const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs));
+    const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs, settings.showReposts));
 
     postSubscription.on('event', (event: NostrEvent) => {
       setPosts(oldPosts => {
@@ -80,7 +80,7 @@ const SlideShow = () => {
 
         if (
           !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
-          !event.isReply &&
+          (settings.showReplies || !event.isReply) &&
           oldPosts.findIndex(p => p.id === event.id) === -1 && // not duplicate
           (settings.showNsfw || !isNsfwRelated(event))
         ) {
