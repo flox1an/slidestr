@@ -7,21 +7,21 @@ const AdultContentInfo = () => {
 
   const proceed = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    nav({ ...currentSettings, showNsfw: true });
+    nav({ ...currentSettings, showAdult: true });
   };
   const goBack = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    nav({ npubs: [], tags: [], showNsfw: false });
+    nav({...currentSettings, npubs: [], tags: [], showAdult: false });
   };
 
   return (
     <div className="disclaimer">
       <div className="disclaimer-content">
         <div className="warning" style={{ textAlign: 'center' }}>
-          NSFW Content Warning
+          Adult Content Warning
         </div>
         <br />
-        You are attempting to access a user profile (npub) or a tag that has been flagged as NSFW (Not Safe For Work).
+        You are attempting to access a user profile (npub) or a tag that has been flagged as adult (Not Safe For Work).
         This indicates that the content you are about to view might be offensive or inappropriate for certain users. If
         you are under 18 years old, we kindly request that you refrain from proceeding further.
       </div>

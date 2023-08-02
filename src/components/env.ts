@@ -70,7 +70,7 @@ export const nfswTags = [
   'naked',
   'nakedart',
   'nasstr',
-  'nsfw',
+  'adult',
   'nude',
   'nodestr',
   'nudeart',
@@ -89,7 +89,7 @@ export const nfswTags = [
   'xxx',
 ];
 
-export const nsfwNPubs = [
+export const adultNPubs = [
   'npub10m75ad8pc6wtlt67f6wjeug4hpqurc68842ve5ne47u9lkjqa0lq8ja88s', // 313Chris:hellokitty_headbang:
   'npub12jedfuhk2wfr7syr38t2f55652khuyz9f88r63ftm0j2vudxq9sqq7677r', // Erikha
   'npub13806pd9p833wkgyemeqddjzdksunlq9gszq4yjnhw4l57sjjhwlq6m79nj', // Orvalho
@@ -139,7 +139,7 @@ export const nsfwNPubs = [
   'npub1p4j4zfxvdgjrs26wx5dh9uvsvqfv8xa7ew89vv60nxang8cn0sxshyj28r', // Porn search bot
 ];
 
-export const nsfwPublicKeys = nsfwNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
+export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
 
 export const blockedNPubs = [
   'npub1awxh85c5wasj60d42uvmzuza2uvjazff9m7skg2vf7x2f8gykwkqykxktf', // AIイラスト',

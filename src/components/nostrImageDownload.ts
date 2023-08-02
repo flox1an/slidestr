@@ -1,6 +1,6 @@
 import { NDKFilter, NDKKind, NDKTag } from '@nostr-dev-kit/ndk';
 import { nip19 } from 'nostr-tools';
-import { nfswTags, nsfwPublicKeys } from './env';
+import { nfswTags, adultPublicKeys } from './env';
 
 export type NostrImage = {
   url: string;
@@ -76,17 +76,17 @@ export const hasContentWarning = ({ tags }: { tags?: NDKTag[] }) => {
   return tags.filter((t: string[]) => t[0] === 'content-warning').length > 0;
 };
 
-export const hasNsfwTag = ({ tags }: { tags?: NDKTag[] }) => {
+export const hasAdultTag = ({ tags }: { tags?: NDKTag[] }) => {
   if (!tags) return false;
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
   return tags.filter((t: string[]) => t[0] === 't' && nfswTags.includes(t[1])).length > 0;
 };
 
-export const isNsfwRelated = ({ tags, pubkey }: { tags?: NDKTag[]; pubkey: string }) => {
+export const isAdultRelated = ({ tags, pubkey }: { tags?: NDKTag[]; pubkey: string }) => {
   return (
     hasContentWarning({ tags }) || // block content warning
-    hasNsfwTag({ tags }) || // block nsfw tags
-    nsfwPublicKeys.includes(pubkey.toLowerCase()) // block nsfw authors
+    hasAdultTag({ tags }) || // block adult tags
+    adultPublicKeys.includes(pubkey.toLowerCase()) // block adult authors
   );
 };
 

@@ -12,7 +12,7 @@ const App = () => {
 
   useEffect(() => {
     if (currentSettings.npubs.length == 0 && currentSettings.tags.length == 0) {
-      nav({ ...currentSettings, tags: defaultHashTags, showNsfw: false });
+      nav({ ...currentSettings, tags: defaultHashTags, showAdult: false });
     }
   }, []);
 

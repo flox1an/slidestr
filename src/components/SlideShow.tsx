@@ -7,12 +7,12 @@ import {
   buildFilter,
   extractImageUrls,
   isImage,
-  isNsfwRelated,
+  isAdultRelated,
   isReply,
   isVideo,
   prepareContent,
 } from './nostrImageDownload';
-import { blockedPublicKeys, defaultRelays, nfswTags, nsfwNPubs } from './env';
+import { blockedPublicKeys, defaultRelays, nfswTags, adultNPubs } from './env';
 import Settings from './Settings';
 import SlideView from './SlideView';
 import GridView from './GridView';
@@ -82,7 +82,7 @@ const SlideShow = () => {
           !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
           (settings.showReplies || !event.isReply) &&
           oldPosts.findIndex(p => p.id === event.id) === -1 && // not duplicate
-          (settings.showNsfw || !isNsfwRelated(event))
+          (settings.showAdult || !isAdultRelated(event))
         ) {
           return [...oldPosts, event];
         }
@@ -156,8 +156,8 @@ const SlideShow = () => {
   const fullScreen = document.fullscreenElement !== null;
 
   const showAdultContentWarning =
-    !settings.showNsfw &&
-    (nfswTags.some(t => settings.tags.includes(t)) || nsfwNPubs.some(p => settings.npubs.includes(p)));
+    !settings.showAdult &&
+    (nfswTags.some(t => settings.tags.includes(t)) || adultNPubs.some(p => settings.npubs.includes(p)));
 
   if (showAdultContentWarning) {
     return <AdultContentInfo></AdultContentInfo>;

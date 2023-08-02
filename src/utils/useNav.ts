@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 export type Settings = {
-  showNsfw: boolean;
+  showAdult: boolean;
   showReplies: boolean;
   showReposts: boolean;
   tags: string[];
@@ -15,18 +15,18 @@ const useNav = () => {
   const navigate = useNavigate();
 
   const currentSettings: Settings = useMemo(() => {
-    const nsfw = searchParams.get('nsfw') === 'true';
+    const adult = searchParams.get('adult') === 'true';
     const replies = searchParams.get('replies') === 'true';
     const reposts = searchParams.get('reposts') === 'true';
 
-    console.log(`tags = ${tags}, npub = ${npub}, nsfw = ${nsfw}, replies = ${replies}, reposts = ${reposts}`);
+    console.log(`tags = ${tags}, npub = ${npub}, adult = ${adult}, replies = ${replies}, reposts = ${reposts}`);
 
     const useTags = tags?.split(',') || [];
 
     return {
       tags: useTags,
       npubs: npub ? [npub] : [],
-      showNsfw: nsfw,
+      showAdult: adult,
       showReplies: replies,
       showReposts: reposts,
     };
@@ -37,8 +37,8 @@ const useNav = () => {
     const validNpubs = settings.npubs.filter(t => t.length > 0);
 
     const searchParams = [];
-    if (settings.showNsfw) {
-      searchParams.push('nsfw=true');
+    if (settings.showAdult) {
+      searchParams.push('adult=true');
     }
     if (settings.showReplies) {
       searchParams.push('replies=true');

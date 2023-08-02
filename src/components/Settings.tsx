@@ -16,7 +16,7 @@ type Mode = 'all' | 'tags' | 'user';
 const SettingsDialog = ({ onClose }: SettingsProps) => {
   const { nav, currentSettings } = useNav();
   const { getProfile } = useNDK();
-  const [showNsfw, setShowNsfw] = useState(currentSettings.showNsfw || false);
+  const [showAdult, setShowAdult] = useState(currentSettings.showAdult || false);
   const [showReplies, setShowReplies] = useState(currentSettings.showReplies || false);
   const [showReposts, setShowReposts] = useState(currentSettings.showReposts || false);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
@@ -33,13 +33,13 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
     const validTags = selectedTags.filter(t => t.selected).map(t => t.name);
 
     if (mode == 'user' && validNpubs.length == 1) {
-      nav({ ...currentSettings, tags: [], npubs: validNpubs, showNsfw, showReplies, showReposts });
+      nav({ ...currentSettings, tags: [], npubs: validNpubs, showAdult, showReplies, showReposts });
     } else if (mode == 'tags' && validTags.length > 0) {
-      nav({ ...currentSettings, tags: validTags, npubs: [], showNsfw, showReplies, showReposts });
+      nav({ ...currentSettings, tags: validTags, npubs: [], showAdult, showReplies, showReposts });
     } else if (mode == 'tags') {
-      nav({ ...currentSettings, tags: defaultHashTags, npubs: [], showNsfw, showReplies, showReposts });
+      nav({ ...currentSettings, tags: defaultHashTags, npubs: [], showAdult, showReplies, showReposts });
     } else {
-      nav({ ...currentSettings, tags: [], npubs: [], showNsfw, showReplies, showReposts });
+      nav({ ...currentSettings, tags: [], npubs: [], showAdult, showReplies, showReposts });
     }
 
     onClose();
@@ -101,7 +101,7 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
                   name="replies"
                   type="checkbox"
                   checked={showReplies}
-                  onChange={e => setShowNsfw(e.target.checked)}
+                  onChange={e => setShowAdult(e.target.checked)}
                 />
               </div>
               <label htmlFor="replies" onClick={() => setShowReplies(n => !n)} style={{ userSelect: 'none' }}>
@@ -113,7 +113,7 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
                 name="reposts"
                 type="checkbox"
                 checked={showReposts}
-                onChange={e => setShowNsfw(e.target.checked)}
+                onChange={e => setShowAdult(e.target.checked)}
               />
               <label htmlFor="reposts" onClick={() => setShowReposts(n => !n)} style={{ userSelect: 'none' }}>
                 Include Reposts
@@ -123,11 +123,11 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
         )}
         <div className="content-warning">
           <div>
-            <input name="nsfw" type="checkbox" checked={showNsfw} onChange={e => setShowNsfw(e.target.checked)} />
+            <input name="adult" type="checkbox" checked={showAdult} onChange={e => setShowAdult(e.target.checked)} />
           </div>
-          <label htmlFor="nsfw" onClick={() => setShowNsfw(n => !n)} style={{ userSelect: 'none' }}>
-            <div className="warning">NSFW Content</div>
-            Allow NSFW to be shown and ignore content warnings.
+          <label htmlFor="adult" onClick={() => setShowAdult(n => !n)} style={{ userSelect: 'none' }}>
+            <div className="warning">NSFW / adult content</div>
+            Allow adult content to be shown and ignore content warnings.
           </label>
         </div>
       </div>
