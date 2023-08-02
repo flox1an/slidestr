@@ -51,7 +51,12 @@ export const visibleHashTags = [
   'travel',
 ];
 
-export const nfswTags = [
+
+/* All posts with the following hashtags are flagged as adult / NSFW are not shown
+   by default. Users can enable this content through the adult content flag
+   in the UI or through a URL parameter. 
+*/
+export const adultContentTags = [
   'adult',
   'ass',
   'blowjob',
@@ -89,6 +94,10 @@ export const nfswTags = [
   'xxx',
 ];
 
+/* These profiles are flagged as adult / NSFW and their content is not shown
+   by default. Users can enable their content through the adult content flag
+   in the UI or through a URL parameter. 
+*/
 export const adultNPubs = [
   'npub10m75ad8pc6wtlt67f6wjeug4hpqurc68842ve5ne47u9lkjqa0lq8ja88s', // 313Chris:hellokitty_headbang:
   'npub12jedfuhk2wfr7syr38t2f55652khuyz9f88r63ftm0j2vudxq9sqq7677r', // Erikha
@@ -141,6 +150,7 @@ export const adultNPubs = [
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
 
+/* The following profiles have questionable content and are blocked completely on slidestr.net */
 export const blockedNPubs = [
   'npub1awxh85c5wasj60d42uvmzuza2uvjazff9m7skg2vf7x2f8gykwkqykxktf', // AIイラスト',
   'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol

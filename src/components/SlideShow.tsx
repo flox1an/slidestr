@@ -12,7 +12,7 @@ import {
   isVideo,
   prepareContent,
 } from './nostrImageDownload';
-import { blockedPublicKeys, defaultRelays, nfswTags, adultNPubs } from './env';
+import { blockedPublicKeys, defaultRelays, adultContentTags, adultNPubs } from './env';
 import Settings from './Settings';
 import SlideView from './SlideView';
 import GridView from './GridView';
@@ -157,7 +157,7 @@ const SlideShow = () => {
 
   const showAdultContentWarning =
     !settings.showAdult &&
-    (nfswTags.some(t => settings.tags.includes(t)) || adultNPubs.some(p => settings.npubs.includes(p)));
+    (adultContentTags.some(t => settings.tags.includes(t)) || adultNPubs.some(p => settings.npubs.includes(p)));
 
   if (showAdultContentWarning) {
     return <AdultContentInfo></AdultContentInfo>;

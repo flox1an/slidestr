@@ -1,6 +1,6 @@
 import { NDKFilter, NDKKind, NDKTag } from '@nostr-dev-kit/ndk';
 import { nip19 } from 'nostr-tools';
-import { nfswTags, adultPublicKeys } from './env';
+import { adultContentTags, adultPublicKeys } from './env';
 
 export type NostrImage = {
   url: string;
@@ -79,7 +79,7 @@ export const hasContentWarning = ({ tags }: { tags?: NDKTag[] }) => {
 export const hasAdultTag = ({ tags }: { tags?: NDKTag[] }) => {
   if (!tags) return false;
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
-  return tags.filter((t: string[]) => t[0] === 't' && nfswTags.includes(t[1])).length > 0;
+  return tags.filter((t: string[]) => t[0] === 't' && adultContentTags.includes(t[1])).length > 0;
 };
 
 export const isAdultRelated = ({ tags, pubkey }: { tags?: NDKTag[]; pubkey: string }) => {
