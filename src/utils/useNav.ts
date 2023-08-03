@@ -15,7 +15,7 @@ const useNav = () => {
   const navigate = useNavigate();
 
   const currentSettings: Settings = useMemo(() => {
-    const adult = searchParams.get('adult') === 'true';
+    const adult = searchParams.get('adult') === 'true' || searchParams.get('nsfw') === 'true';
     const replies = searchParams.get('replies') === 'true';
     const reposts = searchParams.get('reposts') === 'true';
 
