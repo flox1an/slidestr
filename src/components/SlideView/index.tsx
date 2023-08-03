@@ -105,7 +105,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
     // Make sure we have an image to start with but only trigger once
     if (!slideShowStarted && images.current.length > 2) {
       setSlideShowStarted(true);
-      queueNextImage(500);
+      queueNextImage(100);
     }
   }, [images.current.length]);
 

@@ -12,7 +12,7 @@ import {
   isVideo,
   prepareContent,
 } from './nostrImageDownload';
-import { blockedPublicKeys, defaultRelays, adultContentTags, adultNPubs } from './env';
+import { blockedPublicKeys, adultContentTags, adultNPubs } from './env';
 import Settings from './Settings';
 import SlideView from './SlideView';
 import GridView from './GridView';
@@ -24,6 +24,7 @@ import IconSettings from './Icons/IconSettings';
 import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
 import useNav from '../utils/useNav';
+
 /*
 FEATURES:
 - improve mobile support
@@ -60,7 +61,10 @@ const SlideShow = () => {
   const { currentSettings: settings } = useNav();
 
   const fetch = () => {
-    if (!ndk) return;
+    if (!ndk) {
+      console.error('NDK not available.');
+      return;
+    }
  
     const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs, settings.showReposts));
 
@@ -102,12 +106,14 @@ const SlideShow = () => {
   };
 
   useEffect(() => {
-    // reset all
-    setPosts([]);
-    images.current = [];
-    clearTimeout(fetchTimeoutHandle.current);
-    return fetch();
-  }, [settings]);
+    if (ndk) {
+      // reset all
+      setPosts([]);
+      images.current = [];
+      clearTimeout(fetchTimeoutHandle.current);
+      fetch();
+    }
+  }, [settings, ndk]);
 
   useEffect(() => {
     images.current = uniqBy(
