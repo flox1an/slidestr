@@ -51,7 +51,7 @@ FEATURES:
 */
 
 const SlideShow = () => {
-  const { ndk, loadNdk } = useNDK();
+  const { ndk } = useNDK();
   const [posts, setPosts] = useState<NostrEvent[]>([]);
   const images = useRef<NostrImage[]>([]);
   const fetchTimeoutHandle = useRef(0);
@@ -60,6 +60,8 @@ const SlideShow = () => {
   const { currentSettings: settings } = useNav();
 
   const fetch = () => {
+    if (!ndk) return;
+ 
     const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs, settings.showReposts));
 
     postSubscription.on('event', (event: NostrEvent) => {
@@ -146,7 +148,6 @@ const SlideShow = () => {
   };
 
   useEffect(() => {
-    loadNdk(defaultRelays);
     document.body.addEventListener('keydown', onKeyDown);
     return () => {
       document.body.removeEventListener('keydown', onKeyDown);
