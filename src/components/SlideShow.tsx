@@ -72,6 +72,13 @@ const SlideShow = () => {
       setPosts(oldPosts => {
         event.isReply = isReply(event);
 
+        if (event.kind === 1063) {
+          const urlTag = event?.tags?.find(t => t[0]=='url')
+          if (urlTag) {
+            event.content = urlTag[1];
+          }
+        }
+
         if (event.kind === 6 && event.content) {
           try {
             const repostedEvent = JSON.parse(event.content);

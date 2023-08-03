@@ -1,5 +1,5 @@
 import { NDKFilter, NDKKind, NDKTag } from '@nostr-dev-kit/ndk';
-import { nip19 } from 'nostr-tools';
+import { Kind, nip19 } from 'nostr-tools';
 import { adultContentTags, adultPublicKeys } from './env';
 
 export type NostrImage = {
@@ -26,7 +26,7 @@ export interface NostrEvent {
 
 export const buildFilter = (tags: string[], npubs: string[], withReposts = false) => {
   const filter: NDKFilter = {
-    kinds: [1],
+    kinds: [1, 1063] as Kind[],
   };
 
   if (withReposts) {
