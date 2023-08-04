@@ -30,6 +30,21 @@
   gap: 24px;
 }
 
+@media (max-width: 768px) {
+  .disclaimer {
+    position: absolute;
+    width: 100vw;
+    transform: none;
+    overflow-y: scroll;
+    max-height: 100vh;
+    box-sizing: border-box;
+    max-width: none;
+    top: 0;
+    left: 0;
+    justify-content: start;
+  }
+}
+
 .disclaimer .disclaimer-footer {
   flex-shrink: 1;
   display: flex;
