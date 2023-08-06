@@ -1,3 +1,30 @@
+
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+@keyframes rotate {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(-1);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+
 .details {
   /*
   position: fixed;
@@ -54,6 +81,34 @@
 }
 .details-contents .tag:hover {
   background-color: #555;
+}
+
+.details-contents .heart svg {
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+  fill: #ff0000;
+}
+
+.details-contents .zap svg {
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+  fill: rgb(228, 185, 104);
+}
+
+.details-contents .zap.zapped svg {
+  fill: orange;
+  animation: bump 1s ease-in-out
+}
+
+.details-contents .zap.error {
+  fill: red;
+}
+
+.details-contents .zap.zapping svg {
+  animation: rotate 2s ease-in-out;
+  animation-iteration-count: infinite;
 }
 
 .details-contents .detail-image {

@@ -146,6 +146,7 @@ export const adultNPubs = [
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
   'npub1hpxzg0p4hrmfvqmrusa4lkyx0ay53k2gwkjr50qe2cedj3vkufhs030ff0', // Spankingbot
   'npub1p4j4zfxvdgjrs26wx5dh9uvsvqfv8xa7ew89vv60nxang8cn0sxshyj28r', // Porn search bot
+  'npub1tsrs6ptjnq5hluxawfme5sfxalfscapequm3ej0yfw65scwu8lys8q7y7l', // 💜 🔞EUPHORIA 🔞💜
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
@@ -171,6 +172,5 @@ export const defaultRelays = [
   'wss://nostr.wine',
   // "wss://nostr1.current.fyi/",
   'wss://purplepag.es/', // needed for user profiles
-  'wss://n-word.sharivegas.com/', // needed for mostr.pub profiles
   //"wss://feeds.nostr.band/pics",
 ];

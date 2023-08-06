@@ -12,7 +12,7 @@
     "analyze": "vite-bundle-visualizer"
   },
   "dependencies": {
-    "@nostr-dev-kit/ndk": "^0.8.1",
+    "@nostr-dev-kit/ndk": "^0.8.3",
     "@nostr-dev-kit/ndk-react": "^0.1.1",
     "lodash": "^4.17.21",
     "nostr-tools": "^1.14.0",
@@ -31,6 +31,7 @@
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
     "@vitejs/plugin-react": "^4.0.4",
+    "@webbtc/webln-types": "^1.0.13",
     "eslint": "^8.46.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",

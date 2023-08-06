@@ -1,28 +1,20 @@
-import { NDKFilter, NDKKind, NDKTag } from '@nostr-dev-kit/ndk';
+import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
 import { Kind, nip19 } from 'nostr-tools';
 import { adultContentTags, adultPublicKeys } from './env';
 
 export type NostrImage = {
   url: string;
   author: string;
+  authorId: string; // PubKey
   tags: string[];
   content?: string;
   timestamp?: number;
   noteId: string;
   type: 'image' | 'video';
+  event: NDKEvent;
 };
 
-export interface NostrEvent {
-  created_at: number;
-  content: string;
-  tags?: NDKTag[];
-  kind?: NDKKind | number;
-  pubkey: string;
-  id?: string;
-  sig?: string;
-  isRepost: boolean;
-  isReply: boolean;
-}
+
 
 export const buildFilter = (tags: string[], npubs: string[], withReposts = false) => {
   const filter: NDKFilter = {

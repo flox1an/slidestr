@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { NDKProvider } from '@nostr-dev-kit/ndk-react';
 import App from './App';
 import './index.css';
-import {defaultRelays} from './components/env'
+import { defaultRelays } from './components/env';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import GlobalState from './utils/globalState';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <NDKProvider relayUrls={defaultRelays}>
-    <RouterProvider router={router} />
+    <GlobalState>
+      <RouterProvider router={router} />
+    </GlobalState>
   </NDKProvider>
 );

@@ -2,7 +2,6 @@ import { useNDK } from '@nostr-dev-kit/ndk-react';
 import './SlideShow.css';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  NostrEvent,
   NostrImage,
   buildFilter,
   extractImageUrls,
@@ -24,6 +23,7 @@ import IconSettings from './Icons/IconSettings';
 import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
 import useNav from '../utils/useNav';
+import { NDKEvent } from '@nostr-dev-kit/ndk';
 
 /*
 FEATURES:
@@ -53,7 +53,7 @@ FEATURES:
 
 const SlideShow = () => {
   const { ndk } = useNDK();
-  const [posts, setPosts] = useState<NostrEvent[]>([]);
+  const [posts, setPosts] = useState<NDKEvent[]>([]);
   const images = useRef<NostrImage[]>([]);
   const fetchTimeoutHandle = useRef(0);
   const [showGrid, setShowGrid] = useState(false);
@@ -68,9 +68,9 @@ const SlideShow = () => {
  
     const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs, settings.showReposts));
 
-    postSubscription.on('event', (event: NostrEvent) => {
+    postSubscription.on('event', (event: NDKEvent) => {
       setPosts(oldPosts => {
-        event.isReply = isReply(event);
+        //event.isReply = isReply(event);
 
         if (event.kind === 1063) {
           const urlTag = event?.tags?.find(t => t[0]=='url')
@@ -84,7 +84,7 @@ const SlideShow = () => {
             const repostedEvent = JSON.parse(event.content);
             if (repostedEvent) {
               event = repostedEvent;
-              event.isRepost = true;
+              //event.isRepost = true;
             }
           } catch (e) {
             // ingore, the content is no valid json
@@ -93,7 +93,7 @@ const SlideShow = () => {
 
         if (
           !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
-          (settings.showReplies || !event.isReply) &&
+          (settings.showReplies || !isReply(event)) &&
           oldPosts.findIndex(p => p.id === event.id) === -1 && // not duplicate
           (settings.showAdult || !isAdultRelated(event))
         ) {
@@ -128,12 +128,14 @@ const SlideShow = () => {
         return extractImageUrls(p.content)
           .filter(url => isImage(url) || isVideo(url))
           .map(url => ({
+            event: p,
             url,
             author: nip19.npubEncode(p.pubkey),
+            authorId: p.pubkey,
             content: prepareContent(p.content),
             type: isVideo(url) ? 'video' : 'image',
             timestamp: p.created_at,
-            noteId: p.id ? nip19.noteEncode(p.id) : '',
+            noteId: p.id || '',
             tags: p.tags?.filter((t: string[]) => t[0] === 't').map((t: string[]) => t[1].toLowerCase()) || [],
           }));
       }),
