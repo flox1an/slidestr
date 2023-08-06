@@ -29,7 +29,7 @@ const App = () => {
   return (
     <>
     {JSON.stringify(ndk?.signer)}
-    {JSON.stringify(state)}
+    {state.userNPub } 
       <button onClick={onLogin}>Login</button>
       {disclaimerAccepted ? (
         <SlideShow />
