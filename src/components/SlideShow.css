@@ -127,8 +127,16 @@
 }
 
 .controls button {
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.4);
   padding: 0.5em;
+  vertical-align: middle;
+  border-radius: 12px;
+  margin-left: 6px;
+}
+
+.controls button.login {
+  background-color: white;
+  display: inline;
 }
 
 .controls button:hover {
@@ -136,8 +144,21 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+.controls button.login:hover {
+  background-color: white;
+}
+
 .controls button:hover svg {
   opacity: 1;
+}
+
+.controls img.profile {
+  width: 3em;
+  height: 3em;
+  border-radius: 12px;
+  margin-left: 0.5em;
+  vertical-align: middle;
+  cursor: pointer;
 }
 
 .bottomPanel {

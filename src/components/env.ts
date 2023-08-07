@@ -51,7 +51,6 @@ export const visibleHashTags = [
   'travel',
 ];
 
-
 /* All posts with the following hashtags are flagged as adult / NSFW are not shown
    by default. Users can enable this content through the adult content flag
    in the UI or through a URL parameter. 

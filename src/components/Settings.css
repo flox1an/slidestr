@@ -89,8 +89,8 @@
   font-size: 1.2rem;
 }
 
-
-.settings  .replies, .settings .reposts {
+.settings .replies,
+.settings .reposts {
   display: flex;
   gap: 12px;
 }

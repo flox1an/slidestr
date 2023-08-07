@@ -119,6 +119,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
     }
     if (event.key === 'p' || event.key === ' ' || event.key === 'P') {
       setPaused(p => !p);
+      event.stopPropagation();
     }
   };
 

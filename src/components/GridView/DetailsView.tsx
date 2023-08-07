@@ -1,4 +1,4 @@
-import { NostrImage } from '../nostrImageDownload';
+import { NostrImage, createImgProxyUrl } from '../nostrImageDownload';
 import './DetailsView.css';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import DetailsAuthor from './DetailsAuthor';
@@ -19,12 +19,12 @@ type DetailsViewProps = {
 };
 
 type ZapState = 'none' | 'zapped' | 'zapping' | 'error';
+type HeartState = 'none' | 'liked' | 'liking';
 
 const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewProps) => {
   const { getProfile, ndk } = useNDK();
-  const [selfLiked, setSelfLiked] = useState(false);
   const [zapState, setZapState] = useState<ZapState>('none');
-
+  const [heartState, setHeartState] = useState<HeartState>('none');
   const [state, setState] = useGlobalState();
   const currentImage = useMemo(
     () => (activeImageIdx !== undefined ? images[activeImageIdx] : undefined),
@@ -33,23 +33,35 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
   const activeProfile = currentImage?.author !== undefined ? getProfile(currentImage?.author) : undefined;
   const { nav, currentSettings } = useNav();
 
+  const fetchLikeAndZaps = async (noteIds: string[], selfNPub: string) => {
+    const filter: NDKFilter = { kinds: [Kind.Reaction], '#e': noteIds };
+
+    filter.authors = [nip19.decode(selfNPub).data as string];
+
+    const events = await ndk?.fetchEvents(filter);
+
+    return { selfLiked: events && events.size > 0 };
+  };
+
   useEffect(() => {
-    setSelfLiked(false);
-    setZapState("none");
+    setZapState('none');
+    setHeartState('none');
 
     if (!currentImage?.noteId || !state.userNPub) return;
 
-    const filter: NDKFilter = { kinds: [Kind.Reaction], '#e': [currentImage?.noteId] };
+    if (currentImage.post.wasLiked !== undefined) {
+      setHeartState(currentImage.post.wasLiked ? 'liked' : 'none');
+      return;
+    }
 
-    filter.authors = [nip19.decode(state.userNPub).data as string];
-
-    currentImage?.noteId &&
-      ndk?.fetchEvents(filter).then(events => {
-        setSelfLiked(events.size > 0);
-      });
-  }, [currentImage?.event.id]);
+    fetchLikeAndZaps([currentImage.noteId], state.userNPub).then(likes => {
+      currentImage.post.wasLiked = likes.selfLiked;
+      setHeartState(likes.selfLiked ? 'liked' : 'none');
+    });
+  }, [currentImage?.post.event.id]);
 
   const heartClick = async (currentImage: NostrImage) => {
+    setHeartState('liking');
     console.log('heartClick');
     if (!state.userNPub) return;
 
@@ -65,7 +77,8 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
     });
     console.log(ev);
     await ev.publish();
-    setSelfLiked(true);
+    setHeartState('liked');
+    currentImage.post.wasLiked = true;
   };
 
   const zapClick = async (currentImage: NostrImage) => {
@@ -102,8 +115,10 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
     await window.webln.sendPayment(invoice);
 
     setZapState('zapped');
-
+    currentImage.post.wasZapped = true;
   };
+
+  if (!currentImage) return null;
 
   return (
     <div className="details">
@@ -119,14 +134,16 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
 
           <div>{currentImage?.content}</div>
           {state.userNPub && (
-            <>
-              <div className="heart" onClick={() => currentImage && heartClick(currentImage)}>
-                <IconHeart filled={selfLiked}></IconHeart>
+            <div className="details-actions">
+              <div className={`heart ${heartState}`} onClick={() => currentImage && heartClick(currentImage)}>
+                <IconHeart filled={heartState == 'liked'}></IconHeart>
               </div>
-              <div className={`zap ${zapState}`} onClick={() => currentImage && zapClick(currentImage)}>
-                <IconBolt></IconBolt>
-              </div>
-            </>
+              {(activeProfile?.lud06 || activeProfile?.lud16) && (
+                <div className={`zap ${zapState}`} onClick={() => currentImage && zapClick(currentImage)}>
+                  <IconBolt></IconBolt>
+                </div>
+              )}
+            </div>
           )}
           <div>
             {uniq(currentImage?.tags).map(t => (

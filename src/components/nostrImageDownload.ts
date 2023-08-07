@@ -2,6 +2,12 @@ import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
 import { Kind, nip19 } from 'nostr-tools';
 import { adultContentTags, adultPublicKeys } from './env';
 
+export type Post = {
+  event: NDKEvent;
+  wasZapped?: boolean;
+  wasLiked?: boolean;
+};
+
 export type NostrImage = {
   url: string;
   author: string;
@@ -11,10 +17,8 @@ export type NostrImage = {
   timestamp?: number;
   noteId: string;
   type: 'image' | 'video';
-  event: NDKEvent;
+  post: Post;
 };
-
-
 
 export const buildFilter = (tags: string[], npubs: string[], withReposts = false) => {
   const filter: NDKFilter = {

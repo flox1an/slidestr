@@ -1,8 +1,10 @@
+import { NDKUserProfile } from '@nostr-dev-kit/ndk';
 import React, { createContext, useContext, useReducer } from 'react';
 
 // Interface for our state
 interface GlobalState {
   userNPub?: string;
+  profile?: NDKUserProfile;
 }
 const initialState: GlobalState = {
   userNPub: undefined,

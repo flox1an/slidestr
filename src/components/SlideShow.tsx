@@ -10,6 +10,7 @@ import {
   isReply,
   isVideo,
   prepareContent,
+  Post,
 } from './nostrImageDownload';
 import { blockedPublicKeys, adultContentTags, adultNPubs } from './env';
 import Settings from './Settings';
@@ -24,9 +25,14 @@ import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
 import useNav from '../utils/useNav';
 import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { useGlobalState } from '../utils/globalState';
 
 /*
 FEATURES:
+- Improve login (show login dialog, show login status)
+- Detect if user/post does not have zap capability and show warning
+- Retrieve reactions (likes, zaps) for all posts iteratively (pagination)
+- Store posts separately from image urls to track likes/zaps per post
 - improve mobile support
 - widescreen mobile details view should be 2 columns
 - improve large grid performance by adding images on scroll
@@ -52,20 +58,21 @@ FEATURES:
 */
 
 const SlideShow = () => {
-  const { ndk } = useNDK();
-  const [posts, setPosts] = useState<NDKEvent[]>([]);
+  const { ndk, loginWithNip07, getProfile } = useNDK();
+  const [posts, setPosts] = useState<Post[]>([]);
   const images = useRef<NostrImage[]>([]);
   const fetchTimeoutHandle = useRef(0);
-  const [showGrid, setShowGrid] = useState(false);
+  const [showGrid, setShowGrid] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const { currentSettings: settings } = useNav();
+  const [state, setState] = useGlobalState();
 
   const fetch = () => {
     if (!ndk) {
       console.error('NDK not available.');
       return;
     }
- 
+
     const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs, settings.showReposts));
 
     postSubscription.on('event', (event: NDKEvent) => {
@@ -73,7 +80,7 @@ const SlideShow = () => {
         //event.isReply = isReply(event);
 
         if (event.kind === 1063) {
-          const urlTag = event?.tags?.find(t => t[0]=='url')
+          const urlTag = event?.tags?.find(t => t[0] == 'url');
           if (urlTag) {
             event.content = urlTag[1];
           }
@@ -94,10 +101,10 @@ const SlideShow = () => {
         if (
           !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
           (settings.showReplies || !isReply(event)) &&
-          oldPosts.findIndex(p => p.id === event.id) === -1 && // not duplicate
+          oldPosts.findIndex(p => p.event.id === event.id) === -1 && // not duplicate
           (settings.showAdult || !isAdultRelated(event))
         ) {
-          return [...oldPosts, event];
+          return [...oldPosts, { event }];
         }
         return oldPosts;
       });
@@ -125,18 +132,18 @@ const SlideShow = () => {
   useEffect(() => {
     images.current = uniqBy(
       posts.flatMap(p => {
-        return extractImageUrls(p.content)
+        return extractImageUrls(p.event.content)
           .filter(url => isImage(url) || isVideo(url))
           .map(url => ({
-            event: p,
+            post: p,
             url,
-            author: nip19.npubEncode(p.pubkey),
-            authorId: p.pubkey,
-            content: prepareContent(p.content),
+            author: nip19.npubEncode(p.event.pubkey),
+            authorId: p.event.pubkey,
+            content: prepareContent(p.event.content),
             type: isVideo(url) ? 'video' : 'image',
-            timestamp: p.created_at,
-            noteId: p.id || '',
-            tags: p.tags?.filter((t: string[]) => t[0] === 't').map((t: string[]) => t[1].toLowerCase()) || [],
+            timestamp: p.event.created_at,
+            noteId: p.event.id || '',
+            tags: p.event.tags?.filter((t: string[]) => t[0] === 't').map((t: string[]) => t[1].toLowerCase()) || [],
           }));
       }),
       'url'
@@ -179,6 +186,23 @@ const SlideShow = () => {
     return <AdultContentInfo></AdultContentInfo>;
   }
 
+  const onLogin = async () => {
+    const result = await loginWithNip07();
+    if (!result) {
+      console.error('Login failed.');
+      return;
+    }
+
+    setState({ userNPub: result.npub });
+    console.log(result.npub);
+  };
+
+  const onLogout = () => {
+    setState({ userNPub: undefined, profile: undefined });
+  };
+
+  const currentUserProfile = state.userNPub && getProfile(state.userNPub);
+
   return (
     <>
       {showSettings && <Settings onClose={() => setShowSettings(false)}></Settings>}
@@ -197,8 +221,15 @@ const SlideShow = () => {
             <IconFullScreen />
           </button>
         )}
-      </div>
 
+        {state.userNPub && currentUserProfile ? (
+          <img className="profile" onClick={onLogout} src={currentUserProfile.image} />
+        ) : (
+          <button onClick={onLogin} className="btn btn-primary login">
+            Login
+          </button>
+        )}
+      </div>
       {showGrid ? (
         <GridView images={images.current} settings={settings}></GridView>
       ) : (

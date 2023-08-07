@@ -5,15 +5,10 @@ import useDisclaimerState from './utils/useDisclaimerState';
 import useNav from './utils/useNav';
 import { useEffect } from 'react';
 import { defaultHashTags } from './components/env';
-import { useNDK } from '@nostr-dev-kit/ndk-react';
-import { useGlobalState } from './utils/globalState';
 
 const App = () => {
   const { disclaimerAccepted, setDisclaimerAccepted } = useDisclaimerState();
   const { nav, currentSettings } = useNav();
-  const { loginWithNip07, ndk } = useNDK();
-
-  const [state, setState] = useGlobalState();
 
   useEffect(() => {
     if (currentSettings.npubs.length == 0 && currentSettings.tags.length == 0) {
@@ -21,16 +16,8 @@ const App = () => {
     }
   }, []);
 
-  const onLogin = async () => {
-    const result = await loginWithNip07();
-    console.log(result);
-    result && setState({ userNPub: result.npub });
-  };
   return (
     <>
-    {JSON.stringify(ndk?.signer)}
-    {state.userNPub } 
-      <button onClick={onLogin}>Login</button>
       {disclaimerAccepted ? (
         <SlideShow />
       ) : (

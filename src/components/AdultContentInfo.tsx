@@ -11,7 +11,7 @@ const AdultContentInfo = () => {
   };
   const goBack = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    nav({...currentSettings, npubs: [], tags: [], showAdult: false });
+    nav({ ...currentSettings, npubs: [], tags: [], showAdult: false });
   };
 
   return (
