@@ -168,7 +168,7 @@ export const defaultRelays = [
   'wss://relay.damus.io',
   'wss://relay.nostr.band',
   'wss://nos.lol',
-  'wss://relay.mostr.pub',
+  'wss://eden.nostr.land',
   'wss://relay.shitforce.one/',
   'wss://nostr.wine',
   // "wss://nostr1.current.fyi/",
