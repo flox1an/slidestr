@@ -12,32 +12,32 @@
     "analyze": "vite-bundle-visualizer"
   },
   "dependencies": {
-    "@nostr-dev-kit/ndk": "^0.8.3",
+    "@nostr-dev-kit/ndk": "^0.8.12",
     "@nostr-dev-kit/ndk-react": "^0.1.1",
     "lodash": "^4.17.21",
     "nostr-tools": "^1.14.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
-    "react-router-dom": "^6.14.2",
+    "react-router-dom": "^6.15.0",
     "react-swipeable": "^7.0.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.196",
-    "@types/react": "^18.2.18",
+    "@types/lodash": "^4.14.197",
+    "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@types/react-helmet": "^6.1.6",
     "@types/react-swipeable": "^5.2.0",
-    "@typescript-eslint/eslint-plugin": "^6.2.1",
-    "@typescript-eslint/parser": "^6.2.1",
+    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@typescript-eslint/parser": "^6.3.0",
     "@vitejs/plugin-react": "^4.0.4",
-    "@webbtc/webln-types": "^1.0.13",
-    "eslint": "^8.46.0",
+    "@webbtc/webln-types": "^1.0.14",
+    "eslint": "^8.47.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "prettier": "^3.0.1",
     "typescript": "^5.1.6",
-    "vite": "^4.4.8",
+    "vite": "^4.4.9",
     "vite-bundle-visualizer": "^0.10.0"
   }
 }

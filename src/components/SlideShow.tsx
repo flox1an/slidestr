@@ -29,6 +29,9 @@ import { useGlobalState } from '../utils/globalState';
 
 /*
 FEATURES:
+- When one relay is not available the whole app stops working
+- Login automatically / Save log in user
+- the image grid div is updated constantly, why?
 - Improve login (show login dialog, show login status)
 - Detect if user/post does not have zap capability and show warning
 - Retrieve reactions (likes, zaps) for all posts iteratively (pagination)

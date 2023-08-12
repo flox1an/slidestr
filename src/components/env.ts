@@ -146,6 +146,8 @@ export const adultNPubs = [
   'npub1hpxzg0p4hrmfvqmrusa4lkyx0ay53k2gwkjr50qe2cedj3vkufhs030ff0', // Spankingbot
   'npub1p4j4zfxvdgjrs26wx5dh9uvsvqfv8xa7ew89vv60nxang8cn0sxshyj28r', // Porn search bot
   'npub1tsrs6ptjnq5hluxawfme5sfxalfscapequm3ej0yfw65scwu8lys8q7y7l', // 💜 🔞EUPHORIA 🔞💜
+  'npub1fh8e9pnm8rfln0k7c6uh8wrvmva8enkdzsgzsc7v9jk97up23ewqs6kuue', // nostrporn
+  'npub1apr6dy5z4f0qs4cnswxj0gf37g46jxvh7xgwgs4wvzm6stu8f0asd4996r', // Anime Girl
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
