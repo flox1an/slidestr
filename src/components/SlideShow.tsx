@@ -26,6 +26,9 @@ import IconGrid from './Icons/IconGrid';
 import useNav from '../utils/useNav';
 import { NDKEvent } from '@nostr-dev-kit/ndk';
 import { useGlobalState } from '../utils/globalState';
+import useAutoLogin from '../utils/useAutoLogin';
+
+type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
 /*
 FEATURES:
@@ -69,6 +72,7 @@ const SlideShow = () => {
   const [showSettings, setShowSettings] = useState(false);
   const { currentSettings: settings } = useNav();
   const [state, setState] = useGlobalState();
+  const { autoLogin, setAutoLogin } = useAutoLogin();
 
   const fetch = () => {
     if (!ndk) {
@@ -127,6 +131,7 @@ const SlideShow = () => {
       // reset all
       setPosts([]);
       images.current = [];
+
       clearTimeout(fetchTimeoutHandle.current);
       fetch();
     }
@@ -173,6 +178,13 @@ const SlideShow = () => {
   };
 
   useEffect(() => {
+    setTimeout(() => {
+      if (autoLogin && window.nostr) {
+        // auto login when alby is available
+        onLogin();
+      }
+    }, 500);
+
     document.body.addEventListener('keydown', onKeyDown);
     return () => {
       document.body.removeEventListener('keydown', onKeyDown);
@@ -190,6 +202,7 @@ const SlideShow = () => {
   }
 
   const onLogin = async () => {
+    setAutoLogin(true);
     const result = await loginWithNip07();
     if (!result) {
       console.error('Login failed.');
@@ -201,6 +214,7 @@ const SlideShow = () => {
   };
 
   const onLogout = () => {
+    setAutoLogin(false);
     setState({ userNPub: undefined, profile: undefined });
   };
 

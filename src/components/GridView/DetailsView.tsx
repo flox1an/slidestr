@@ -1,4 +1,4 @@
-import { NostrImage, createImgProxyUrl } from '../nostrImageDownload';
+import { NostrImage } from '../nostrImageDownload';
 import './DetailsView.css';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import DetailsAuthor from './DetailsAuthor';
