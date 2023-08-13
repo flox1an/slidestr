@@ -47,7 +47,7 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
   const onEditKeyDown = (e: any) => {
     e.stopPropagation();
     if (e.key === 'Enter') {
-      const newTag = e.target.value as string;
+      const newTag = (e.target.value as string).toLowerCase();
       setUserTags([...userTags, newTag]);
       setSelectedTags([...selectedTags, { name: newTag, selected: true, deletable: true }]);
       setEditMode(false);

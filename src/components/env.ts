@@ -149,6 +149,7 @@ export const adultNPubs = [
   'npub1fh8e9pnm8rfln0k7c6uh8wrvmva8enkdzsgzsc7v9jk97up23ewqs6kuue', // nostrporn
   'npub1apr6dy5z4f0qs4cnswxj0gf37g46jxvh7xgwgs4wvzm6stu8f0asd4996r', // Anime Girl
   'npub1acwrv7aqgu949mw0zxmw2akgsjqp574nnq4vcl9wln5355q79w5ssv9qxg', // Arianna
+  'npub1v3rnmlms82wgxejxwn7rr6kjruy3ty0l4084dx2zp3tn8dlxv28sjnp6pf', // High Elf Archer
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
