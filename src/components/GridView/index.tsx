@@ -21,7 +21,7 @@ const GridView = ({ settings, images }: GridViewProps) => {
       images
         .filter(i => !isVideo(i.url)) // TODO: filter out video for now, since we don't have a good way to display them
         .sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
-    [images]
+    [images, settings] // settings is not used here, but we need to include it to trigger a re-render when it changes
   );
 
   const onKeyDown = (event: KeyboardEvent) => {

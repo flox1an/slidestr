@@ -183,7 +183,7 @@ const SlideShow = () => {
         // auto login when alby is available
         onLogin();
       }
-    }, 500);
+    }, 100);
 
     document.body.addEventListener('keydown', onKeyDown);
     return () => {
