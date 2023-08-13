@@ -26,8 +26,9 @@ const GridView = ({ settings, images }: GridViewProps) => {
 
   const onKeyDown = (event: KeyboardEvent) => {
     console.log(event);
+
     if (event.key === 'ArrowRight') {
-      setActiveImageIdx(idx => (idx !== undefined && idx < sortedImages.length - 1 ? idx + 1 : idx));
+      setActiveImageIdx(idx => idx !== undefined ? idx + 1 : 0);
     }
     if (event.key === 'ArrowLeft') {
       setActiveImageIdx(idx => (idx !== undefined && idx > 0 ? idx - 1 : idx));
