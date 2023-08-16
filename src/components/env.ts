@@ -15,7 +15,7 @@ export const defaultHashTags = [
   'photostr',
   'picstr',
   'plebchain',
-  'tavelstr',
+  'travelstr',
   'zapathon',
 ];
 
@@ -51,7 +51,6 @@ export const visibleHashTags = [
   'psychedelic',
   'streetphotography',
   'style',
-  'tavelstr',
   'travel',
   'travelstr',
   'zapathon',
@@ -157,6 +156,9 @@ export const adultNPubs = [
   'npub1acwrv7aqgu949mw0zxmw2akgsjqp574nnq4vcl9wln5355q79w5ssv9qxg', // Arianna
   'npub1v3rnmlms82wgxejxwn7rr6kjruy3ty0l4084dx2zp3tn8dlxv28sjnp6pf', // High Elf Archer
   'npub1jvp6kfs2d3m98lyw5wcyr4fnctr83s0rc3mj5p0f75ach6vcd8rst6wqnu', // VelectBlue Art
+
+  'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
+  'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
