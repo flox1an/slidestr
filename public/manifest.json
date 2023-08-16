@@ -1,0 +1,10 @@
+{
+    "name": "slidestr.net",
+    "short_name": "slidestr",
+    "theme_color": "#4a49ff",
+    "background_color": "#7600ff",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/"
+  }
+  

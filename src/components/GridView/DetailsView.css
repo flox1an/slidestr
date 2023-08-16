@@ -158,15 +158,25 @@
   .details {
     overflow-y: scroll;
     align-items: normal;
+    overflow-x: hidden;
+    padding: 0;
+    overscroll-behavior: none;
   }
   .details-contents {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
   }
+  .details-contents .detail-image {
+    border-radius: 0px;
+  }
   .detail-description {
     max-width: 100%;
     width: 100%;
     overflow: visible;
+    padding-left: 2em;
+  }
+  .closeButton {
+    top: 1.5em;
   }
 }
 

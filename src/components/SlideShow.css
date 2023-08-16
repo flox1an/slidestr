@@ -214,3 +214,9 @@
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 }
+
+@media screen and (max-width: 768px) {
+  .controls {
+    top: 2em;
+  }
+}

@@ -29,6 +29,10 @@ const MainInner = () => {
       element: <App />,
     },
     {
+      path: '/followers',
+      element: <App />,
+    },
+    {
       path: '/:npub',
       element: <App />,
     },

@@ -7,7 +7,9 @@ declare global {
 }
 
 const useAutoLogin = () => {
-  const [autoLogin, setAutoLogin] = useState(JSON.parse(localStorage.getItem('autoLogin') as string) as boolean | undefined);
+  const [autoLogin, setAutoLogin] = useState(
+    JSON.parse(localStorage.getItem('autoLogin') as string) as boolean | undefined
+  );
 
   useEffect(() => {
     const autoLogin = JSON.parse(localStorage.getItem('autoLogin') as string) as boolean | undefined;

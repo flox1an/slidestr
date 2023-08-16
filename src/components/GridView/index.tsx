@@ -6,6 +6,7 @@ import GridImage from './GridImage';
 import { Settings } from '../../utils/useNav';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import AuthorProfile from '../AuthorProfile';
+import { useSwipeable } from 'react-swipeable';
 
 type GridViewProps = {
   settings: Settings;
@@ -24,19 +25,36 @@ const GridView = ({ settings, images }: GridViewProps) => {
     [images, settings] // settings is not used here, but we need to include it to trigger a re-render when it changes
   );
 
+  const showNextImage = () => {
+    setActiveImageIdx(idx => (idx !== undefined ? idx + 1 : 0));
+  };
+
+  const showPreviousImage = () => {
+    setActiveImageIdx(idx => (idx !== undefined && idx > 0 ? idx - 1 : idx));
+  };
+
   const onKeyDown = (event: KeyboardEvent) => {
     console.log(event);
 
     if (event.key === 'ArrowRight') {
-      setActiveImageIdx(idx => idx !== undefined ? idx + 1 : 0);
+      showNextImage();
     }
     if (event.key === 'ArrowLeft') {
-      setActiveImageIdx(idx => (idx !== undefined && idx > 0 ? idx - 1 : idx));
+      showPreviousImage();
     }
     if (event.key === 'Escape') {
       setActiveImageIdx(undefined);
     }
   };
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      showNextImage();
+    },
+    onSwipedRight: () => {
+      showPreviousImage();
+    },
+  });
 
   useEffect(() => {
     document.body.addEventListener('keydown', onKeyDown);
@@ -48,7 +66,7 @@ const GridView = ({ settings, images }: GridViewProps) => {
   const activeProfile = settings.npubs.length == 1 && getProfile(settings.npubs[0]);
 
   return (
-    <div className="gridview">
+    <div className="gridview" {...swipeHandlers}>
       {activeImageIdx !== undefined ? (
         <DetailsView images={sortedImages} activeImageIdx={activeImageIdx} setActiveImageIdx={setActiveImageIdx} />
       ) : null}

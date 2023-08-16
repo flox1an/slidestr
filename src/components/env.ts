@@ -3,18 +3,20 @@ import { nip19 } from 'nostr-tools';
 export const appName = 'slidestr.net';
 
 export const defaultHashTags = [
-  'art',
   'artstr',
   'catstr',
   'dogstr',
-  'nature',
-  'naturephotography',
+  'flowerstr',
+  'foodstr',
+  'gardenstr',
+  'grownostr',
+  'nostr',
   'photography',
   'photostr',
-  'streetphotography',
+  'picstr',
+  'plebchain',
   'tavelstr',
-  'gardening',
-  'gardenstr',
+  'zapathon',
 ];
 
 export const visibleHashTags = [
@@ -27,6 +29,8 @@ export const visibleHashTags = [
   'cute',
   'dogstr',
   'fashion',
+  'flowerstr',
+  'foodstr',
   'freedom',
   'gardening',
   'gardenstr',
@@ -47,8 +51,10 @@ export const visibleHashTags = [
   'psychedelic',
   'streetphotography',
   'style',
-  'travelstr',
+  'tavelstr',
   'travel',
+  'travelstr',
+  'zapathon',
 ];
 
 /* All posts with the following hashtags are flagged as adult / NSFW are not shown
@@ -150,6 +156,7 @@ export const adultNPubs = [
   'npub1apr6dy5z4f0qs4cnswxj0gf37g46jxvh7xgwgs4wvzm6stu8f0asd4996r', // Anime Girl
   'npub1acwrv7aqgu949mw0zxmw2akgsjqp574nnq4vcl9wln5355q79w5ssv9qxg', // Arianna
   'npub1v3rnmlms82wgxejxwn7rr6kjruy3ty0l4084dx2zp3tn8dlxv28sjnp6pf', // High Elf Archer
+  'npub1jvp6kfs2d3m98lyw5wcyr4fnctr83s0rc3mj5p0f75ach6vcd8rst6wqnu', // VelectBlue Art
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
