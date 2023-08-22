@@ -111,14 +111,19 @@ export const adultNPubs = [
   'npub16ye5pezunzcx8y0ecjquks0sr5jkj6lrhfjyu2n9qxt5cxgzrvcqgnvx8s', // Aru Moon
   'npub177wu03dgx6zt9a9hdey079prfw5lvj5dhm20z4k96tf6um6zjk7qyzdumj', // Eoun
   'npub19xwjw7f23nsmnsd0j72mvhrdswt4cp6urc5el2zuu8se3yfu87ess524je', // Gone Wild (NSFW)
+  'npub1acwrv7aqgu949mw0zxmw2akgsjqp574nnq4vcl9wln5355q79w5ssv9qxg', // Arianna
+  'npub1acwrv7aqgu949mw0zxmw2akgsjqp574nnq4vcl9wln5355q79w5ssv9qxg', // Arianna
   'npub1af9lxfzeq5rxmu9zz7d85tn2ex8zvvlx0duqcemcdhkz9cvlt29st3rcgd', // Happy Nut
+  'npub1apr6dy5z4f0qs4cnswxj0gf37g46jxvh7xgwgs4wvzm6stu8f0asd4996r', // Anime Girl
   'npub1ccs7rlmctzzv6sj5qcjd3fdlys8zr3q6mnj30l4r4n6xp999yx7qg5qwtg', // gynoiddolls
   'npub1csk2wg33ee9kutyps4nmevyv3putfegj7yd0emsp44ph32wvmamqs7uyan', // Lilura
   'npub1e4n8nah09he25slv00dz3kav3jsu5jvp83aya234ejumcmu2xseqwrp6pl', // Svenno(NSFW)
   'npub1femd0mrawr0jmtjr2jwa2nm90haxrpglzdt6tt0djrsav39e53asf74aer', // FemDom Raw
+  'npub1fh8e9pnm8rfln0k7c6uh8wrvmva8enkdzsgzsc7v9jk97up23ewqs6kuue', // nostrporn
   'npub1ga79p6qsjh0xd343q3du2unf2gl6gk0rde36c06mafxkrssmnnesxyzcss', // Orange Incest 🔞
   'npub1grssdyrmdgy5gw5umg50u6rrl9nk738lw4qg2thpcqqaf3lypkqsxt7lhg', // Shades of Red
   'npub1hjdtj67ckrq0lzga2mchny3wmgn6rptp826djd6edgyru7x6dszq093c0a', // ai
+  'npub1hpxzg0p4hrmfvqmrusa4lkyx0ay53k2gwkjr50qe2cedj3vkufhs030ff0', // Spankingbot
   'npub1j0xvl8l2s4w25vcavf3jv6fgyakyc0hplxc9we8hc8mja0ct7epss0qlkj', // Thicc Pics (NSFW)
   'npub1j0y6f9gl9w39ggarr9x76lyh2swv7mpgddguv49mhmzqlz8tm69qcwpl55', // NeoMobius
   'npub1j2u3lfkhl95e6qwswr32hx6h36arlw8p2cl6hy0wgnmxmekrhx8qx93uvh', // Ay Papi
@@ -126,6 +131,7 @@ export const adultNPubs = [
   'npub1jge7z2kpmpdra6g58vg95uznve8ctcenmlyp9ntr3kjymscyuqpqty2cdh', // Storm
   'npub1jjtzhxzu8dlf7yn480sz67tesnfl7gpzfpkgpez05d2z9y3lya5sxvky0y', // Selfie Girls
   'npub1jp9v034z3a26cp5hajwyuzl0hety5akdpwdnjaqgfd7pm2ts4dwsc29va8', // curatedbliss
+  'npub1jvp6kfs2d3m98lyw5wcyr4fnctr83s0rc3mj5p0f75ach6vcd8rst6wqnu', // VelectBlue Art
   'npub1kade5vf37snr4hv5hgstav6j5ygry6z09kkq0flp47p8cmeuz5zs7zz2an', // Aeontropy
   'npub1klxseqx4et3grzgvajtlm47tz7tqmxygwj49kx3frsuls9cf8lhqhhhr5q', // Riley_R_Fan
   'npub1kul999wnt8gwa6l2vyuewhnmmp25gq7dly9zmgsw52x8csmqjgts7278rx', // 𝓟𝓮𝓽𝓲𝓽𝓮 𝓟𝓻𝓲𝓷𝓬𝓮𝓼𝓼
@@ -133,29 +139,26 @@ export const adultNPubs = [
   'npub1mgusda7ujnyuhhudwkyrp763k4dd9xspktekl0tg5v0j76yph8ssyrfdpm', // anisyia
   'npub1nkw853ncf4nmsctujc3hdahwtm03hssrskc2t33qjqedxtpwupfqeukt53', // bpufa
   'npub1nme4074q6yrqexdn5z625vhvv9j9e2qwwfcgdyg2utffhvdgrxfqn5ztgm', // Ay Papi
+  'npub1p4j4zfxvdgjrs26wx5dh9uvsvqfv8xa7ew89vv60nxang8cn0sxshyj28r', // Porn search bot
   'npub1peq5ds2jaj5en35xgl6r6rxvvk9eh4ppzhs4mpdh9s5y8ffdwl5q7nmyda', // Furry Artworks 18+
   'npub1pl0qa9x3n8wt55em0x3zwuy02rtl5t3jsretr0egjqgkx2f6jztqt0xwew', // nude
   'npub1prxgd4slvue3fxwtgvpcawmgvl5fqal8ujan6z3uhvzy20gwcdyqlu7d2p', // Miss Addication 18+
   'npub1qg550au9hqmpgye4kfrtj7yt85dn60ty5hk0hcm7pktq6g6mzugsufnfcx', // Poppy Clements
   'npub1qnpzqvzjxy79wpuvylw65gkh8n7pk62up9nc63a45a23mv0sf6us62qk5n', // 🔞▶️Play & ⏸️Pause 🔞
   'npub1rv08kght99a7xwckm0qpmzw09m5gwppequgqd8lwu74eakgaavwsp5cjtw', // CuratedNSFW
+  'npub1skvfwq29xn92k08mu2584kx5x6ymz62askpnzjp9d3s8us68pemsmt78a4', // pornstarxyz
   'npub1suddec4n2jv50pgn9eea35r4k83ahr4mcj0zv2uec36w6jeuwagq82xjgl', // quiet.enjoyer
   'npub1t252vm7u5qmfwv3k70g6rl2ue7ctvtvrnd60vy8jh5suglv8pw2snyyzfq', // 20th Century Foxes (NSFW)
   'npub1thsprukxnc8rxqggnesqp2wg2temhaadzhhg7n4pttpveyqedlwsqgge9q', // Harmony. Corrupted.
+  'npub1tsrs6ptjnq5hluxawfme5sfxalfscapequm3ej0yfw65scwu8lys8q7y7l', // 💜 🔞EUPHORIA 🔞💜
   'npub1ulafm4d3n7ukl7yzg4hfnhfjut74nym5p83e3d67l3j62yc6ysqqrancw2', // naked
+  'npub1v3rnmlms82wgxejxwn7rr6kjruy3ty0l4084dx2zp3tn8dlxv28sjnp6pf', // High Elf Archer
   'npub1ve4ztpqvlgu3v6hgrvc4lrdl2ernue7lq2h8tcgaksrkxlm7gnsqkjmz4e', // bluntkaraoke
   'npub1wmsn8fch7kwt987jcdx06uuapn6pwzau59pvy0ql5d3xlmnxa2csj3c5p4', // StefsPicks
   'npub1y77j6jm5hw34xl5m85aumltv88arh2s7q383allkpfe4muarzc5qzfgru0', // sexy-models
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
-  'npub1hpxzg0p4hrmfvqmrusa4lkyx0ay53k2gwkjr50qe2cedj3vkufhs030ff0', // Spankingbot
-  'npub1p4j4zfxvdgjrs26wx5dh9uvsvqfv8xa7ew89vv60nxang8cn0sxshyj28r', // Porn search bot
-  'npub1tsrs6ptjnq5hluxawfme5sfxalfscapequm3ej0yfw65scwu8lys8q7y7l', // 💜 🔞EUPHORIA 🔞💜
-  'npub1fh8e9pnm8rfln0k7c6uh8wrvmva8enkdzsgzsc7v9jk97up23ewqs6kuue', // nostrporn
-  'npub1apr6dy5z4f0qs4cnswxj0gf37g46jxvh7xgwgs4wvzm6stu8f0asd4996r', // Anime Girl
-  'npub1acwrv7aqgu949mw0zxmw2akgsjqp574nnq4vcl9wln5355q79w5ssv9qxg', // Arianna
-  'npub1v3rnmlms82wgxejxwn7rr6kjruy3ty0l4084dx2zp3tn8dlxv28sjnp6pf', // High Elf Archer
-  'npub1jvp6kfs2d3m98lyw5wcyr4fnctr83s0rc3mj5p0f75ach6vcd8rst6wqnu', // VelectBlue Art
+  'npub1sg7rwnf96a0fhl85xlvq0unumqqh89qaygwcdy5d3ue8209ekt2suhxg7u', // Anime Mommies Bot
 
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
