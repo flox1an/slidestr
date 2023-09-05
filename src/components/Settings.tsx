@@ -32,13 +32,24 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
     const validNpubs = npubs.filter(t => t.length > 0);
     const validTags = selectedTags.filter(t => t.selected).map(t => t.name);
 
+    // If the mode is 'user' and there is exactly one validNpubs
     if (mode == 'user' && validNpubs.length == 1) {
+      // Navigate with the current settings, but only keep the validNpubs, and reset tags
       nav({ ...currentSettings, tags: [], npubs: validNpubs, showAdult, showReplies, showReposts });
-    } else if (mode == 'tags' && validTags.length > 0) {
+    }
+    // If the mode is 'tags' and there is at least one valid tag
+    else if (mode == 'tags' && validTags.length > 0) {
+      // Navigate with the current settings, but only keep the validTags, and reset npubs
       nav({ ...currentSettings, tags: validTags, npubs: [], showAdult, showReplies, showReposts });
-    } else if (mode == 'tags') {
+    }
+    // If the mode is 'tags' but there are no valid tags
+    else if (mode == 'tags') {
+      // Navigate with the current settings, but reset npubs and use defaultHashTags as tags
       nav({ ...currentSettings, tags: defaultHashTags, npubs: [], showAdult, showReplies, showReposts });
-    } else {
+    }
+    // If none of the above conditions are met
+    else {
+      // Navigate with the current settings, but reset both tags and npubs
       nav({ ...currentSettings, tags: [], npubs: [], showAdult, showReplies, showReposts });
     }
 

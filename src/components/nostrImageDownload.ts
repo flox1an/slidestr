@@ -1,6 +1,6 @@
 import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
 import { Kind, nip19 } from 'nostr-tools';
-import { adultContentTags, adultPublicKeys } from './env';
+import { adultContentTags, adultPublicKeys, mixedAdultNPubs } from './env';
 
 export type Post = {
   event: NDKEvent;
@@ -78,22 +78,26 @@ export const hasAdultTag = ({ tags }: { tags?: NDKTag[] }) => {
   return tags.filter((t: string[]) => t[0] === 't' && adultContentTags.includes(t[1])).length > 0;
 };
 
-export const isAdultRelated = ({ tags, pubkey }: { tags?: NDKTag[]; pubkey: string }) => {
+export const isAdultRelated = ({ tags, pubkey }: { tags?: NDKTag[]; pubkey: string }, isTagSearch: boolean) => {
+  // if we search for a specific non adult tag and the user in the mixed category
+  // allow as non adult 
+  if (isTagSearch && mixedAdultNPubs.includes(pubkey.toLowerCase()) && !hasAdultTag({ tags })) {
+    return false;
+  }
+
   return (
     hasContentWarning({ tags }) || // block content warning
     hasAdultTag({ tags }) || // block adult tags
+    mixedAdultNPubs.includes(pubkey.toLowerCase()) || // block mixed adult authors
     adultPublicKeys.includes(pubkey.toLowerCase()) // block adult authors
   );
 };
 
 export const isImage = (url: string) => {
-  return (
-    url.endsWith('.jpg') ||
-    url.endsWith('.png') ||
-    url.endsWith('.gif') ||
-    url.endsWith('.jpeg') ||
-    url.endsWith('.webp')
-  );
+  const fileExtension = url.split('.').pop();
+  if (fileExtension == undefined) return false;
+  const imageExtensions = ['jpg', 'png', 'gif', 'jpeg', 'webp'];
+  return imageExtensions.includes(fileExtension);
 };
 
 export const isVideo = (url: string) => {

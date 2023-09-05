@@ -5,10 +5,23 @@ import useNav from '../utils/useNav';
 const AdultContentInfo = () => {
   const { nav, currentSettings } = useNav();
 
+  /**
+   * Proceed function handles the event when the 'Proceed' button is clicked.
+   * It prevents the default button click action and navigates to the current settings with adult content enabled.
+   *
+   * @param {MouseEvent<HTMLButtonElement>} e - The event triggered by clicking the 'Proceed' button.
+   */
   const proceed = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     nav({ ...currentSettings, showAdult: true });
   };
+  
+  /**
+   * GoBack function handles the event when the 'Go Back' button is clicked.
+   * It prevents the default button click action, resets the current settings and navigates back with adult content disabled.
+   *
+   * @param {MouseEvent<HTMLButtonElement>} e - The event triggered by clicking the 'Go Back' button.
+   */
   const goBack = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     nav({ ...currentSettings, npubs: [], tags: [], showAdult: false });

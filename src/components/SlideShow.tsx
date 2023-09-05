@@ -12,7 +12,7 @@ import {
   prepareContent,
   Post,
 } from './nostrImageDownload';
-import { blockedPublicKeys, adultContentTags, adultNPubs } from './env';
+import { blockedPublicKeys, adultContentTags, adultNPubs, mixedAdultNPubs } from './env';
 import Settings from './Settings';
 import SlideView from './SlideView';
 import GridView from './GridView';
@@ -109,7 +109,7 @@ const SlideShow = () => {
           !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
           (settings.showReplies || !isReply(event)) &&
           oldPosts.findIndex(p => p.event.id === event.id) === -1 && // not duplicate
-          (settings.showAdult || !isAdultRelated(event))
+          (settings.showAdult || !isAdultRelated(event, settings.tags.length > 0))
         ) {
           return [...oldPosts, { event }];
         }
@@ -160,11 +160,10 @@ const SlideShow = () => {
 
   const onKeyDown = (event: KeyboardEvent) => {
     if (showSettings) return;
-
-    if (event.key === 'g' || event.key === 'G') {
+    if (event.key.toLowerCase() === 'g') {
       setShowGrid(p => !p);
     }
-    if (event.key === 's' || event.key === 'S') {
+    if (event.key.toLowerCase() === 's') {
       setShowSettings(s => !s);
     }
     if (event.key === 'Escape') {
@@ -195,7 +194,7 @@ const SlideShow = () => {
 
   const showAdultContentWarning =
     !settings.showAdult &&
-    (adultContentTags.some(t => settings.tags.includes(t)) || adultNPubs.some(p => settings.npubs.includes(p)));
+    (adultContentTags.some(t => settings.tags.includes(t)) || adultNPubs.some(p => settings.npubs.includes(p)) || mixedAdultNPubs.some(p => settings.npubs.includes(p)));
 
   if (showAdultContentWarning) {
     return <AdultContentInfo></AdultContentInfo>;
