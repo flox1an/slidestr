@@ -219,4 +219,9 @@
   .controls {
     top: 2em;
   }
+
+  .author-image {
+    width: 48px;
+    height: 48px;
+  }
 }

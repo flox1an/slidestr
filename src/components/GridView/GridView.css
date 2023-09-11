@@ -18,7 +18,7 @@
 
 .imagegrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat( auto-fill, minmax(200px, 1fr));
   grid-gap: 1rem;
   padding: 1rem;
   width: 100vw;
@@ -26,7 +26,7 @@
   box-sizing: border-box;
 }
 
-.imagegrid .image {
+.imagegrid img.image {
   border-radius: 0.5rem;
   width: 100%;
   object-fit: cover;
@@ -34,6 +34,15 @@
   cursor: pointer;
   visibility: hidden;
 }
+
+.imagegrid video.image {
+  border-radius: 0.5rem;
+  width: 100%;
+  object-fit: cover;
+  height: 200px;
+  cursor: pointer;
+}
+
 
 .imagegrid .image.show {
   animation-duration: 0.5s;
@@ -44,7 +53,7 @@
 
 @media screen and (max-width: 600px) {
   .imagegrid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
 

@@ -132,6 +132,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
 
   if (!currentImage) return null;
 
+  // TODO unmute video through icon
 
   return (
     <div className="details">

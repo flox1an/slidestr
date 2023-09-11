@@ -19,9 +19,7 @@ const GridView = ({ settings, images }: GridViewProps) => {
 
   const sortedImages = useMemo(
     () =>
-      images
-        .filter(i => !isVideo(i.url)) // TODO: filter out video for now, since we don't have a good way to display them
-        .sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
+      images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
     [images, settings] // settings is not used here, but we need to include it to trigger a re-render when it changes
   );
 
@@ -72,18 +70,7 @@ const GridView = ({ settings, images }: GridViewProps) => {
       ) : null}
       <div className="imagegrid">
         {sortedImages.map((image, idx) =>
-          isVideo(image.url) ? (
-            <video
-              className="image"
-              data-node-id={image.noteId}
-              key={image.url}
-              src={image.url}
-              controls
-              preload="none"
-            />
-          ) : (
             <GridImage key={image.url} image={image} onClick={() => setActiveImageIdx(idx)}></GridImage>
-          )
         )}
       </div>
       {activeProfile && (
