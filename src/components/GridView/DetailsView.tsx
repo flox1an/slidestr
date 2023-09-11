@@ -1,4 +1,4 @@
-import { NostrImage } from '../nostrImageDownload';
+import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
 import './DetailsView.css';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import DetailsAuthor from './DetailsAuthor';
@@ -126,14 +126,18 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
 
   if (!currentImage) return null;
 
+  const nextImageProxyUrl = nextImage?.url && createImgProxyUrl(nextImage?.url, 800, -1);
+  const currentImageProxyUrl = currentImage?.url && createImgProxyUrl(currentImage?.url, 800, -1);
+
   return (
     <div className="details">
       <CloseButton onClick={() => setActiveImageIdx(undefined)}></CloseButton>
-      {nextImage && <img src={nextImage?.url} loading='eager' style={{ display: 'none' }} />}
+      {nextImage && !isVideo(nextImage.url) && <img src={nextImageProxyUrl} loading='eager' style={{ display: 'none' }} />}
+      {nextImage && isVideo(nextImage.url) && <video src={nextImage?.url} preload='true' style={{ display: 'none' }} />}
       <div className="details-contents" style={
-        { backgroundImage: `url(${currentImage?.url})` }
+        { backgroundImage: `url(${!isVideo(currentImage.url) ? currentImageProxyUrl : ''})` }
       }>
-        <img className="detail-image" src={currentImage?.url} loading='eager'></img>
+        {isVideo(currentImage.url) ? <video className="detail-image" src={currentImage?.url} autoPlay loop muted playsInline></video> : <img className="detail-image" src={currentImageProxyUrl} loading='eager'></img>}
         <div className="detail-description">
           <DetailsAuthor
             profile={activeProfile}

@@ -166,6 +166,7 @@ export const adultNPubs = [
   'npub1sg7rwnf96a0fhl85xlvq0unumqqh89qaygwcdy5d3ue8209ekt2suhxg7u', // Anime Mommies Bot
   'npub1kq67ngznkldmecycjfmjt4deuvyxgpn4zcpq8cvfmdl2hufzzccs6nc9q8', // Sargas
   'npub10y6rhnutt52wwt5f7544tq4as6jt03aq7j8mle7wcymjjudanm4q4hvzaw', // NSFW
+  'npub17693mv2qu7mv67zqpcup9n502gmkuhytkxq3sw7qp50vlptq8f7syzv93d', // sha0wgoone
 
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures

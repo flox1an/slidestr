@@ -117,5 +117,8 @@ export const createImgProxyUrl = (url: string, width = 200, height = 200) => {
     url.includes('file.misskey.design')
   )
     return url;
-  return `https://imgproxy.iris.to/insecure/rs:fill:${width}:${height}/plain/${url}`;
+
+  const heightParam = height < 0 ? '' : ':' + height;
+
+  return `https://imgproxy.iris.to/insecure/rs:fill:${width}${heightParam}/plain/${url}`;
 };
