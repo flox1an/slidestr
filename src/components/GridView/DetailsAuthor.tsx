@@ -27,7 +27,7 @@ const DetailsAuthor = ({ profile, npub, setActiveImageIdx }: DetailsAuthorProps)
         }}
       ></div>
 
-      {profile?.displayName || profile?.name}
+      <div className="author-name">{profile?.displayName || profile?.name}</div>
     </div>
   );
 };

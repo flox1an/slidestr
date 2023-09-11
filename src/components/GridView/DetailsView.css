@@ -23,28 +23,6 @@
 }
 
 .details {
-  /*
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(10px);
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  font-size: 1.2rem;
-  animation: fadeIn 0.5s ease-in-out;
-  z-index: 500;
-  padding: 2em;
-  flex-direction: column;
-  gap: 24px;
-  width: 90%;
-  height: 85%;
-  */
-
   position: absolute;
   z-index: 500;
   background: rgba(0, 0, 0, 0.8);
@@ -85,9 +63,7 @@
   padding: 0.5em;
   width: 1.5em;
   height: 1.5em;
-
   cursor: pointer;
-  fill: #ff0000;
 }
 
 .details-actions > div {
@@ -102,6 +78,7 @@
 .details-actions .heart.liked svg {
   animation: bump 1s ease-in-out;
   overflow: visible;
+  fill: #ff0000;
 }
 
 .details-actions .zap svg {
@@ -109,7 +86,6 @@
   width: 1.5em;
   height: 1.5em;
   cursor: pointer;
-  fill: rgb(228, 185, 104);
 }
 
 .details-actions .zap.zapped svg {
@@ -135,6 +111,7 @@
 }
 
 .detail-description {
+  position: relative;
   display: flex;
   box-sizing: border-box;
   flex-direction: column;
@@ -161,7 +138,6 @@
   }
 }
 
-
 @media screen and (max-width: 768px) {
   .details {
     overflow-y: scroll;
@@ -170,7 +146,27 @@
     padding: 0;
     overscroll-behavior: none;
   }
-  
+  .details-author {
+    position: absolute;
+    top: -104px;
+    align-items: center;
+  }
+  .details-author .author-image {
+    margin: 0px;
+  }
+  .details-author .author-name {
+    width: 17em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-height: 3em;
+  }
+  .details-actions {
+    position: fixed;
+    right: 1em;
+    bottom: 1em;
+    display: flex;
+    flex-direction: column-reverse;
+  }
   .details-contents {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
@@ -186,28 +182,18 @@
     -webkit-backdrop-filter: blur(20px) brightness(0.5);
     background-color: transparent;
     max-height: none;
-   
   }
   .detail-description {
     max-width: 100%;
     width: 100%;
     overflow: visible;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
     padding-bottom: 3em;
   }
-  .closeButton {
-    top: 1.5em;
+  .details .closeButton {
+    top: 2em;
+    left: 2em;
   }
 }
 
-.closeButton {
-  position: absolute;
-  top: 0.5em;
-  right: 1em;
-  padding: 0.5em;
-  cursor: pointer;
-  color: white;
-  font-size: 1.5rem;
-  z-index: 1000;
-}

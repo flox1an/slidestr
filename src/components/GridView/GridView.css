@@ -54,6 +54,8 @@
 @media screen and (max-width: 600px) {
   .imagegrid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-gap: 8px;
+    padding: 8px
   }
 }
 
