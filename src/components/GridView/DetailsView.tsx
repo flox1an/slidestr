@@ -150,7 +150,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
             setActiveImageIdx={setActiveImageIdx}
           ></DetailsAuthor>
 
-          <div>{currentImage?.content}</div>
+          <div className="details-text">{currentImage?.content}</div>
           {state.userNPub && (
             <div className="details-actions">
               <div className={`heart ${heartState}`} onClick={() => currentImage && heartClick(currentImage)}>

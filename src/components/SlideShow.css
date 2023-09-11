@@ -61,8 +61,8 @@
   cursor: pointer;
   color: white;
   position: absolute;
-  bottom: 1em;
-  left: 1em;
+  bottom: 2em;
+  left: 2em;
   z-index: 200;
 }
 
@@ -82,7 +82,7 @@
 }
 
 .slide {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
@@ -111,14 +111,14 @@
   animation-play-state: paused;
 }
 
-.controls {
+.top-controls {
   position: absolute;
-  top: 1em;
-  right: 1em;
+  top: 2em;
+  right: 2em;
   z-index: 200;
 }
 
-.controls button svg {
+.top-controls button svg {
   fill: white;
   opacity: 0.8;
   height: 1.8em;
@@ -126,33 +126,33 @@
   transform: fill 0.5s ease-in-out;
 }
 
-.controls button {
-  background-color: rgba(0, 0, 0, 0.4);
+.top-controls button {
+  background-color: none;
   padding: 0.5em;
   vertical-align: middle;
   border-radius: 12px;
   margin-left: 6px;
 }
 
-.controls button.login {
+.top-controls button.login {
   background-color: white;
   display: inline;
 }
 
-.controls button:hover {
+.top-controls button:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.controls button.login:hover {
+.top-controls button.login:hover {
   background-color: white;
 }
 
-.controls button:hover svg {
+.top-controls button:hover svg {
   opacity: 1;
 }
 
-.controls img.profile {
+.top-controls img.profile {
   width: 3em;
   height: 3em;
   border-radius: 12px;
@@ -160,6 +160,27 @@
   vertical-align: middle;
   cursor: pointer;
 }
+
+.bottom-controls {
+  position: fixed;
+  bottom: 2.5em;
+  right: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  z-index: 1000;
+}
+.bottom-controls button {
+  border: none;
+  background-color: transparent;
+  padding:0px;
+}
+.bottom-controls button svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
 
 .bottomPanel {
   position: absolute;

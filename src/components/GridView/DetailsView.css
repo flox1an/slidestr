@@ -162,10 +162,11 @@
   }
   .details-actions {
     position: fixed;
-    right: 1em;
-    bottom: 1em;
+    right: 2em;
+    bottom: 2em;
     display: flex;
     flex-direction: column-reverse;
+    gap: 0.5em;
   }
   .details-contents {
     grid-template-columns: 1fr;
@@ -190,6 +191,11 @@
     padding-left: 2em;
     padding-right: 2em;
     padding-bottom: 3em;
+  }
+  .detail-description .details-text {
+    max-width: 90vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .details .closeButton {
     top: 2em;

@@ -11,6 +11,7 @@ import {
   isVideo,
   prepareContent,
   Post,
+  createImgProxyUrl,
 } from './nostrImageDownload';
 import { blockedPublicKeys, adultContentTags, adultNPubs, mixedAdultNPubs } from './env';
 import Settings from './Settings';
@@ -194,7 +195,9 @@ const SlideShow = () => {
 
   const showAdultContentWarning =
     !settings.showAdult &&
-    (adultContentTags.some(t => settings.tags.includes(t)) || adultNPubs.some(p => settings.npubs.includes(p)) || mixedAdultNPubs.some(p => settings.npubs.includes(p)));
+    (adultContentTags.some(t => settings.tags.includes(t)) ||
+      adultNPubs.some(p => settings.npubs.includes(p)) ||
+      mixedAdultNPubs.some(p => settings.npubs.includes(p)));
 
   if (showAdultContentWarning) {
     return <AdultContentInfo></AdultContentInfo>;
@@ -223,7 +226,19 @@ const SlideShow = () => {
     <>
       {showSettings && <Settings onClose={() => setShowSettings(false)}></Settings>}
 
-      <div className="controls">
+      <div className="top-controls">
+        {state.userNPub && currentUserProfile ? (
+          currentUserProfile.image && (
+            <img className="profile" onClick={onLogout} src={createImgProxyUrl(currentUserProfile.image, 80, 80)} />
+          )
+        ) : (
+          <button onClick={onLogin} className="btn btn-primary login">
+            Login
+          </button>
+        )}
+      </div>
+
+      <div className="bottom-controls">
         <button onClick={() => setShowGrid(g => !g)} title={showGrid ? 'Play random slideshow (G)' : 'view grid (G)'}>
           {showGrid ? <IconPlay /> : <IconGrid />}
         </button>
@@ -237,15 +252,8 @@ const SlideShow = () => {
             <IconFullScreen />
           </button>
         )}
-
-        {state.userNPub && currentUserProfile ? (
-          <img className="profile" onClick={onLogout} src={currentUserProfile.image} />
-        ) : (
-          <button onClick={onLogin} className="btn btn-primary login">
-            Login
-          </button>
-        )}
       </div>
+
       {showGrid ? (
         <GridView images={images.current} settings={settings}></GridView>
       ) : (
