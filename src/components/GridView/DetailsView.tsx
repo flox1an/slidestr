@@ -30,6 +30,12 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
     () => (activeImageIdx !== undefined ? images[activeImageIdx] : undefined),
     [images, activeImageIdx]
   );
+  const nextImage = useMemo(
+    () => (activeImageIdx !== undefined ? images[activeImageIdx + 1] : undefined),
+    [images, activeImageIdx]
+  );
+
+
   const activeProfile = currentImage?.author !== undefined ? getProfile(currentImage?.author) : undefined;
   const { nav, currentSettings } = useNav();
 
@@ -123,8 +129,11 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
   return (
     <div className="details">
       <CloseButton onClick={() => setActiveImageIdx(undefined)}></CloseButton>
-      <div className="details-contents">
-        <img className="detail-image" src={currentImage?.url}></img>
+      {nextImage && <img src={nextImage?.url} loading='eager' style={{ display: 'none' }} />}
+      <div className="details-contents" style={
+        { backgroundImage: `url(${currentImage?.url})` }
+      }>
+        <img className="detail-image" src={currentImage?.url} loading='eager'></img>
         <div className="detail-description">
           <DetailsAuthor
             profile={activeProfile}
