@@ -11,6 +11,7 @@ import { NDKEvent, NDKFilter } from '@nostr-dev-kit/ndk';
 import { Kind, nip19 } from 'nostr-tools';
 import { useGlobalState } from '../../utils/globalState';
 import IconBolt from '../Icons/IconBolt';
+import useWindowSize from '../../utils/useWindowSize';
 
 type DetailsViewProps = {
   images: NostrImage[];
@@ -26,6 +27,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
   const [zapState, setZapState] = useState<ZapState>('none');
   const [heartState, setHeartState] = useState<HeartState>('none');
   const [state, setState] = useGlobalState();
+  const size = useWindowSize();
   const currentImage = useMemo(
     () => (activeImageIdx !== undefined ? images[activeImageIdx] : undefined),
     [images, activeImageIdx]
@@ -124,10 +126,12 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
     currentImage.post.wasZapped = true;
   };
 
+  const imageWidth = useMemo(() => size.width && size.width > 1600 ? 1600 : 800, [size.width])
+  const nextImageProxyUrl = nextImage?.url && createImgProxyUrl(nextImage?.url, imageWidth, -1);
+  const currentImageProxyUrl = currentImage?.url && createImgProxyUrl(currentImage?.url, imageWidth, -1);
+
   if (!currentImage) return null;
 
-  const nextImageProxyUrl = nextImage?.url && createImgProxyUrl(nextImage?.url, 800, -1);
-  const currentImageProxyUrl = currentImage?.url && createImgProxyUrl(currentImage?.url, 800, -1);
 
   return (
     <div className="details">
