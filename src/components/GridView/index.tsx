@@ -7,6 +7,7 @@ import { Settings } from '../../utils/useNav';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import AuthorProfile from '../AuthorProfile';
 import { useSwipeable } from 'react-swipeable';
+import LazyLoad from 'react-lazy-load';
 
 type GridViewProps = {
   settings: Settings;

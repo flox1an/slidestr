@@ -37,6 +37,10 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
     [images, activeImageIdx]
   );
 
+  useEffect(() => {
+    setState({ ...state, showNavButtons: false });
+    return () => setState({ ...state, showNavButtons: true });
+  }, []);
 
   const activeProfile = currentImage?.author !== undefined ? getProfile(currentImage?.author) : undefined;
   const { nav, currentSettings } = useNav();
@@ -126,7 +130,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
     currentImage.post.wasZapped = true;
   };
 
-  const imageWidth = useMemo(() => size.width && size.width > 1600 ? 1600 : 800, [size.width])
+  const imageWidth = useMemo(() => (size.width && size.width > 1600 ? 1600 : 800), [size.width]);
   const nextImageProxyUrl = nextImage?.url && createImgProxyUrl(nextImage?.url, imageWidth, -1);
   const currentImageProxyUrl = currentImage?.url && createImgProxyUrl(currentImage?.url, imageWidth, -1);
 
@@ -137,12 +141,19 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
   return (
     <div className="details">
       <CloseButton onClick={() => setActiveImageIdx(undefined)}></CloseButton>
-      {nextImage && !isVideo(nextImage.url) && <img src={nextImageProxyUrl} loading='eager' style={{ display: 'none' }} />}
-      {nextImage && isVideo(nextImage.url) && <video src={nextImage?.url} preload='true' style={{ display: 'none' }} />}
-      <div className="details-contents" style={
-        { backgroundImage: `url(${!isVideo(currentImage.url) ? currentImageProxyUrl : ''})` }
-      }>
-        {isVideo(currentImage.url) ? <video className="detail-image" src={currentImage?.url} autoPlay loop muted playsInline></video> : <img className="detail-image" src={currentImageProxyUrl} loading='eager'></img>}
+      {nextImage && !isVideo(nextImage.url) && (
+        <img src={nextImageProxyUrl} loading="eager" style={{ display: 'none' }} />
+      )}
+      {nextImage && isVideo(nextImage.url) && <video src={nextImage?.url} preload="true" style={{ display: 'none' }} />}
+      <div
+        className="details-contents"
+        style={{ backgroundImage: `url(${!isVideo(currentImage.url) ? currentImageProxyUrl : ''})` }}
+      >
+        {isVideo(currentImage.url) ? (
+          <video className="detail-image" src={currentImage?.url} autoPlay loop muted playsInline></video>
+        ) : (
+          <img className="detail-image" src={currentImageProxyUrl} loading="eager"></img>
+        )}
         <div className="detail-description">
           <DetailsAuthor
             profile={activeProfile}
@@ -150,7 +161,8 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
             setActiveImageIdx={setActiveImageIdx}
           ></DetailsAuthor>
 
-          <div className="details-text">{currentImage?.content}</div>
+          {currentImage?.content && <div className="details-text">{currentImage?.content}</div>}
+
           {state.userNPub && (
             <div className="details-actions">
               <div className={`heart ${heartState}`} onClick={() => currentImage && heartClick(currentImage)}>
@@ -163,21 +175,23 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
               )}
             </div>
           )}
-          <div>
-            {uniq(currentImage?.tags).map(t => (
-              <>
-                <span
-                  className="tag"
-                  onClick={() => {
-                    setActiveImageIdx(undefined);
-                    nav({ ...currentSettings, tags: [t], npubs: [] });
-                  }}
-                >
-                  {t}
-                </span>{' '}
-              </>
-            ))}
-          </div>
+          {currentImage.tags.length > 0 && (
+            <div>
+              {uniq(currentImage?.tags).map(t => (
+                <>
+                  <span
+                    className="tag"
+                    onClick={() => {
+                      setActiveImageIdx(undefined);
+                      nav({ ...currentSettings, tags: [t], npubs: [] });
+                    }}
+                  >
+                    {t}
+                  </span>{' '}
+                </>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

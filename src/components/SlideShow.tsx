@@ -28,6 +28,7 @@ import useNav from '../utils/useNav';
 import { NDKEvent } from '@nostr-dev-kit/ndk';
 import { useGlobalState } from '../utils/globalState';
 import useAutoLogin from '../utils/useAutoLogin';
+import IconUser from './Icons/IconUser';
 
 type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -232,27 +233,29 @@ const SlideShow = () => {
             <img className="profile" onClick={onLogout} src={createImgProxyUrl(currentUserProfile.image, 80, 80)} />
           )
         ) : (
-          <button onClick={onLogin} className="btn btn-primary login">
-            Login
+          <button onClick={onLogin} className="login">
+            <IconUser></IconUser>
           </button>
         )}
       </div>
 
-      <div className="bottom-controls">
-        <button onClick={() => setShowGrid(g => !g)} title={showGrid ? 'Play random slideshow (G)' : 'view grid (G)'}>
-          {showGrid ? <IconPlay /> : <IconGrid />}
-        </button>
-
-        <button onClick={() => setShowSettings(s => !s)}>
-          <IconSettings />
-        </button>
-
-        {!fullScreen && (
-          <button onClick={() => document?.getElementById('root')?.requestFullscreen()}>
-            <IconFullScreen />
+      {state.showNavButtons && (
+        <div className="bottom-controls">
+          <button onClick={() => setShowGrid(g => !g)} title={showGrid ? 'Play random slideshow (G)' : 'view grid (G)'}>
+            {showGrid ? <IconPlay /> : <IconGrid />}
           </button>
-        )}
-      </div>
+
+          <button onClick={() => setShowSettings(s => !s)}>
+            <IconSettings />
+          </button>
+
+          {!fullScreen && (
+            <button onClick={() => document?.getElementById('root')?.requestFullscreen()}>
+              <IconFullScreen />
+            </button>
+          )}
+        </div>
+      )}
 
       {showGrid ? (
         <GridView images={images.current} settings={settings}></GridView>

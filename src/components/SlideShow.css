@@ -119,37 +119,22 @@
 }
 
 .top-controls button svg {
-  fill: white;
-  opacity: 0.8;
-  height: 1.8em;
-  width: 2em;
-  transform: fill 0.5s ease-in-out;
+  height: 24px;
+  width: 24px;
+  border-radius: 0px;
+  padding: 0px;
 }
 
 .top-controls button {
-  background-color: none;
-  padding: 0.5em;
+  background-color: transparent;
   vertical-align: middle;
-  border-radius: 12px;
-  margin-left: 6px;
 }
 
 .top-controls button.login {
-  background-color: white;
   display: inline;
-}
-
-.top-controls button:hover {
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.top-controls button.login:hover {
-  background-color: white;
-}
-
-.top-controls button:hover svg {
-  opacity: 1;
+  width: 48px;
+  height: 48px;
 }
 
 .top-controls img.profile {
@@ -178,7 +163,7 @@
 .bottom-controls button svg {
   width: 24px;
   height: 24px;
-  fill: white;
+  color: white;
 }
 
 
@@ -196,6 +181,7 @@
   animation-name: hidePanel;
   animation-duration: 0.5s;
   animation-timing-function: ease-in;
+  display: none; /* disabled for now */
 }
 
 .bottomPanel:hover {

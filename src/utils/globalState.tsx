@@ -5,9 +5,11 @@ import React, { createContext, useContext, useReducer } from 'react';
 interface GlobalState {
   userNPub?: string;
   profile?: NDKUserProfile;
+  showNavButtons: boolean;
 }
 const initialState: GlobalState = {
   userNPub: undefined,
+  showNavButtons: true
 };
 
 type GlobalStateType = [GlobalState, React.Dispatch<Partial<GlobalState>>];
