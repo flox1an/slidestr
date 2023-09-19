@@ -55,6 +55,7 @@
   cursor: pointer;
   overflow: visible;
 }
+
 .details-contents .tag:hover {
   background-color: #555;
 }
@@ -79,6 +80,14 @@
   animation: bump 1s ease-in-out;
   overflow: visible;
   fill: #ff0000;
+}
+
+.details-actions .link svg {
+  padding: 0.5em;
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+  color: white;
 }
 
 .details-actions .zap svg {
@@ -202,4 +211,3 @@
     left: 2em;
   }
 }
-

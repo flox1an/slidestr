@@ -1,4 +1,4 @@
-const IconHeart = ({ filled }: { filled: boolean }) => {
+const IconHeart = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" id="heart" viewBox="0 0 20 18" fill="none">
       <path

@@ -12,6 +12,7 @@ import { Kind, nip19 } from 'nostr-tools';
 import { useGlobalState } from '../../utils/globalState';
 import IconBolt from '../Icons/IconBolt';
 import useWindowSize from '../../utils/useWindowSize';
+import IconLink from '../Icons/IconLink';
 
 type DetailsViewProps = {
   images: NostrImage[];
@@ -163,18 +164,30 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
 
           {currentImage?.content && <div className="details-text">{currentImage?.content}</div>}
 
-          {state.userNPub && (
-            <div className="details-actions">
-              <div className={`heart ${heartState}`} onClick={() => currentImage && heartClick(currentImage)}>
-                <IconHeart filled={heartState == 'liked'}></IconHeart>
-              </div>
-              {(activeProfile?.lud06 || activeProfile?.lud16) && (
-                <div className={`zap ${zapState}`} onClick={() => currentImage && zapClick(currentImage)}>
-                  <IconBolt></IconBolt>
+          <div className="details-actions">
+            {state.userNPub && (
+              <>
+                <div className={`heart ${heartState}`} onClick={() => currentImage && heartClick(currentImage)}>
+                  <IconHeart></IconHeart>
                 </div>
-              )}
-            </div>
-          )}
+                {(activeProfile?.lud06 || activeProfile?.lud16) && (
+                  <div className={`zap ${zapState}`} onClick={() => currentImage && zapClick(currentImage)}>
+                    <IconBolt></IconBolt>
+                  </div>
+                )}
+              </>
+            )}
+            {nextImage?.noteId && (
+              <a
+                className="link"
+                target="_blank"
+                href={`https://nostrapp.link/?page=search#${nip19.noteEncode(currentImage?.noteId)}`}
+              >
+                <IconLink></IconLink>
+              </a>
+            )}
+          </div>
+
           {currentImage.tags.length > 0 && (
             <div>
               {uniq(currentImage?.tags).map(t => (
