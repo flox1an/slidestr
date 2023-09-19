@@ -181,7 +181,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
               <a
                 className="link"
                 target="_blank"
-                href={`https://nostrapp.link/?page=search#${nip19.noteEncode(currentImage?.noteId)}`}
+                href={`https://nostrapp.link/#${nip19.noteEncode(currentImage?.noteId)}`}
               >
                 <IconLink></IconLink>
               </a>
