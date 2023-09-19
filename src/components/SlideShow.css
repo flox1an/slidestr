@@ -123,6 +123,7 @@
   width: 24px;
   border-radius: 0px;
   padding: 0px;
+  color: white;
 }
 
 .top-controls button {
@@ -155,17 +156,18 @@
   gap: 1.5em;
   z-index: 1000;
 }
+
 .bottom-controls button {
   border: none;
   background-color: transparent;
   padding:0px;
 }
+
 .bottom-controls button svg {
   width: 24px;
   height: 24px;
   color: white;
 }
-
 
 .bottomPanel {
   position: absolute;

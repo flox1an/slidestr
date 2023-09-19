@@ -140,74 +140,91 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
   // TODO unmute video through icon
 
   return (
-    <div className="details">
+    <>
       <CloseButton onClick={() => setActiveImageIdx(undefined)}></CloseButton>
-      {nextImage && !isVideo(nextImage.url) && (
-        <img src={nextImageProxyUrl} loading="eager" style={{ display: 'none' }} />
-      )}
-      {nextImage && isVideo(nextImage.url) && <video src={nextImage?.url} preload="true" style={{ display: 'none' }} />}
-      <div
-        className="details-contents"
-        style={{ backgroundImage: `url(${!isVideo(currentImage.url) ? currentImageProxyUrl : ''})` }}
-      >
-        {isVideo(currentImage.url) ? (
-          <video className="detail-image" src={currentImage?.url} autoPlay loop muted playsInline></video>
-        ) : (
-          <img className="detail-image" src={currentImageProxyUrl} loading="eager"></img>
+      <div className="details">
+        {nextImage && !isVideo(nextImage.url) && (
+          <img src={nextImageProxyUrl} loading="eager" style={{ display: 'none' }} />
         )}
-        <div className="detail-description">
-          <DetailsAuthor
-            profile={activeProfile}
-            npub={currentImage?.author}
-            setActiveImageIdx={setActiveImageIdx}
-          ></DetailsAuthor>
+        {nextImage && isVideo(nextImage.url) && (
+          <video src={nextImage?.url} preload="true" style={{ display: 'none' }} />
+        )}
+        <div
+          className="details-contents"
+          style={{ backgroundImage: `url(${!isVideo(currentImage.url) ? currentImageProxyUrl : ''})` }}
+        >
+          {isVideo(currentImage.url) ? (
+            <video className="detail-image" src={currentImage?.url} autoPlay loop muted playsInline></video>
+          ) : (
+            <img className="detail-image" src={currentImageProxyUrl} loading="eager"></img>
+          )}
+          <div className="detail-description">
+            <DetailsAuthor
+              profile={activeProfile}
+              npub={currentImage?.author}
+              setActiveImageIdx={setActiveImageIdx}
+            ></DetailsAuthor>
 
-          {currentImage?.content && <div className="details-text">{currentImage?.content}</div>}
+            {currentImage?.content && <div className="details-text">{currentImage?.content}</div>}
 
-          <div className="details-actions">
-            {state.userNPub && (
-              <>
-                <div className={`heart ${heartState}`} onClick={() => currentImage && heartClick(currentImage)}>
-                  <IconHeart></IconHeart>
-                </div>
-                {(activeProfile?.lud06 || activeProfile?.lud16) && (
-                  <div className={`zap ${zapState}`} onClick={() => currentImage && zapClick(currentImage)}>
-                    <IconBolt></IconBolt>
+            <div className="details-actions">
+              {state.userNPub && (
+                <>
+                  <div className={`heart ${heartState}`} onClick={() => currentImage && heartClick(currentImage)}>
+                    <IconHeart></IconHeart>
                   </div>
-                )}
-              </>
-            )}
-            {nextImage?.noteId && (
-              <a
-                className="link"
-                target="_blank"
-                href={`https://nostrapp.link/#${nip19.noteEncode(currentImage?.noteId)}`}
-              >
-                <IconLink></IconLink>
-              </a>
+                  {(activeProfile?.lud06 || activeProfile?.lud16) && (
+                    <div className={`zap ${zapState}`} onClick={() => currentImage && zapClick(currentImage)}>
+                      <IconBolt></IconBolt>
+                    </div>
+                  )}
+                </>
+              )}
+              {nextImage?.noteId && (
+                <a
+                  className="link"
+                  target="_blank"
+                  href={`https://nostrapp.link/#${nip19.noteEncode(currentImage?.noteId)}`}
+                >
+                  <IconLink></IconLink>
+                </a>
+              )}
+              {/* 
+            <div className="more">
+              <IconDots></IconDots>
+              <div className="more-menu">
+                <a className="more-action">
+                  <IconLink></IconLink> eiofjiodsjfp9dsf
+                </a>
+                <a className="more-action">
+                  <IconLink></IconLink> usdhfoidshfo
+                </a>
+              </div>
+            </div>
+            */}
+            </div>
+
+            {currentImage.tags.length > 0 && (
+              <div>
+                {uniq(currentImage?.tags).map(t => (
+                  <>
+                    <span
+                      className="tag"
+                      onClick={() => {
+                        setActiveImageIdx(undefined);
+                        nav({ ...currentSettings, tags: [t], npubs: [] });
+                      }}
+                    >
+                      {t}
+                    </span>{' '}
+                  </>
+                ))}
+              </div>
             )}
           </div>
-
-          {currentImage.tags.length > 0 && (
-            <div>
-              {uniq(currentImage?.tags).map(t => (
-                <>
-                  <span
-                    className="tag"
-                    onClick={() => {
-                      setActiveImageIdx(undefined);
-                      nav({ ...currentSettings, tags: [t], npubs: [] });
-                    }}
-                  >
-                    {t}
-                  </span>{' '}
-                </>
-              ))}
-            </div>
-          )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
