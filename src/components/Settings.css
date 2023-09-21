@@ -40,6 +40,8 @@
     transform: none;
     left: 0;
     max-height: none;
+    box-sizing: border-box;
+    width: 100%;
   }
 }
 
