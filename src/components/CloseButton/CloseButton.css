@@ -7,3 +7,11 @@
   font-size: 1.5rem;
   z-index: 1000;
 }
+
+@media (max-width: 768px) {
+  .closeButton {
+    position: fixed;
+    top: 2em;
+    left: 1.5em;
+  }
+}

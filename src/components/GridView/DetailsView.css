@@ -245,11 +245,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .closeButton {
-    position: fixed;
-    top: 2em;
-    left: 1.5em;
-  }
   .details-actions .more .more-menu {
     bottom: 50px;
     right: 0px;

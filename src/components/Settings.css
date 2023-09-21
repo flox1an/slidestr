@@ -35,8 +35,11 @@
 
 @media (max-width: 768px) {
   .settings {
-    width: 90vw;
-    height: 90vh;
+    height: 100vh;
+    top: 0;
+    transform: none;
+    left: 0;
+    max-height: none;
   }
 }
 
@@ -122,4 +125,10 @@
 
 .settings .settings-mode > div.active {
   border-bottom: 1px solid #7600ff;
+}
+
+@media (max-width: 768px) {
+  .settings .closeButton {
+    left: 2.5em;
+  }
 }
