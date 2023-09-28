@@ -13,6 +13,7 @@ import { useGlobalState } from '../../utils/globalState';
 import IconBolt from '../Icons/IconBolt';
 import useWindowSize from '../../utils/useWindowSize';
 import IconLink from '../Icons/IconLink';
+import IconDots from '../Icons/IconDots';
 
 type DetailsViewProps = {
   images: NostrImage[];
@@ -28,6 +29,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
   const [zapState, setZapState] = useState<ZapState>('none');
   const [heartState, setHeartState] = useState<HeartState>('none');
   const [state, setState] = useGlobalState();
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
   const size = useWindowSize();
   const currentImage = useMemo(
     () => (activeImageIdx !== undefined ? images[activeImageIdx] : undefined),
@@ -47,7 +49,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
   const { nav, currentSettings } = useNav();
 
   const fetchLikeAndZaps = async (noteIds: string[], selfNPub: string) => {
-    const filter: NDKFilter = { kinds: [Kind.Reaction], '#e': noteIds };
+    const filter: NDKFilter = { kinds: [7], '#e': noteIds }; // Kind Reaction
 
     filter.authors = [nip19.decode(selfNPub).data as string];
 
@@ -142,7 +144,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
   return (
     <>
       <CloseButton onClick={() => setActiveImageIdx(undefined)}></CloseButton>
-      <div className="details">
+      <div className="details" onClick={() => setShowMoreMenu(false)}>
         {nextImage && !isVideo(nextImage.url) && (
           <img src={nextImageProxyUrl} loading="eager" style={{ display: 'none' }} />
         )}
@@ -189,19 +191,29 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
                   <IconLink></IconLink>
                 </a>
               )}
-              {/* 
-            <div className="more">
+              {
+            <div className="more" onClick={(e) => {e.stopPropagation(); setShowMoreMenu(s=>!s)}}>
               <IconDots></IconDots>
-              <div className="more-menu">
+              <div className={`more-menu ${showMoreMenu ? 'show': '' }`} >
+                <a className="more-action"   target="_blank"
+                  href={`https://nostrapp.link/#${nip19.noteEncode(currentImage?.noteId)}?select=true`}>
+                  <IconLink></IconLink>Open note with...
+                </a>
+                <a className="more-action"   target="_blank"
+                  href={`https://nostrapp.link/#${currentImage?.author}`}>
+                  <IconLink></IconLink>Open author profile
+                </a>
+                {/*
                 <a className="more-action">
-                  <IconLink></IconLink> eiofjiodsjfp9dsf
+                  <IconLink></IconLink>Repost
                 </a>
                 <a className="more-action">
-                  <IconLink></IconLink> usdhfoidshfo
+                  <IconLink></IconLink>Follow author
                 </a>
+                 */}
               </div>
             </div>
-            */}
+            }
             </div>
 
             {currentImage.tags.length > 0 && (
