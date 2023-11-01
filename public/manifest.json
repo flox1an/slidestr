@@ -1,8 +1,8 @@
 {
     "name": "slidestr.net",
     "short_name": "slidestr",
-    "theme_color": "#4a49ff",
-    "background_color": "#7600ff",
+    "theme_color": "#000000",
+    "background_color": "#000000",
     "display": "fullscreen",
     "scope": "/",
     "start_url": "/"

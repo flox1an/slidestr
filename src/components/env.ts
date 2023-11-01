@@ -91,6 +91,7 @@ export const adultContentTags = [
   'pornstr',
   'pussy',
   'sex',
+  'sexy',
   'suicidegirls',
   'thighstr',
   'teenstr',
@@ -100,8 +101,10 @@ export const adultContentTags = [
   'nostrqueen'
 ];
 
+/* These are shown when using tags but hidden from global (unless NSFW content is enabled) */
 export const mixedAdultNPubs = [
   'npub12jedfuhk2wfr7syr38t2f55652khuyz9f88r63ftm0j2vudxq9sqq7677r', // Erikha
+  'npub1x427a8qed5v8a7awj6t5lrdhkc7mp92nd2n3lgnq7p0qn9uttrrs9rfzz4', // Kimiko
 ]
 
 /* These profiles are flagged as adult / NSFW and their content is not shown
@@ -168,6 +171,7 @@ export const adultNPubs = [
   'npub1y77j6jm5hw34xl5m85aumltv88arh2s7q383allkpfe4muarzc5qzfgru0', // sexy-models
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
+  'npub1lua7422kkuksdww4x794z4pp0vwkv463g4j3s4kzurjnn9w2zcsqu3glte', // Awake
 
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
