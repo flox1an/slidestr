@@ -15,7 +15,7 @@ const AdultContentInfo = () => {
     e.preventDefault();
     nav({ ...currentSettings, showAdult: true });
   };
-  
+
   /**
    * GoBack function handles the event when the 'Go Back' button is clicked.
    * It prevents the default button click action, resets the current settings and navigates back with adult content disabled.

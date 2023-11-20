@@ -9,7 +9,7 @@ interface GlobalState {
 }
 const initialState: GlobalState = {
   userNPub: undefined,
-  showNavButtons: true
+  showNavButtons: true,
 };
 
 type GlobalStateType = [GlobalState, React.Dispatch<Partial<GlobalState>>];

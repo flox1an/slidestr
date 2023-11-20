@@ -192,18 +192,26 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
                 </a>
               )}
               {
-            <div className="more" onClick={(e) => {e.stopPropagation(); setShowMoreMenu(s=>!s)}}>
-              <IconDots></IconDots>
-              <div className={`more-menu ${showMoreMenu ? 'show': '' }`} >
-                <a className="more-action"   target="_blank"
-                  href={`https://nostrapp.link/#${nip19.noteEncode(currentImage?.noteId)}?select=true`}>
-                  <IconLink></IconLink>Open note with...
-                </a>
-                <a className="more-action"   target="_blank"
-                  href={`https://nostrapp.link/#${currentImage?.author}`}>
-                  <IconLink></IconLink>Open author profile
-                </a>
-                {/*
+                <div
+                  className="more"
+                  onClick={e => {
+                    e.stopPropagation();
+                    setShowMoreMenu(s => !s);
+                  }}
+                >
+                  <IconDots></IconDots>
+                  <div className={`more-menu ${showMoreMenu ? 'show' : ''}`}>
+                    <a
+                      className="more-action"
+                      target="_blank"
+                      href={`https://nostrapp.link/#${nip19.noteEncode(currentImage?.noteId)}?select=true`}
+                    >
+                      <IconLink></IconLink>Open note with...
+                    </a>
+                    <a className="more-action" target="_blank" href={`https://nostrapp.link/#${currentImage?.author}`}>
+                      <IconLink></IconLink>Open author profile
+                    </a>
+                    {/*
                 <a className="more-action">
                   <IconLink></IconLink>Repost
                 </a>
@@ -211,9 +219,9 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
                   <IconLink></IconLink>Follow author
                 </a>
                  */}
-              </div>
-            </div>
-            }
+                  </div>
+                </div>
+              }
             </div>
 
             {currentImage.tags.length > 0 && (

@@ -19,8 +19,7 @@ const GridView = ({ settings, images }: GridViewProps) => {
   const { getProfile } = useNDK();
 
   const sortedImages = useMemo(
-    () =>
-      images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
+    () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
     [images, settings] // settings is not used here, but we need to include it to trigger a re-render when it changes
   );
 
@@ -70,9 +69,9 @@ const GridView = ({ settings, images }: GridViewProps) => {
         <DetailsView images={sortedImages} activeImageIdx={activeImageIdx} setActiveImageIdx={setActiveImageIdx} />
       ) : null}
       <div className="imagegrid">
-        {sortedImages.map((image, idx) =>
-            <GridImage key={image.url} image={image} onClick={() => setActiveImageIdx(idx)}></GridImage>
-        )}
+        {sortedImages.map((image, idx) => (
+          <GridImage key={image.url} image={image} onClick={() => setActiveImageIdx(idx)}></GridImage>
+        ))}
       </div>
       {activeProfile && (
         <AuthorProfile

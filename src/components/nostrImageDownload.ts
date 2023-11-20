@@ -80,7 +80,7 @@ export const hasAdultTag = ({ tags }: { tags?: NDKTag[] }) => {
 
 export const isAdultRelated = ({ tags, pubkey }: { tags?: NDKTag[]; pubkey: string }, isTagSearch: boolean) => {
   // if we search for a specific non adult tag and the user in the mixed category
-  // allow as non adult 
+  // allow as non adult
   if (isTagSearch && mixedAdultNPubs.includes(pubkey.toLowerCase()) && !hasAdultTag({ tags })) {
     return false;
   }

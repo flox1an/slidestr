@@ -98,14 +98,14 @@ export const adultContentTags = [
   'tits',
   'titstr',
   'xxx',
-  'nostrqueen'
+  'nostrqueen',
 ];
 
 /* These are shown when using tags but hidden from global (unless NSFW content is enabled) */
 export const mixedAdultNPubs = [
   'npub12jedfuhk2wfr7syr38t2f55652khuyz9f88r63ftm0j2vudxq9sqq7677r', // Erikha
   'npub1x427a8qed5v8a7awj6t5lrdhkc7mp92nd2n3lgnq7p0qn9uttrrs9rfzz4', // Kimiko
-]
+];
 
 /* These profiles are flagged as adult / NSFW and their content is not shown
    by default. Users can enable their content through the adult content flag
@@ -120,6 +120,7 @@ export const adultNPubs = [
   'npub16ye5pezunzcx8y0ecjquks0sr5jkj6lrhfjyu2n9qxt5cxgzrvcqgnvx8s', // Aru Moon
   'npub17693mv2qu7mv67zqpcup9n502gmkuhytkxq3sw7qp50vlptq8f7syzv93d', // sha0wgoone
   'npub177wu03dgx6zt9a9hdey079prfw5lvj5dhm20z4k96tf6um6zjk7qyzdumj', // Eoun
+  'npub19e2tewftsy7ysd6hhkc4wn2czd4ku34z7wqkw5y4q8lm8fzhgxjsfhw825', // Waifposter88
   'npub19xwjw7f23nsmnsd0j72mvhrdswt4cp6urc5el2zuu8se3yfu87ess524je', // Gone Wild (NSFW)
   'npub1acwrv7aqgu949mw0zxmw2akgsjqp574nnq4vcl9wln5355q79w5ssv9qxg', // Arianna
   'npub1acwrv7aqgu949mw0zxmw2akgsjqp574nnq4vcl9wln5355q79w5ssv9qxg', // Arianna
@@ -129,6 +130,7 @@ export const adultNPubs = [
   'npub1csk2wg33ee9kutyps4nmevyv3putfegj7yd0emsp44ph32wvmamqs7uyan', // Lilura
   'npub1e4n8nah09he25slv00dz3kav3jsu5jvp83aya234ejumcmu2xseqwrp6pl', // Svenno(NSFW)
   'npub1femd0mrawr0jmtjr2jwa2nm90haxrpglzdt6tt0djrsav39e53asf74aer', // FemDom Raw
+  'npub1fevdattp2nd69c47cvldjp73hd3rjqynt9j7azgsjrdlt6jmhx9qagw3la', // Nova
   'npub1fh8e9pnm8rfln0k7c6uh8wrvmva8enkdzsgzsc7v9jk97up23ewqs6kuue', // nostrporn
   'npub1fut75jn7hztc248vz3g8vfsdtwuy95l6khw533k6dsstsdrxkussf9ax6g', // bliss (not many nude art posts)
   'npub1ga79p6qsjh0xd343q3du2unf2gl6gk0rde36c06mafxkrssmnnesxyzcss', // Orange Incest 🔞
@@ -147,9 +149,11 @@ export const adultNPubs = [
   'npub1klxseqx4et3grzgvajtlm47tz7tqmxygwj49kx3frsuls9cf8lhqhhhr5q', // Riley_R_Fan
   'npub1kq67ngznkldmecycjfmjt4deuvyxgpn4zcpq8cvfmdl2hufzzccs6nc9q8', // Sargas
   'npub1kul999wnt8gwa6l2vyuewhnmmp25gq7dly9zmgsw52x8csmqjgts7278rx', // 𝓟𝓮𝓽𝓲𝓽𝓮 𝓟𝓻𝓲𝓷𝓬𝓮𝓼𝓼
+  'npub1lua7422kkuksdww4x794z4pp0vwkv463g4j3s4kzurjnn9w2zcsqu3glte', // Awake
   'npub1m5fdz9gqa2qeudpy47zllmv9gqe3zzj44dkt9lh2kes3mlex7e6se348vy', // Marble Sculture
   'npub1mgusda7ujnyuhhudwkyrp763k4dd9xspktekl0tg5v0j76yph8ssyrfdpm', // anisyia
   'npub1nkw853ncf4nmsctujc3hdahwtm03hssrskc2t33qjqedxtpwupfqeukt53', // bpufa
+  'npub1nllxsheh5hpy55rkmkt46lee4m8tk05g8fmp7nf0mu7hhcz3qc4s7m2vsn', // Aria Hikari
   'npub1nme4074q6yrqexdn5z625vhvv9j9e2qwwfcgdyg2utffhvdgrxfqn5ztgm', // Ay Papi
   'npub1p4j4zfxvdgjrs26wx5dh9uvsvqfv8xa7ew89vv60nxang8cn0sxshyj28r', // Porn search bot
   'npub1peq5ds2jaj5en35xgl6r6rxvvk9eh4ppzhs4mpdh9s5y8ffdwl5q7nmyda', // Furry Artworks 18+
@@ -171,7 +175,8 @@ export const adultNPubs = [
   'npub1y77j6jm5hw34xl5m85aumltv88arh2s7q383allkpfe4muarzc5qzfgru0', // sexy-models
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
-  'npub1lua7422kkuksdww4x794z4pp0vwkv463g4j3s4kzurjnn9w2zcsqu3glte', // Awake
+  'npub1dn42tzy8v8m2xu4y38djf28dfugf5vkg2uucueeldvmucdlcwgjsk49856', // Mila
+  'npub1sgmuwdfzq2asrh68p6ul9chp32y4938qa7ns637qgmeqgglhtwmq4l5xl9', // Nudeful Art
 
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
@@ -187,7 +192,7 @@ export const blockedNPubs = [
   'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
   'npub1kf8sau5dejmcmfmzzj256rv728p5w7s0wytdyz8ypa0ne0y6k0vswhgu9w', // noname
   'npub16dx8unvqnweeauxsaw479qhy2j5z8s2krvzaq4rsull57e9klldspdqvpm', // Pascub
-  'npub125wcpwdn0zmt3accu3jlkv349jgw9d8htk4cjx2spc9qfvusl7hs6np5pt', 
+  'npub125wcpwdn0zmt3accu3jlkv349jgw9d8htk4cjx2spc9qfvusl7hs6np5pt',
 ];
 
 export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
