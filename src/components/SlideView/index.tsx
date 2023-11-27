@@ -2,14 +2,13 @@ import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import AuthorProfile from '../AuthorProfile';
 import Slide from './Slide';
 import { NostrImage, urlFix } from '../nostrImageDownload';
-import { appName } from '../env';
-import { useNDK } from '@nostr-dev-kit/ndk-react';
 import useDebouncedEffect from '../../utils/useDebouncedEffect';
 import { useSwipeable } from 'react-swipeable';
 import { Helmet } from 'react-helmet';
 import IconPause from '../Icons/IconPause';
 import IconSpinner from '../Icons/IconSpinner';
 import { Settings } from '../../utils/useNav';
+import useProfile from '../../utils/useProfile';
 
 type SlideViewProps = {
   settings: Settings;
@@ -18,25 +17,17 @@ type SlideViewProps = {
 };
 
 const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
-  const { getProfile } = useNDK();
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const history = useRef<NostrImage[]>([]);
   const [paused, setPaused] = useState(false);
   const upcomingImage = useRef<NostrImage>();
   const [loading, setLoading] = useState(true);
   const viewTimeoutHandle = useRef(0);
-  const [title, setTitle] = useState(appName);
   const [activeNpub, setActiveNpub] = useState<string | undefined>(undefined);
   const [slideShowStarted, setSlideShowStarted] = useState(false);
   const [activeContent, setActiveContent] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    if (settings.tags && settings.tags.length > 0) {
-      setTitle('#' + settings.tags.join(' #') + ` | ${appName}`);
-    } else {
-      setTitle(`Random photos from popular hashtags | ${appName}`);
-    }
-  }, [settings]);
+  const { activeProfile, title } = useProfile(settings);
+  
   const queueNextImage = (waitTime: number) => {
     clearTimeout(viewTimeoutHandle.current);
     viewTimeoutHandle.current = setTimeout(() => {
@@ -151,14 +142,6 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
     console.log(`cleaning timeout in useEffect[settings] `);
     //clearTimeout(viewTimeoutHandle.current);
   }, [settings]);
-
-  const activeProfile = activeNpub && getProfile(activeNpub);
-
-  useEffect(() => {
-    if (settings.npubs.length > 0 && activeProfile && (activeProfile.displayName || activeProfile.name)) {
-      setTitle(activeProfile.displayName || activeProfile.name + ` | ${appName}`);
-    }
-  }, [activeProfile]);
 
   return (
     <div {...swipeHandlers} onClick={() => setPaused(p => !p)} style={{ overflow: 'hidden' }}>

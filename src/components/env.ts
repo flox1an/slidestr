@@ -177,6 +177,7 @@ export const adultNPubs = [
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
   'npub1dn42tzy8v8m2xu4y38djf28dfugf5vkg2uucueeldvmucdlcwgjsk49856', // Mila
   'npub1sgmuwdfzq2asrh68p6ul9chp32y4938qa7ns637qgmeqgglhtwmq4l5xl9', // Nudeful Art
+  'npub15asxgmzhextsxd8545rldcqgauq3ycxjta6a9m4x70p927jvltpq983udd', // Big Wanker
 
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures

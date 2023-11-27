@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { NostrImage, isVideo, urlFix } from '../nostrImageDownload';
+import { NostrImage, urlFix } from '../nostrImageDownload';
 import './GridView.css';
 import DetailsView from './DetailsView';
 import GridImage from './GridImage';
 import { Settings } from '../../utils/useNav';
-import { useNDK } from '@nostr-dev-kit/ndk-react';
 import AuthorProfile from '../AuthorProfile';
 import { useSwipeable } from 'react-swipeable';
-import LazyLoad from 'react-lazy-load';
+import { Helmet } from 'react-helmet';
+import useProfile from '../../utils/useProfile';
 
 type GridViewProps = {
   settings: Settings;
@@ -16,7 +16,7 @@ type GridViewProps = {
 
 const GridView = ({ settings, images }: GridViewProps) => {
   const [activeImageIdx, setActiveImageIdx] = useState<number | undefined>();
-  const { getProfile } = useNDK();
+  const { activeProfile, title } = useProfile(settings);
 
   const sortedImages = useMemo(
     () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
@@ -61,10 +61,13 @@ const GridView = ({ settings, images }: GridViewProps) => {
     };
   }, []);
 
-  const activeProfile = settings.npubs.length == 1 && getProfile(settings.npubs[0]);
+
 
   return (
     <div className="gridview" {...swipeHandlers}>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       {activeImageIdx !== undefined ? (
         <DetailsView images={sortedImages} activeImageIdx={activeImageIdx} setActiveImageIdx={setActiveImageIdx} />
       ) : null}
