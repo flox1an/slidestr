@@ -27,7 +27,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
   const [slideShowStarted, setSlideShowStarted] = useState(false);
   const [activeContent, setActiveContent] = useState<string | undefined>(undefined);
   const { activeProfile, title } = useProfile(settings);
-  
+
   const queueNextImage = (waitTime: number) => {
     clearTimeout(viewTimeoutHandle.current);
     viewTimeoutHandle.current = setTimeout(() => {

@@ -61,8 +61,6 @@ const GridView = ({ settings, images }: GridViewProps) => {
     };
   }, []);
 
-
-
   return (
     <div className="gridview" {...swipeHandlers}>
       <Helmet>
