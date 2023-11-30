@@ -1,6 +1,7 @@
 import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
-import { Kind, nip19 } from 'nostr-tools';
+import { nip19 } from 'nostr-tools';
 import { adultContentTags, adultPublicKeys, mixedAdultNPubs } from './env';
+import  uniq from 'lodash/uniq';
 
 export type Post = {
   event: NDKEvent;
@@ -51,13 +52,21 @@ export const urlFix = (url: string) => {
   // dont use cdn for mp4/webm
   if (url == undefined || url.endsWith('.mp4') || url.endsWith('.webm')) return url;
 
+  // remove google lens prefix (used in meme posts)
+  url = url.replace(/https:\/\/lens.google.com\/uploadbyurl\?url=/,'');
+
+  // remove fuzzysearch prefix (used in meme posts)
+  url = url.replace(/https:\/\/fuzzysearch.net\/#url=/, '');
+
   // use cdn for nostr.build
   return url.replace(/https?:\/\/nostr.build/, 'https://cdn.nostr.build');
+   
 };
 
 export const extractImageUrls = (text: string): string[] => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  return (text.match(urlRegex) || []).map(u => urlFix(u));
+  const matchedUrls = (text.match(urlRegex) || []).map(u => urlFix(u));
+  return uniq(matchedUrls);
 };
 
 export const isReply = ({ tags }: { tags?: NDKTag[] }) => {
