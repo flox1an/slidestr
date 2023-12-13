@@ -180,7 +180,8 @@ export const adultNPubs = [
   'npub15asxgmzhextsxd8545rldcqgauq3ycxjta6a9m4x70p927jvltpq983udd', // Big Wanker
   'npub1yk6fz5gx6m79g3xvxk3ca9u87mh8t73w2u2tzvdmrqwauvsqtsnsq6rcqm', // bloodywing
   'npub19sjqp4cvlv2quj0rls8lfs9sy2yquclq60xhatjrjhdu55qh7jtq9v8wy4', // 中本聰
-
+  'npub1kvjspwal4kqnvhkraursdhe9elhdsddtuhtj22ql3dvckzlazngqh4d68q', // Girlection
+  'npub17fvwg0z0dw54ghjqucep3nz0frj46fy0z35nvcynmpgm6yeam6fsny7n02',
   
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
