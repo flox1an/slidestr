@@ -30,7 +30,7 @@ import { useGlobalState } from '../utils/globalState';
 import useAutoLogin from '../utils/useAutoLogin';
 import IconUser from './Icons/IconUser';
 
-type AlbyNostr = typeof window.nostr & { enabled: boolean };
+// type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
 /*
 FEATURES:
@@ -75,68 +75,68 @@ const SlideShow = () => {
   const { currentSettings: settings } = useNav();
   const [state, setState] = useGlobalState();
   const { autoLogin, setAutoLogin } = useAutoLogin();
-  const currentSubId = useRef("1");
-
-  const fetch = () => {
-    if (!ndk) {
-      console.error('NDK not available.');
-      return;
-    }
-
-    currentSubId.current = `${Math.floor(Math.random() * 10000000)}`
-
-    const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs, settings.showReposts), {
-       subId: currentSubId.current
-    });
-
-    postSubscription.on('event', (event: NDKEvent) => {
-      setPosts(oldPosts => {
-        // Ignore event when the subscription's subId is not current any more.
-        if (postSubscription.subId !== currentSubId.current) return oldPosts;
-
-        //event.isReply = isReply(event);
-
-        if (event.kind === 1063) {
-          const urlTag = event?.tags?.find(t => t[0] == 'url');
-          if (urlTag) {
-            event.content = urlTag[1];
-          }
-        }
-
-        if (event.kind === 6 && event.content) {
-          try {
-            const repostedEvent = JSON.parse(event.content);
-            if (repostedEvent) {
-              event = repostedEvent;
-              //event.isRepost = true;
-            }
-          } catch (e) {
-            // ingore, the content is no valid json
-          }
-        }
-
-        if (
-          !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
-          (settings.showReplies || !isReply(event)) &&
-          oldPosts.findIndex(p => p.event.id === event.id) === -1 && // not duplicate
-          (settings.showAdult || !isAdultRelated(event, settings.tags.length > 0))
-        ) {
-          return [...oldPosts, { event }];
-        }
-        return oldPosts;
-      });
-    });
-
-    postSubscription.on('notice', notice => {
-      console.log('NOTICE: ', notice);
-    });
-
-    return () => {
-      postSubscription.stop();
-    };
-  };
+  const currentSubId = useRef('1');
 
   useEffect(() => {
+    const fetch = () => {
+      if (!ndk) {
+        console.error('NDK not available.');
+        return;
+      }
+
+      currentSubId.current = `${Math.floor(Math.random() * 10000000)}`;
+
+      const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs, settings.showReposts), {
+        subId: currentSubId.current,
+      });
+
+      postSubscription.on('event', (event: NDKEvent) => {
+        setPosts(oldPosts => {
+          // Ignore event when the subscription's subId is not current any more.
+          if (postSubscription.subId !== currentSubId.current) return oldPosts;
+
+          //event.isReply = isReply(event);
+
+          if (event.kind === 1063) {
+            const urlTag = event?.tags?.find(t => t[0] == 'url');
+            if (urlTag) {
+              event.content = urlTag[1];
+            }
+          }
+
+          if (event.kind === 6 && event.content) {
+            try {
+              const repostedEvent = JSON.parse(event.content);
+              if (repostedEvent) {
+                event = repostedEvent;
+                //event.isRepost = true;
+              }
+            } catch (e) {
+              // ingore, the content is no valid json
+            }
+          }
+
+          if (
+            !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
+            (settings.showReplies || !isReply(event)) &&
+            oldPosts.findIndex(p => p.event.id === event.id) === -1 && // not duplicate
+            (settings.showAdult || !isAdultRelated(event, settings.tags.length > 0))
+          ) {
+            return [...oldPosts, { event }];
+          }
+          return oldPosts;
+        });
+      });
+
+      postSubscription.on('notice', notice => {
+        console.log('NOTICE: ', notice);
+      });
+
+      return () => {
+        postSubscription.stop();
+      };
+    };
+
     if (ndk) {
       // reset all
       setPosts([]);
@@ -152,6 +152,7 @@ const SlideShow = () => {
       posts.flatMap(p => {
         return extractImageUrls(p.event.content)
           .filter(url => isImage(url) || isVideo(url))
+          .filter(url => !url.startsWith('https://creatr.nostr.wine/')) // Filter our creatr.nostr.wine content, since we don't have NIP-98 auth yet.
           .map(url => ({
             post: p,
             url,
