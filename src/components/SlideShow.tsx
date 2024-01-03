@@ -75,6 +75,7 @@ const SlideShow = () => {
   const { currentSettings: settings } = useNav();
   const [state, setState] = useGlobalState();
   const { autoLogin, setAutoLogin } = useAutoLogin();
+  const currentSubId = useRef("1");
 
   const fetch = () => {
     if (!ndk) {
@@ -82,10 +83,17 @@ const SlideShow = () => {
       return;
     }
 
-    const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs, settings.showReposts));
+    currentSubId.current = `${Math.floor(Math.random() * 10000000)}`
+
+    const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs, settings.showReposts), {
+       subId: currentSubId.current
+    });
 
     postSubscription.on('event', (event: NDKEvent) => {
       setPosts(oldPosts => {
+        // Ignore event when the subscription's subId is not current any more.
+        if (postSubscription.subId !== currentSubId.current) return oldPosts;
+
         //event.isReply = isReply(event);
 
         if (event.kind === 1063) {
