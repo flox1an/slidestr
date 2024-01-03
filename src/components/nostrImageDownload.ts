@@ -129,5 +129,5 @@ export const createImgProxyUrl = (url: string, width = 200, height = 200) => {
 
   const heightParam = height < 0 ? '' : ':' + height;
 
-  return `https://imgproxy.iris.to/insecure/rs:fill:${width}${heightParam}/plain/${url}`;
+  return `https://imgproxy.slidestr.net/insecure/rs:fill:${width}${heightParam}/plain/${url}`;
 };

@@ -8,7 +8,7 @@ import useNav from '../../utils/useNav';
 import CloseButton from '../CloseButton/CloseButton';
 import IconHeart from '../Icons/IconHeart';
 import { NDKEvent, NDKFilter } from '@nostr-dev-kit/ndk';
-import { Kind, nip19 } from 'nostr-tools';
+import { nip19 } from 'nostr-tools';
 import { useGlobalState } from '../../utils/globalState';
 import IconBolt from '../Icons/IconBolt';
 import useWindowSize from '../../utils/useWindowSize';
@@ -81,7 +81,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
     if (!state.userNPub) return;
 
     const ev = new NDKEvent(ndk, {
-      kind: Kind.Reaction,
+      kind: 7, // Reaction
       pubkey: nip19.decode(state.userNPub).data as string,
       created_at: Math.floor(new Date().getTime() / 1000),
       content: '+',
