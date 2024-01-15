@@ -60,6 +60,12 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
 
   useEffect(() => {
     document.body.addEventListener('keydown', onKeyDown);
+
+    if (currentImage) {
+      console.log('setting hash to #g' + currentImage);
+      window.location.hash = '#g' + currentImage;
+    }
+
     return () => {
       document.body.removeEventListener('keydown', onKeyDown);
     };
@@ -77,7 +83,16 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
        */}
       <div className="imagegrid">
         {sortedImages.map((image, idx) => (
-          <GridImage key={image.url} image={image} onClick={() => {setCurrentImage(idx); setViewMode('scroll');}}></GridImage>
+          <GridImage
+            index={idx}
+            key={image.url}
+            image={image}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentImage(idx);
+              setViewMode('scroll');
+            }}
+          ></GridImage>
         ))}
       </div>
       {activeProfile && (

@@ -57,15 +57,6 @@ const ScrollImage = ({ image, currentImage, setCurrentImage, index }: ScrollImag
     }
   }, [isVisible, videoRef, index, currentImage, setCurrentImage, mediaIsVideo]);
 
-  /* not needed anymore
-  useEffect(() => {
-    if (currentImage == index) {
-      containerRef.current?.focus();
-      console.log('setting self focus ' + currentImage);
-    }
-  }, [currentImage, index]);
-  */
-
   return (
     <div
       ref={containerRef}
