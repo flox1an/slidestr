@@ -1,0 +1,57 @@
+.scrollview {
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  height: 100dvh;
+  width: 100vw;
+
+  /*background-color: brown; /* DEBUG color */
+}
+
+.scrollview .scroll-content {
+  height: 100dvh;
+  width: 100vw;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  scroll-snap-align: start none;
+
+  /*background-color: yellow; /* DEBUG color */
+}
+
+.scrollview .scroll-content .image {
+  pointer-events: none;
+  object-fit: contain;
+  max-width: 100%;
+  height: 100dvh;
+  width: 100vw;
+  backdrop-filter: blur(20px) brightness(0.5);
+  -webkit-backdrop-filter: blur(20px) brightness(0.5);
+  background-color: transparent;
+  max-height: none;
+}
+
+.scrollview:focus-visible {
+  outline: none !important;
+}
+
+.left-bottom-menu {
+  position: fixed;
+  bottom: 2.5em;
+  left: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  z-index: 1000;
+}
+
+.left-bottom-menu button {
+  border: none;
+  background-color: transparent;
+  padding: 0px;
+}
+
+.left-bottom-menu button svg {
+  height: 24px;
+  fill: white;
+  color: white;
+}

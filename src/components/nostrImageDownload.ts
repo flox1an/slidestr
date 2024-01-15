@@ -24,6 +24,7 @@ export type NostrImage = {
 export const buildFilter = (tags: string[], npubs: string[], withReposts = false) => {
   const filter: NDKFilter = {
     kinds: [1, 1063] as number[],
+    limit: 500
   };
 
   if (withReposts) {
@@ -114,8 +115,10 @@ export const isVideo = (url: string) => {
 };
 
 export const createImgProxyUrl = (url: string, width = 200, height = 200) => {
+
   if (
-    url.includes('imgur.com') ||
+    url.includes('imgur.com') /* ||
+
     url.includes('cdn.midjourney.com') ||
     url.includes('wasabisys.com') ||
     url.includes('files.mastodon.social') ||
@@ -123,11 +126,11 @@ export const createImgProxyUrl = (url: string, width = 200, height = 200) => {
     url.includes('media.mastodon.scot') ||
     url.includes('media.mas.to') ||
     url.includes('smutlandia.com') ||
-    url.includes('file.misskey.design')
+    url.includes('file.misskey.design') */
   )
     return url;
-
+  
   const heightParam = height < 0 ? '' : ':' + height;
 
-  return `https://imgproxy.slidestr.net/insecure/rs:fill:${width}${heightParam}/plain/${url}`;
+  return `https://imgproxy.slidestr.net/insecure/f:webp/rs:fill:${width}${heightParam}/plain/${url}`;
 };

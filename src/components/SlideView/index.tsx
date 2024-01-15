@@ -9,14 +9,15 @@ import IconPause from '../Icons/IconPause';
 import IconSpinner from '../Icons/IconSpinner';
 import { Settings } from '../../utils/useNav';
 import useProfile from '../../utils/useProfile';
+import { ViewMode } from '../SlideShow';
 
 type SlideViewProps = {
   settings: Settings;
   images: MutableRefObject<NostrImage[]>;
-  setShowGrid: (showGrid: boolean) => void;
+  setViewMode: (viewMode: ViewMode) => void;
 };
 
-const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
+const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const history = useRef<NostrImage[]>([]);
   const [paused, setPaused] = useState(false);
@@ -168,7 +169,7 @@ const SlideView = ({ settings, images, setShowGrid }: SlideViewProps) => {
       )}
       {activeProfile && (
         <AuthorProfile
-          setShowGrid={setShowGrid}
+          setViewMode={setViewMode}
           src={urlFix(activeProfile.image || '')}
           author={activeProfile.displayName || activeProfile.name}
           npub={activeNpub}

@@ -16,19 +16,20 @@ import {
 import { blockedPublicKeys, adultContentTags, adultNPubs, mixedAdultNPubs } from './env';
 import Settings from './Settings';
 import SlideView from './SlideView';
-import GridView from './GridView';
 import { nip19 } from 'nostr-tools';
-import IconFullScreen from './Icons/IconFullScreen';
 import uniqBy from 'lodash/uniqBy';
 import AdultContentInfo from './AdultContentInfo';
 import IconSettings from './Icons/IconSettings';
-import IconPlay from './Icons/IconPlay';
-import IconGrid from './Icons/IconGrid';
 import useNav from '../utils/useNav';
 import { NDKEvent } from '@nostr-dev-kit/ndk';
 import { useGlobalState } from '../utils/globalState';
 import useAutoLogin from '../utils/useAutoLogin';
 import IconUser from './Icons/IconUser';
+import ScrollView from './GridView/ScrollView';
+import IconPlay from './Icons/IconPlay';
+import IconGrid from './Icons/IconGrid';
+import IconFullScreen from './Icons/IconFullScreen';
+import GridView from './GridView';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -65,17 +66,20 @@ FEATURES:
 - Prevent duplicate images (shuffle? history?)
 */
 
+export type ViewMode = 'grid' | 'slideshow' | 'scroll';
+
 const SlideShow = () => {
   const { ndk, loginWithNip07, getProfile } = useNDK();
   const [posts, setPosts] = useState<Post[]>([]);
   const images = useRef<NostrImage[]>([]);
   const fetchTimeoutHandle = useRef(0);
-  const [showGrid, setShowGrid] = useState(true);
+  const [viewMode, setViewMode] = useState<ViewMode>('scroll');
   const [showSettings, setShowSettings] = useState(false);
   const { currentSettings: settings } = useNav();
   const [state, setState] = useGlobalState();
   const { autoLogin, setAutoLogin } = useAutoLogin();
   const currentSubId = useRef('1');
+  const [currentImage, setCurrentImage] = useState<number | undefined>();
 
   useEffect(() => {
     const fetch = () => {
@@ -172,7 +176,10 @@ const SlideShow = () => {
   const onKeyDown = (event: KeyboardEvent) => {
     if (showSettings) return;
     if (event.key.toLowerCase() === 'g') {
-      setShowGrid(p => !p);
+      setViewMode('grid');
+    }
+    if (event.key.toLowerCase() === 'x') {
+      setViewMode('scroll');
     }
     if (event.key.toLowerCase() === 's') {
       setShowSettings(s => !s);
@@ -232,6 +239,10 @@ const SlideShow = () => {
 
   const currentUserProfile = state.userNPub && getProfile(state.userNPub);
 
+  const toggleViewMode = () => {
+    setViewMode(view => (view == 'grid' ? 'scroll' : 'grid'));
+  };
+
   return (
     <>
       {showSettings && <Settings onClose={() => setShowSettings(false)}></Settings>}
@@ -250,15 +261,31 @@ const SlideShow = () => {
 
       {state.showNavButtons && (
         <div className="bottom-controls">
-          <button onClick={() => setShowGrid(g => !g)} title={showGrid ? 'Play random slideshow (G)' : 'view grid (G)'}>
-            {showGrid ? <IconPlay /> : <IconGrid />}
-          </button>
+          {(viewMode == 'scroll' || viewMode == 'slideshow') && (
+            <button onClick={() => toggleViewMode()} title={'view grid (G)'}>
+              <IconGrid />
+            </button>
+          )}
+          {viewMode == 'grid' && (
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                setViewMode('slideshow');
+                return true;
+              }}
+              title={'play slideshow (G)'}
+            >
+              <IconPlay />
+            </button>
+          )}
 
-          <button onClick={() => setShowSettings(s => !s)}>
-            <IconSettings />
-          </button>
+          {viewMode != 'slideshow' && (
+            <button onClick={() => setShowSettings(s => !s)}>
+              <IconSettings />
+            </button>
+          )}
 
-          {!fullScreen && (
+          {viewMode == 'slideshow' && !fullScreen && (
             <button onClick={() => document?.getElementById('root')?.requestFullscreen()}>
               <IconFullScreen />
             </button>
@@ -266,11 +293,24 @@ const SlideShow = () => {
         </div>
       )}
 
-      {showGrid ? (
-        <GridView images={images.current} settings={settings}></GridView>
-      ) : (
-        <SlideView images={images} settings={settings} setShowGrid={setShowGrid}></SlideView>
+      {viewMode == 'grid' && (
+        <GridView
+          images={images.current}
+          settings={settings}
+          setCurrentImage={setCurrentImage}
+          currentImage={currentImage}
+          setViewMode={setViewMode}
+        ></GridView>
       )}
+      {viewMode == 'scroll' && (
+        <ScrollView
+          images={images.current}
+          settings={settings}
+          setCurrentImage={setCurrentImage}
+          currentImage={currentImage}
+        ></ScrollView>
+      )}
+      {viewMode == 'slideshow' && <SlideView images={images} settings={settings} setViewMode={setViewMode}></SlideView>}
     </>
   );
 };

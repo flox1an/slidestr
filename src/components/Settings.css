@@ -35,7 +35,7 @@
 
 @media (max-width: 768px) {
   .settings {
-    height: 100vh;
+    height: 100dvh;
     top: 0;
     transform: none;
     left: 0;

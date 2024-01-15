@@ -99,7 +99,7 @@
 }
 
 .slide video {
-  max-height: 100vh;
+  max-height: 100dvh;
   max-width: 100vw;
   position: absolute;
   top: 50%;

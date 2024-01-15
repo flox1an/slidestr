@@ -36,7 +36,7 @@
     width: 100vw;
     transform: none;
     overflow-y: scroll;
-    max-height: 100vh;
+    max-height: 100dvh;
     box-sizing: border-box;
     max-width: none;
     top: 0;

@@ -1,21 +1,23 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import './GridView.css';
-import DetailsView from './DetailsView';
 import GridImage from './GridImage';
 import { Settings } from '../../utils/useNav';
 import AuthorProfile from '../AuthorProfile';
 import { useSwipeable } from 'react-swipeable';
 import { Helmet } from 'react-helmet';
 import useProfile from '../../utils/useProfile';
+import { ViewMode } from '../SlideShow';
 
 type GridViewProps = {
   settings: Settings;
   images: NostrImage[];
+  currentImage: number | undefined;
+  setCurrentImage: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setViewMode: React.Dispatch<React.SetStateAction<ViewMode>>;
 };
 
-const GridView = ({ settings, images }: GridViewProps) => {
-  const [activeImageIdx, setActiveImageIdx] = useState<number | undefined>();
+const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: GridViewProps) => {
   const { activeProfile, title } = useProfile(settings);
 
   const sortedImages = useMemo(
@@ -24,11 +26,11 @@ const GridView = ({ settings, images }: GridViewProps) => {
   );
 
   const showNextImage = () => {
-    setActiveImageIdx(idx => (idx !== undefined ? idx + 1 : 0));
+    setCurrentImage(idx => (idx !== undefined ? idx + 1 : 0));
   };
 
   const showPreviousImage = () => {
-    setActiveImageIdx(idx => (idx !== undefined && idx > 0 ? idx - 1 : idx));
+    setCurrentImage(idx => (idx !== undefined && idx > 0 ? idx - 1 : idx));
   };
 
   const onKeyDown = (event: KeyboardEvent) => {
@@ -40,9 +42,11 @@ const GridView = ({ settings, images }: GridViewProps) => {
     if (event.key === 'ArrowLeft') {
       showPreviousImage();
     }
+    /*
     if (event.key === 'Escape') {
-      setActiveImageIdx(undefined);
+      setCurrentImage(undefined);
     }
+    */
   };
 
   const swipeHandlers = useSwipeable({
@@ -66,12 +70,14 @@ const GridView = ({ settings, images }: GridViewProps) => {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      {activeImageIdx !== undefined ? (
-        <DetailsView images={sortedImages} activeImageIdx={activeImageIdx} setActiveImageIdx={setActiveImageIdx} />
+      {/*
+      {currentImage !== undefined ? (
+        <DetailsView images={sortedImages} currentImage={currentImage} setCurrentImage={setCurrentImage} />
       ) : null}
+       */}
       <div className="imagegrid">
         {sortedImages.map((image, idx) => (
-          <GridImage key={image.url} image={image} onClick={() => setActiveImageIdx(idx)}></GridImage>
+          <GridImage key={image.url} image={image} onClick={() => {setCurrentImage(idx); setViewMode('scroll');}}></GridImage>
         ))}
       </div>
       {activeProfile && (

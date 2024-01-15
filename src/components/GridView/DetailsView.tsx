@@ -17,27 +17,27 @@ import IconDots from '../Icons/IconDots';
 
 type DetailsViewProps = {
   images: NostrImage[];
-  activeImageIdx: number | undefined;
-  setActiveImageIdx: (idx: number | undefined) => void;
+  currentImage:  number | undefined;
+  setCurrentImage: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
 type ZapState = 'none' | 'zapped' | 'zapping' | 'error';
 type HeartState = 'none' | 'liked' | 'liking';
 
-const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewProps) => {
+const DetailsView = ({ images, currentImage, setCurrentImage }: DetailsViewProps) => {
   const { getProfile, ndk } = useNDK();
   const [zapState, setZapState] = useState<ZapState>('none');
   const [heartState, setHeartState] = useState<HeartState>('none');
   const [state, setState] = useGlobalState();
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const size = useWindowSize();
-  const currentImage = useMemo(
-    () => (activeImageIdx !== undefined ? images[activeImageIdx] : undefined),
-    [images, activeImageIdx]
+  const currentImageData = useMemo(
+    () => (currentImage !== undefined ? images[currentImage] : undefined),
+    [images, currentImage]
   );
-  const nextImage = useMemo(
-    () => (activeImageIdx !== undefined ? images[activeImageIdx + 1] : undefined),
-    [images, activeImageIdx]
+  const nextImageData = useMemo(
+    () => (currentImage !== undefined ? images[currentImage + 1] : undefined),
+    [images, currentImage]
   );
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
     return () => setState({ ...state, showNavButtons: true });
   }, []);
 
-  const activeProfile = currentImage?.author !== undefined ? getProfile(currentImage?.author) : undefined;
+  const activeProfile = currentImageData?.author !== undefined ? getProfile(currentImageData?.author) : undefined;
   const { nav, currentSettings } = useNav();
 
   const fetchLikeAndZaps = async (noteIds: string[], selfNPub: string) => {
@@ -62,18 +62,18 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
     setZapState('none');
     setHeartState('none');
 
-    if (!currentImage?.noteId || !state.userNPub) return;
+    if (!currentImageData?.noteId || !state.userNPub) return;
 
-    if (currentImage.post.wasLiked !== undefined) {
-      setHeartState(currentImage.post.wasLiked ? 'liked' : 'none');
+    if (currentImageData.post.wasLiked !== undefined) {
+      setHeartState(currentImageData.post.wasLiked ? 'liked' : 'none');
       return;
     }
 
-    fetchLikeAndZaps([currentImage.noteId], state.userNPub).then(likes => {
-      currentImage.post.wasLiked = likes.selfLiked;
+    fetchLikeAndZaps([currentImageData.noteId], state.userNPub).then(likes => {
+      currentImageData.post.wasLiked = likes.selfLiked;
       setHeartState(likes.selfLiked ? 'liked' : 'none');
     });
-  }, [currentImage?.post.event.id]);
+  }, [currentImageData?.post.event.id]);
 
   const heartClick = async (currentImage: NostrImage) => {
     setHeartState('liking');
@@ -134,59 +134,59 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
   };
 
   const imageWidth = useMemo(() => (size.width && size.width > 1600 ? 1600 : 800), [size.width]);
-  const nextImageProxyUrl = nextImage?.url && createImgProxyUrl(nextImage?.url, imageWidth, -1);
-  const currentImageProxyUrl = currentImage?.url && createImgProxyUrl(currentImage?.url, imageWidth, -1);
+  const nextImageProxyUrl = nextImageData?.url && createImgProxyUrl(nextImageData?.url, imageWidth, -1);
+  const currentImageProxyUrl = currentImageData?.url && createImgProxyUrl(currentImageData?.url, imageWidth, -1);
 
-  if (!currentImage) return null;
+  if (!currentImageData) return null;
 
   // TODO unmute video through icon
 
   return (
     <>
-      <CloseButton onClick={() => setActiveImageIdx(undefined)}></CloseButton>
+      <CloseButton onClick={() => setCurrentImage(undefined)}></CloseButton>
       <div className="details" onClick={() => setShowMoreMenu(false)}>
-        {nextImage && !isVideo(nextImage.url) && (
+        {nextImageData && !isVideo(nextImageData.url) && (
           <img src={nextImageProxyUrl} loading="eager" style={{ display: 'none' }} />
         )}
-        {nextImage && isVideo(nextImage.url) && (
-          <video src={nextImage?.url} preload="true" style={{ display: 'none' }} />
+        {nextImageData && isVideo(nextImageData.url) && (
+          <video src={nextImageData?.url} preload="true" style={{ display: 'none' }} />
         )}
         <div
           className="details-contents"
-          style={{ backgroundImage: `url(${!isVideo(currentImage.url) ? currentImageProxyUrl : ''})` }}
+          style={{ backgroundImage: `url(${!isVideo(currentImageData.url) ? currentImageProxyUrl : ''})` }}
         >
-          {isVideo(currentImage.url) ? (
-            <video className="detail-image" src={currentImage?.url} autoPlay loop muted playsInline></video>
+          {isVideo(currentImageData.url) ? (
+            <video className="detail-image" src={currentImageData.url} autoPlay loop muted playsInline></video>
           ) : (
             <img className="detail-image" src={currentImageProxyUrl} loading="eager"></img>
           )}
           <div className="detail-description">
             <DetailsAuthor
               profile={activeProfile}
-              npub={currentImage?.author}
-              setActiveImageIdx={setActiveImageIdx}
+              npub={currentImageData?.author}
+              setActiveImageIdx={setCurrentImage}
             ></DetailsAuthor>
 
-            {currentImage?.content && <div className="details-text">{currentImage?.content}</div>}
+            {currentImageData?.content && <div className="details-text">{currentImageData?.content}</div>}
 
             <div className="details-actions">
               {state.userNPub && (
                 <>
-                  <div className={`heart ${heartState}`} onClick={() => currentImage && heartClick(currentImage)}>
+                  <div className={`heart ${heartState}`} onClick={() => currentImage && heartClick(currentImageData)}>
                     <IconHeart></IconHeart>
                   </div>
                   {(activeProfile?.lud06 || activeProfile?.lud16) && (
-                    <div className={`zap ${zapState}`} onClick={() => currentImage && zapClick(currentImage)}>
+                    <div className={`zap ${zapState}`} onClick={() => currentImage && zapClick(currentImageData)}>
                       <IconBolt></IconBolt>
                     </div>
                   )}
                 </>
               )}
-              {nextImage?.noteId && (
+              {nextImageData?.noteId && (
                 <a
                   className="link"
                   target="_blank"
-                  href={`https://nostrapp.link/#${nip19.noteEncode(currentImage?.noteId)}`}
+                  href={`https://nostrapp.link/#${nip19.noteEncode(currentImageData?.noteId)}`}
                 >
                   <IconLink></IconLink>
                 </a>
@@ -204,11 +204,11 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
                     <a
                       className="more-action"
                       target="_blank"
-                      href={`https://nostrapp.link/#${nip19.noteEncode(currentImage?.noteId)}?select=true`}
+                      href={`https://nostrapp.link/#${nip19.noteEncode(currentImageData?.noteId)}?select=true`}
                     >
                       <IconLink></IconLink>Open note with...
                     </a>
-                    <a className="more-action" target="_blank" href={`https://nostrapp.link/#${currentImage?.author}`}>
+                    <a className="more-action" target="_blank" href={`https://nostrapp.link/#${currentImageData?.author}`}>
                       <IconLink></IconLink>Open author profile
                     </a>
                     {/*
@@ -224,14 +224,14 @@ const DetailsView = ({ images, activeImageIdx, setActiveImageIdx }: DetailsViewP
               }
             </div>
 
-            {currentImage.tags.length > 0 && (
+            {currentImageData.tags.length > 0 && (
               <div>
-                {uniq(currentImage?.tags).map(t => (
+                {uniq(currentImageData?.tags).map(t => (
                   <>
                     <span
                       className="tag"
                       onClick={() => {
-                        setActiveImageIdx(undefined);
+                        setCurrentImage(undefined);
                         nav({ ...currentSettings, tags: [t], npubs: [] });
                       }}
                     >

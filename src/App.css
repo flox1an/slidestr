@@ -1,8 +1,7 @@
 #root {
   overflow: hidden;
-}
-
-body {
-  overflow: hidden;
-  min-height: 100vh;
+  margin: 0px;
+  padding: 0px;
+  
+  /*background-color: green; /* DEBUG colors  */
 }

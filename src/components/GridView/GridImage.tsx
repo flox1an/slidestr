@@ -30,6 +30,7 @@ const GridImage = ({ image, onClick }: GridImageProps) => {
         <img
           data-node-id={image.noteId}
           onError={(e: SyntheticEvent<HTMLImageElement>) => {
+            console.log('not found: ', e.currentTarget.src);
             e.currentTarget.src = '/notfound.png';
           }}
           className={`image ${loaded ? 'show' : ''}`}

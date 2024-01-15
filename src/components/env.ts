@@ -195,11 +195,12 @@ export const mixedAdultPublicKeys = mixedAdultNPubs.map(npub => (nip19.decode(np
 
 /* The following profiles have questionable content and are blocked completely on slidestr.net */
 export const blockedNPubs = [
-  'npub1awxh85c5wasj60d42uvmzuza2uvjazff9m7skg2vf7x2f8gykwkqykxktf', // AIイラスト',
-  'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
-  'npub1kf8sau5dejmcmfmzzj256rv728p5w7s0wytdyz8ypa0ne0y6k0vswhgu9w', // noname
-  'npub16dx8unvqnweeauxsaw479qhy2j5z8s2krvzaq4rsull57e9klldspdqvpm', // Pascub
   'npub125wcpwdn0zmt3accu3jlkv349jgw9d8htk4cjx2spc9qfvusl7hs6np5pt',
+  'npub16dx8unvqnweeauxsaw479qhy2j5z8s2krvzaq4rsull57e9klldspdqvpm', // Pascub
+  'npub1awxh85c5wasj60d42uvmzuza2uvjazff9m7skg2vf7x2f8gykwkqykxktf', // AIイラスト',
+  'npub1kf8sau5dejmcmfmzzj256rv728p5w7s0wytdyz8ypa0ne0y6k0vswhgu9w', // noname
+  'npub1nshq4pcyzdmnewg4h8yu6tsuh5t72whzkz5x4wj7t0c0cy7yyrfqq2cgnl',
+  'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
 ];
 
 export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
