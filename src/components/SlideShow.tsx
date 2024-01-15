@@ -308,6 +308,7 @@ const SlideShow = () => {
           settings={settings}
           setCurrentImage={setCurrentImage}
           currentImage={currentImage}
+          setViewMode={setViewMode}
         ></ScrollView>
       )}
       {viewMode == 'slideshow' && <SlideView images={images} settings={settings} setViewMode={setViewMode}></SlideView>}

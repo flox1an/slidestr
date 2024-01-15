@@ -87,7 +87,7 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
             index={idx}
             key={image.url}
             image={image}
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               setCurrentImage(idx);
               setViewMode('scroll');
@@ -100,6 +100,7 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
           src={urlFix(activeProfile.image || '')}
           author={activeProfile.displayName || activeProfile.name}
           npub={activeProfile.npub}
+          setViewMode={setViewMode}
         ></AuthorProfile>
       )}
     </div>

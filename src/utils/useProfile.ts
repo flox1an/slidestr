@@ -2,12 +2,15 @@ import { appName } from '../components/env';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import { useEffect, useState } from 'react';
 import { Settings } from './useNav';
+import { NostrImage } from '@/components/nostrImageDownload';
 
-const useProfile = (settings: Settings) => {
+const useProfile = (settings: Settings, activeImage?: NostrImage) => {
   const { getProfile } = useNDK();
   const [title, setTitle] = useState(appName);
 
-  const activeProfile = settings.npubs.length == 1 && getProfile(settings.npubs[0]);
+  const profileNpub =  settings.npubs.length == 1 ?settings.npubs[0] : activeImage && activeImage?.author;
+
+  const activeProfile = profileNpub && getProfile(profileNpub);
 
   useEffect(() => {
     if (settings.npubs.length > 0 && activeProfile && (activeProfile.displayName || activeProfile.name)) {
@@ -22,6 +25,7 @@ const useProfile = (settings: Settings) => {
   return {
     activeProfile,
     title,
+    profileNpub,
   };
 };
 

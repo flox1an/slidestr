@@ -8,7 +8,7 @@ type AvatarImageProps = {
   src?: string;
   author?: string;
   npub?: string;
-  setViewMode?: (viewMode: ViewMode) => void;
+  setViewMode: (viewMode: ViewMode) => void;
 };
 
 const AuthorProfile = ({ src, author, npub, setViewMode }: AvatarImageProps) => {

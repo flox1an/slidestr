@@ -5,23 +5,22 @@ import AuthorProfile from '../AuthorProfile';
 import { Helmet } from 'react-helmet';
 import useProfile from '../../utils/useProfile';
 import ScrollImage from './ScrollImage';
+import { ViewMode } from '../SlideShow';
 
 type ScrollViewProps = {
   settings: Settings;
   images: NostrImage[];
   currentImage: number | undefined;
   setCurrentImage: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setViewMode: (viewMode: ViewMode) => void;
 };
 
-const ScrollView = ({ settings, images, currentImage, setCurrentImage }: ScrollViewProps) => {
-  const { activeProfile, title } = useProfile(settings);
+const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: ScrollViewProps) => {
 
   const sortedImages = useMemo(
     () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
     [images] // settings is not used here, but we need to include it to trigger a re-render when it changes
   );
-
-  console.log('activeElement ' + document.activeElement);
 
   useEffect(() => {
     if (currentImage) {
@@ -30,7 +29,12 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage }: ScrollV
     }
   }, []);
 
+  const activeImage = useMemo(() => currentImage ? sortedImages[currentImage] : undefined, [sortedImages, currentImage]);
+  const { activeProfile, profileNpub, title } = useProfile(settings, activeImage);
+
+  console.log(JSON.stringify(activeProfile));
   return (
+    
     <div className="scrollview" tabIndex={0}>
       <Helmet>
         <title>{title}</title>
@@ -50,7 +54,8 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage }: ScrollV
         <AuthorProfile
           src={urlFix(activeProfile.image || '')}
           author={activeProfile.displayName || activeProfile.name}
-          npub={activeProfile.npub}
+          npub={profileNpub}
+          setViewMode={setViewMode}
         ></AuthorProfile>
       )}
     </div>
