@@ -16,7 +16,6 @@ type ScrollViewProps = {
 };
 
 const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: ScrollViewProps) => {
-
   const sortedImages = useMemo(
     () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
     [images] // settings is not used here, but we need to include it to trigger a re-render when it changes
@@ -29,17 +28,19 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
     }
   }, []);
 
-  const activeImage = useMemo(() => currentImage ? sortedImages[currentImage] : undefined, [sortedImages, currentImage]);
+  const activeImage = useMemo(
+    () => (currentImage ? sortedImages[currentImage] : undefined),
+    [sortedImages, currentImage]
+  );
   const { activeProfile, profileNpub, title } = useProfile(settings, activeImage);
 
   console.log(JSON.stringify(activeProfile));
   return (
-    
     <div className="scrollview" tabIndex={0}>
       <Helmet>
         <title>{title}</title>
       </Helmet>
-     
+
       {sortedImages.map((image, idx) => (
         <ScrollImage
           key={image.url}

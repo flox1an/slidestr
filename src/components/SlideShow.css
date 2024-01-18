@@ -98,6 +98,8 @@
   animation-name: showImage;
 }
 
+
+
 .slide video {
   max-height: 100dvh;
   max-width: 100vw;
@@ -236,5 +238,11 @@
 
   .author-info {
     width: 80vw;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .author-name {
+    display: none;
   }
 }

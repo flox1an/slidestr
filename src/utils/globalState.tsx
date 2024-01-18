@@ -1,3 +1,4 @@
+import { NostrImage } from '@/components/nostrImageDownload';
 import { NDKUserProfile } from '@nostr-dev-kit/ndk';
 import React, { createContext, useContext, useReducer } from 'react';
 
@@ -6,6 +7,7 @@ interface GlobalState {
   userNPub?: string;
   profile?: NDKUserProfile;
   showNavButtons: boolean;
+  activeImage?: NostrImage;
 }
 const initialState: GlobalState = {
   userNPub: undefined,

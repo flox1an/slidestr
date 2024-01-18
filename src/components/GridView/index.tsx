@@ -81,6 +81,22 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
         <DetailsView images={sortedImages} currentImage={currentImage} setCurrentImage={setCurrentImage} />
       ) : null}
        */}
+      {activeProfile && (
+        <div className="profile-header">
+          <AuthorProfile
+            src={urlFix(activeProfile.image || '')}
+            author={activeProfile.displayName || activeProfile.name}
+            npub={activeProfile.npub}
+            setViewMode={setViewMode}
+          ></AuthorProfile>
+          {/*
+          <span>{activeProfile.banner}</span>
+          <span>{activeProfile.bio}</span>
+          {activeProfile.website}
+          */}
+        </div>
+      )}
+
       <div className="imagegrid">
         {sortedImages.map((image, idx) => (
           <GridImage
@@ -95,14 +111,6 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
           ></GridImage>
         ))}
       </div>
-      {activeProfile && (
-        <AuthorProfile
-          src={urlFix(activeProfile.image || '')}
-          author={activeProfile.displayName || activeProfile.name}
-          npub={activeProfile.npub}
-          setViewMode={setViewMode}
-        ></AuthorProfile>
-      )}
     </div>
   );
 };

@@ -195,6 +195,7 @@
   }
 }
 
+
 @media screen and (max-width: 768px) {
   .details {
     overflow-y: scroll;
@@ -212,10 +213,7 @@
     margin: 0px;
   }
   .details-author .author-name {
-    width: 17em;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    max-height: 3em;
+    display: none;
   }
   .details-actions {
     position: fixed;

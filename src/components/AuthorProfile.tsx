@@ -22,8 +22,7 @@ const AuthorProfile = ({ src, author, npub, setViewMode }: AvatarImageProps) => 
         npub && nav({ ...currentSettings, tags: [], npubs: [npub] });
       }}
     >
-      <div>
-        {avatarLoaded && (
+      {avatarLoaded && (
           <div
             className="author-image"
             style={{
@@ -31,8 +30,7 @@ const AuthorProfile = ({ src, author, npub, setViewMode }: AvatarImageProps) => 
             }}
           ></div>
         )}
-        {author}
-      </div>
+        <span className="author-name">{author}</span>
     </div>
   );
 };
