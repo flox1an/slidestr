@@ -1,7 +1,7 @@
 import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
 import { nip19 } from 'nostr-tools';
 import { adultContentTags, adultPublicKeys, mixedAdultNPubs } from './env';
-import  uniq from 'lodash/uniq';
+import uniq from 'lodash/uniq';
 
 export type Post = {
   event: NDKEvent;
@@ -24,7 +24,7 @@ export type NostrImage = {
 export const buildFilter = (tags: string[], npubs: string[], withReposts = false) => {
   const filter: NDKFilter = {
     kinds: [1, 1063] as number[],
-    limit: 500
+    limit: npubs.length > 0 ? 1000 : 500,
   };
 
   if (withReposts) {
@@ -54,14 +54,16 @@ export const urlFix = (url: string) => {
   if (url == undefined || url.endsWith('.mp4') || url.endsWith('.webm')) return url;
 
   // remove google lens prefix (used in meme posts)
-  url = url.replace(/https:\/\/lens.google.com\/uploadbyurl\?url=/,'');
+  url = url.replace(/https:\/\/lens.google.com\/uploadbyurl\?url=/, '');
 
   // remove fuzzysearch prefix (used in meme posts)
   url = url.replace(/https:\/\/fuzzysearch.net\/#url=/, '');
 
+  // redirect on www.nogood.store does not work properly
+  url = url.replace(/https:\/\/www.nogood.store/, 'https://www.nogood.studio');
+
   // use cdn for nostr.build
   return url.replace(/https?:\/\/nostr.build/, 'https://cdn.nostr.build');
-   
 };
 
 export const extractImageUrls = (text: string): string[] => {
@@ -115,7 +117,6 @@ export const isVideo = (url: string) => {
 };
 
 export const createImgProxyUrl = (url: string, width = 200, height = 200) => {
-
   if (
     url.includes('imgur.com') /* ||
 
@@ -129,7 +130,7 @@ export const createImgProxyUrl = (url: string, width = 200, height = 200) => {
     url.includes('file.misskey.design') */
   )
     return url;
-  
+
   const heightParam = height < 0 ? '' : ':' + height;
 
   return `https://imgproxy.slidestr.net/insecure/f:webp/rs:fill:${width}${heightParam}/plain/${url}`;

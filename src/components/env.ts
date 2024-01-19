@@ -184,6 +184,7 @@ export const adultNPubs = [
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
   'npub1935j9y7lzyu8mx0zm8mcr4njzrsautl66ms0w3z7wyea04zh85psqdc3v6',
+  'npub183tgfk2u2zt7tzqwfsvd6wa3d6d9z474v3874wvuv0y3l8z54faskufdh4', // Goon Master
   
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
