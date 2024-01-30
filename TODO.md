@@ -10,3 +10,7 @@
 - think about use of ui framework, and redesign settings dialog
 - move NSFW block list into a list event on an slidestr.net profile
 - direct link to profile (from nostrudel) should go to the grid.
+- Add key/salt to imageproxy, see snort impl
+- Add Follow button to profile page
+- After seleting a profile, I get to the grid for that user: How to I get back to the previous search?
+- 
