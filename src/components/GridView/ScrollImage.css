@@ -36,7 +36,7 @@
 
 .left-bottom-menu {
   position: fixed;
-  bottom: 8em;
+  bottom: 9em;
   left: 2em;
   display: flex;
   flex-direction: column;
@@ -54,4 +54,11 @@
   height: 24px;
   fill: white;
   color: white;
+}
+
+
+@media screen and (max-width: 768px) {
+  .left-bottom-menu {
+    bottom: 7em;
+  }
 }

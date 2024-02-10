@@ -1,26 +1,4 @@
-@keyframes bump {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
 
-@keyframes rotate {
-  0% {
-    transform: scaleX(1);
-  }
-  50% {
-    transform: scaleX(-1);
-  }
-  100% {
-    transform: scaleX(1);
-  }
-}
 
 .details {
   position: absolute;
@@ -71,45 +49,6 @@
   display: inline;
 }
 
-.details-actions .heart.liking svg {
-  animation: rotate 2s ease-in-out;
-  animation-iteration-count: infinite;
-}
-
-.details-actions .heart.liked svg {
-  animation: bump 1s ease-in-out;
-  overflow: visible;
-  fill: #ff0000;
-}
-
-.details-actions .link svg {
-  padding: 0.5em;
-  width: 1.5em;
-  height: 1.5em;
-  cursor: pointer;
-  color: white;
-}
-
-.details-actions .zap svg {
-  padding: 0.5em;
-  width: 1.5em;
-  height: 1.5em;
-  cursor: pointer;
-}
-
-.details-actions .zap.zapped svg {
-  fill: orange;
-  animation: bump 1s ease-in-out;
-}
-
-.details-actions .zap.error {
-  fill: red;
-}
-
-.details-actions .zap.zapping svg {
-  animation: rotate 2s ease-in-out;
-  animation-iteration-count: infinite;
-}
 
 .details-contents .detail-image {
   object-fit: contain;

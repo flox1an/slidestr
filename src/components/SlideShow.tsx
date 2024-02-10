@@ -30,6 +30,9 @@ import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
 import IconFullScreen from './Icons/IconFullScreen';
 import GridView from './GridView';
+import useZapsAndReations from '../utils/useZapAndReaction';
+import IconHeart from './Icons/IconHeart';
+import IconBolt from './Icons/IconBolt';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -73,13 +76,15 @@ const SlideShow = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const images = useRef<NostrImage[]>([]);
   const fetchTimeoutHandle = useRef(0);
-  const [viewMode, setViewMode] = useState<ViewMode>('scroll');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [showSettings, setShowSettings] = useState(false);
   const { currentSettings: settings } = useNav();
   const [state, setState] = useGlobalState();
   const { autoLogin, setAutoLogin } = useAutoLogin();
   const currentSubId = useRef('1');
-  const [currentImage, setCurrentImage] = useState<number | undefined>();
+  const [imageIdx, setImageIdx] = useState<number | undefined>();
+
+  const { zapClick, heartClick, zapState, heartState } = useZapsAndReations(state.activeImage, state.userNPub);
 
   useEffect(() => {
     const fetch = () => {
@@ -175,6 +180,9 @@ const SlideShow = () => {
 
   const onKeyDown = (event: KeyboardEvent) => {
     if (showSettings) return;
+    if (event.key === 'Escape') {
+      setViewMode('grid');
+    }
     if (event.key.toLowerCase() === 'g') {
       setViewMode('grid');
     }
@@ -208,6 +216,14 @@ const SlideShow = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (state.userNPub) {
+      setState({ profile: getProfile(state.userNPub) });
+    } else {
+      setState({ profile: undefined });
+    }
+  }, [state.userNPub, getProfile, setState]);
+
   const fullScreen = document.fullscreenElement !== null;
 
   const showAdultContentWarning =
@@ -229,15 +245,12 @@ const SlideShow = () => {
     }
 
     setState({ userNPub: result.npub });
-    console.log(result.npub);
   };
 
   const onLogout = () => {
     setAutoLogin(false);
     setState({ userNPub: undefined, profile: undefined });
   };
-
-  const currentUserProfile = state.userNPub && getProfile(state.userNPub);
 
   const toggleViewMode = () => {
     setViewMode(view => (view == 'grid' ? 'scroll' : 'grid'));
@@ -248,9 +261,9 @@ const SlideShow = () => {
       {showSettings && <Settings onClose={() => setShowSettings(false)}></Settings>}
 
       <div className="top-controls">
-        {state.userNPub && currentUserProfile ? (
-          currentUserProfile.image && (
-            <img className="profile" onClick={onLogout} src={createImgProxyUrl(currentUserProfile.image, 80, 80)} />
+        {state.userNPub && state.profile ? (
+          state.profile.image && (
+            <img className="profile" onClick={onLogout} src={createImgProxyUrl(state.profile.image, 80, 80)} />
           )
         ) : (
           <button onClick={onLogin} className="login">
@@ -261,6 +274,19 @@ const SlideShow = () => {
 
       {state.showNavButtons && (
         <div className="bottom-controls">
+          {state.userNPub && state.activeImage && (
+            <>
+              <button className={`heart ${heartState}`} onClick={() => state.activeImage && heartClick(state.activeImage)}>
+                <IconHeart></IconHeart>
+              </button>
+              {(state.profile?.lud06 || state.profile?.lud16) && (
+                <button className={`zap ${zapState}`} onClick={() => state.activeImage && zapClick(state.activeImage)}>
+                  <IconBolt></IconBolt>
+                </button>
+              )}
+            </>
+          )}
+
           {(viewMode == 'scroll' || viewMode == 'slideshow') && (
             <button onClick={() => toggleViewMode()} title={'view grid (G)'}>
               <IconGrid />
@@ -297,8 +323,8 @@ const SlideShow = () => {
         <GridView
           images={images.current}
           settings={settings}
-          setCurrentImage={setCurrentImage}
-          currentImage={currentImage}
+          setCurrentImage={setImageIdx}
+          currentImage={imageIdx}
           setViewMode={setViewMode}
         ></GridView>
       )}
@@ -306,8 +332,8 @@ const SlideShow = () => {
         <ScrollView
           images={images.current}
           settings={settings}
-          setCurrentImage={setCurrentImage}
-          currentImage={currentImage}
+          setCurrentImage={setImageIdx}
+          currentImage={imageIdx}
           setViewMode={setViewMode}
         ></ScrollView>
       )}

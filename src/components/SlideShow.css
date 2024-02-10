@@ -57,6 +57,30 @@
   }
 }
 
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(-1);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
 .author-info {
   cursor: pointer;
   color: white;
@@ -224,6 +248,51 @@
   animation-duration: 6s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+}
+
+.bottom-controls .heart svg {
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+}
+
+.bottom-controls .heart.liking svg {
+  animation: rotate 2s ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.bottom-controls .heart.liked svg {
+  animation: bump 1s ease-in-out;
+  overflow: visible;
+  fill: #ff0000;
+}
+
+.bottom-controls .link svg {
+  padding: 0.5em;
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+  color: white;
+}
+
+.bottom-controls .zap svg {
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+}
+
+.bottom-controls .zap.zapped svg {
+  fill: orange;
+  animation: bump 1s ease-in-out;
+}
+
+.bottom-controls .zap.error {
+  fill: red;
+}
+
+.bottom-controls .zap.zapping svg {
+  animation: rotate 2s ease-in-out;
+  animation-iteration-count: infinite;
 }
 
 @media screen and (max-width: 768px) {

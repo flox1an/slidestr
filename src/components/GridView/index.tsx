@@ -8,6 +8,7 @@ import { useSwipeable } from 'react-swipeable';
 import { Helmet } from 'react-helmet';
 import useProfile from '../../utils/useProfile';
 import { ViewMode } from '../SlideShow';
+import { useGlobalState } from '../../utils/globalState';
 
 type GridViewProps = {
   settings: Settings;
@@ -19,6 +20,7 @@ type GridViewProps = {
 
 const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: GridViewProps) => {
   const { activeProfile, title } = useProfile(settings);
+  const [_, setState] = useGlobalState();
 
   const sortedImages = useMemo(
     () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
@@ -60,6 +62,7 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
 
   useEffect(() => {
     document.body.addEventListener('keydown', onKeyDown);
+    setState({activeImage: undefined});
 
     if (currentImage) {
       console.log('setting hash to #g' + currentImage);
