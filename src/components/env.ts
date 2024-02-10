@@ -123,6 +123,9 @@ export const adultNPubs = [
   'npub17693mv2qu7mv67zqpcup9n502gmkuhytkxq3sw7qp50vlptq8f7syzv93d', // sha0wgoone
   'npub177wu03dgx6zt9a9hdey079prfw5lvj5dhm20z4k96tf6um6zjk7qyzdumj', // Eoun
   'npub17fvwg0z0dw54ghjqucep3nz0frj46fy0z35nvcynmpgm6yeam6fsny7n02',
+  'npub183tgfk2u2zt7tzqwfsvd6wa3d6d9z474v3874wvuv0y3l8z54faskufdh4', // Goon Master
+  'npub18c2udd3zxf3zw4l582cxzfvptcxg44k358dy8uam683775dsmpeq7zlay2', // Sexflix
+  'npub1935j9y7lzyu8mx0zm8mcr4njzrsautl66ms0w3z7wyea04zh85psqdc3v6',
   'npub19e2tewftsy7ysd6hhkc4wn2czd4ku34z7wqkw5y4q8lm8fzhgxjsfhw825', // Waifposter88
   'npub19sjqp4cvlv2quj0rls8lfs9sy2yquclq60xhatjrjhdu55qh7jtq9v8wy4', // 中本聰
   'npub19xwjw7f23nsmnsd0j72mvhrdswt4cp6urc5el2zuu8se3yfu87ess524je', // Gone Wild (NSFW)
@@ -167,6 +170,7 @@ export const adultNPubs = [
   'npub1prxgd4slvue3fxwtgvpcawmgvl5fqal8ujan6z3uhvzy20gwcdyqlu7d2p', // Miss Addication 18+
   'npub1qg550au9hqmpgye4kfrtj7yt85dn60ty5hk0hcm7pktq6g6mzugsufnfcx', // Poppy Clements
   'npub1qnpzqvzjxy79wpuvylw65gkh8n7pk62up9nc63a45a23mv0sf6us62qk5n', // 🔞▶️Play & ⏸️Pause 🔞
+  'npub1qrgawjx8cvc0qsd5te5dep3ynmklsye55gu0w9d4y6tk0vcxduassqqgzf', // dustycity
   'npub1rv08kght99a7xwckm0qpmzw09m5gwppequgqd8lwu74eakgaavwsp5cjtw', // CuratedNSFW
   'npub1sg7rwnf96a0fhl85xlvq0unumqqh89qaygwcdy5d3ue8209ekt2suhxg7u', // Anime Mommies Bot
   'npub1sgmuwdfzq2asrh68p6ul9chp32y4938qa7ns637qgmeqgglhtwmq4l5xl9', // Nudeful Art / Athos
@@ -183,9 +187,7 @@ export const adultNPubs = [
   'npub1yk6fz5gx6m79g3xvxk3ca9u87mh8t73w2u2tzvdmrqwauvsqtsnsq6rcqm', // bloodywing
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
-  'npub1935j9y7lzyu8mx0zm8mcr4njzrsautl66ms0w3z7wyea04zh85psqdc3v6',
-  'npub183tgfk2u2zt7tzqwfsvd6wa3d6d9z474v3874wvuv0y3l8z54faskufdh4', // Goon Master
-  
+
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
 ];
@@ -211,9 +213,9 @@ export const spamAccounts = [];
 export const defaultRelays = [
   'wss://relay.damus.io',
   'wss://relay.nostr.band',
+  'wss://relay.snort.social',
   'wss://nos.lol',
   //'wss://eden.nostr.land',
-  'wss://relay.shitforce.one/',
   'wss://nostr.wine',
   // "wss://nostr1.current.fyi/",
   'wss://purplepag.es/', // needed for user profiles
