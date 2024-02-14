@@ -12,11 +12,11 @@
     "analyze": "vite-bundle-visualizer"
   },
   "dependencies": {
-    "@nostr-dev-kit/ndk": "^2.4.0",
-    "@nostr-dev-kit/ndk-cache-dexie": "^2.2.5",
+    "@nostr-dev-kit/ndk": "^2.4.1",
+    "@nostr-dev-kit/ndk-cache-dexie": "^2.2.6",
     "@nostr-dev-kit/ndk-react": "^0.1.1",
     "lodash": "^4.17.21",
-    "nostr-tools": "^2.1.5",
+    "nostr-tools": "^2.1.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
@@ -30,8 +30,8 @@
     "@types/react-dom": "^18.2.19",
     "@types/react-helmet": "^6.1.11",
     "@types/react-swipeable": "^5.2.0",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.0.1",
     "@vitejs/plugin-react": "^4.2.1",
     "@webbtc/webln-types": "^3.0.0",
     "eslint": "^8.56.0",
@@ -39,7 +39,7 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "prettier": "^3.2.5",
     "typescript": "^5.3.3",
-    "vite": "^5.1.1",
+    "vite": "^5.1.2",
     "vite-bundle-visualizer": "^1.0.1"
   }
 }
