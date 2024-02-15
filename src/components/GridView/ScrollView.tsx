@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import { Settings } from '../../utils/useNav';
 import AuthorProfile from '../AuthorProfile';
@@ -7,6 +7,8 @@ import useProfile from '../../utils/useProfile';
 import ScrollImage from './ScrollImage';
 import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
+import IconChevronUp from '../Icons/IconChevronUp';
+import InfoPanel from '../InfoPanel';
 
 type ScrollViewProps = {
   settings: Settings;
@@ -19,6 +21,8 @@ type ScrollViewProps = {
 const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: ScrollViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useGlobalState();
+  const [showInfoPanel, setShowInfoPanel] = useState(false);
+
   const sortedImages = useMemo(
     () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
     [images] // settings is not used here, but we need to include it to trigger a re-render when it changes
@@ -42,7 +46,8 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
 
   const { activeProfile, profileNpub, title } = useProfile(settings, state.activeImage);
 
-  console.log(JSON.stringify(activeProfile));
+  const infoPanelAvailable = state.activeImage && (state.activeImage.content || state.activeImage.tags.length > 0);
+
   return (
     <div ref={containerRef} className="scrollview" tabIndex={0}>
       <Helmet>
@@ -59,13 +64,30 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
         ></ScrollImage>
       ))}
 
-      {activeProfile && (
+      {!showInfoPanel && activeProfile && (
         <AuthorProfile
           src={urlFix(activeProfile.image || '')}
           author={activeProfile.displayName || activeProfile.name}
           npub={profileNpub}
           setViewMode={setViewMode}
         ></AuthorProfile>
+      )}
+
+      {showInfoPanel && state.activeImage ? (
+        <InfoPanel
+          image={state.activeImage}
+          onClose={() => setShowInfoPanel(false)}
+          setViewMode={setViewMode}
+          settings={settings}
+        />
+      ) : (
+        infoPanelAvailable && (
+          <div className="bottom-menu">
+            <button onClick={() => setShowInfoPanel(true)}>
+              <IconChevronUp />
+            </button>
+          </div>
+        )
       )}
     </div>
   );

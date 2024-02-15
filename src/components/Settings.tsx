@@ -7,14 +7,16 @@ import { defaultHashTags } from './env';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import { createImgProxyUrl } from './nostrImageDownload';
 import { useGlobalState } from '../utils/globalState';
+import { ViewMode } from './SlideShow';
 
 type SettingsProps = {
   onClose: () => void;
+  setViewMode: React.Dispatch<React.SetStateAction<ViewMode>>;
 };
 
 type Mode = 'all' | 'tags' | 'user';
 
-const SettingsDialog = ({ onClose }: SettingsProps) => {
+const SettingsDialog = ({ onClose, setViewMode }: SettingsProps) => {
   const { nav, currentSettings } = useNav();
   const { getProfile } = useNDK();
   const [state, setState] = useGlobalState();
@@ -38,6 +40,7 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
     e.preventDefault();
     const validNpubs = npubs.filter(t => t.length > 0);
     const validTags = selectedTags.filter(t => t.selected).map(t => t.name);
+    setViewMode('grid');
 
     // If the mode is 'user' and there is exactly one validNpubs
     if (mode == 'user' && validNpubs.length == 1) {
@@ -69,19 +72,18 @@ const SettingsDialog = ({ onClose }: SettingsProps) => {
     <>
       {' '}
       <div className="settings" onClick={e => e.stopPropagation()}>
-        <h2>Browse settings</h2>
         <CloseButton onClick={onClose}></CloseButton>
 
         <div className="settings-content">
           <div className="settings-mode">
             <div className={mode == 'tags' ? 'active' : ''} onClick={() => setMode('tags')}>
-              By tags
+              tags
             </div>
             <div className={mode == 'user' ? 'active' : ''} onClick={() => setMode('user')}>
-              By user profile
+              user profile
             </div>
             <div className={mode == 'all' ? 'active' : ''} onClick={() => setMode('all')}>
-              All of nostr
+              all of nostr
             </div>
           </div>
           {mode == 'tags' && (

@@ -22,15 +22,14 @@ const AuthorProfile = ({ src, author, npub, setViewMode }: AvatarImageProps) => 
         npub && nav({ ...currentSettings, tags: [], npubs: [npub] });
       }}
     >
-      {avatarLoaded && (
-          <div
-            className="author-image"
-            style={{
-              backgroundImage: src ? `url(${createImgProxyUrl(src, 80, 80)})` : 'none',
-            }}
-          ></div>
-        )}
-        <span className="author-name">{author}</span>
+      <div
+        className="author-image"
+        style={{
+          backgroundImage: avatarLoaded && src ? `url(${createImgProxyUrl(src, 80, 80)})` : 'none',
+        }}
+      ></div>
+
+      <span className="author-name">{author}</span>
     </div>
   );
 };

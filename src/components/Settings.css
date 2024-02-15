@@ -9,17 +9,16 @@
 
 .settings {
   position: fixed;
-  width: 80vw;
-  height: 80vh;
-  top: 50%;
+  width: 80dvw;
+  height: 80dvh;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
+  transform: translate(-50%, 0);
+  background: #111;
   /*justify-content: center;*/
   align-items: center;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0 0 16px 16px;
+  /*border: 1px solid rgba(255, 255, 255, 0.18);*/
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   font-size: 1.2rem;
   animation: fadeIn 0.5s ease-in-out;
@@ -30,7 +29,6 @@
   gap: 24px;
   overflow-y: auto;
   max-width: 35em;
-  max-height: 35em;
 }
 
 @media (max-width: 768px) {
@@ -100,13 +98,9 @@
   gap: 12px;
 }
 
-.settings h2 {
-  margin: 0px;
-  padding: 0px;
-}
-
 .settings .settings-content > * {
   margin-bottom: 1em;
+  margin-top: 1em;
   max-width: 28em;
 }
 
@@ -131,6 +125,7 @@
 
 @media (max-width: 768px) {
   .settings .closeButton {
+    top: 1.5em;
     left: 2.5em;
   }
 }

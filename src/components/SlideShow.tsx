@@ -19,7 +19,6 @@ import SlideView from './SlideView';
 import { nip19 } from 'nostr-tools';
 import uniqBy from 'lodash/uniqBy';
 import AdultContentInfo from './AdultContentInfo';
-import IconSettings from './Icons/IconSettings';
 import useNav from '../utils/useNav';
 import { NDKEvent } from '@nostr-dev-kit/ndk';
 import { useGlobalState } from '../utils/globalState';
@@ -33,6 +32,7 @@ import GridView from './GridView';
 import useZapsAndReations from '../utils/useZapAndReaction';
 import IconHeart from './Icons/IconHeart';
 import IconBolt from './Icons/IconBolt';
+import IconSearch from './Icons/IconSearch';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -258,7 +258,7 @@ const SlideShow = () => {
 
   return (
     <>
-      {showSettings && <Settings onClose={() => setShowSettings(false)}></Settings>}
+      {showSettings && <Settings onClose={() => setShowSettings(false)} setViewMode={setViewMode}></Settings>}
 
       <div className="top-controls">
         {state.userNPub && state.profile ? (
@@ -276,7 +276,10 @@ const SlideShow = () => {
         <div className="bottom-controls">
           {state.userNPub && state.activeImage && (
             <>
-              <button className={`heart ${heartState}`} onClick={() => state.activeImage && heartClick(state.activeImage)}>
+              <button
+                className={`heart ${heartState}`}
+                onClick={() => state.activeImage && heartClick(state.activeImage)}
+              >
                 <IconHeart></IconHeart>
               </button>
               {(state.profile?.lud06 || state.profile?.lud16) && (
@@ -307,7 +310,7 @@ const SlideShow = () => {
 
           {viewMode != 'slideshow' && (
             <button onClick={() => setShowSettings(s => !s)}>
-              <IconSettings />
+              <IconSearch />
             </button>
           )}
 

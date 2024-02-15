@@ -64,11 +64,7 @@ const ScrollImage = ({ image, currentImage, setCurrentImage, index }: ScrollImag
       ref={containerRef}
       id={'sc' + index}
       className="scroll-content"
-      style={
-        nearCurrentImage
-          ? { backgroundImage: `url(${!mediaIsVideo ? currentImageProxyUrl : ''})` }
-          : { background: 'red' }
-      }
+      style={nearCurrentImage ? { backgroundImage: `url(${!mediaIsVideo ? currentImageProxyUrl : ''})` } : undefined}
     >
       {nearCurrentImage &&
         (mediaIsVideo ? (

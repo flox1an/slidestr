@@ -5,6 +5,7 @@ export const appName = 'slidestr.net';
 export const defaultHashTags = [
   'artstr',
   'catstr',
+  'coffeechain',
   'dogstr',
   'flowerstr',
   'foodstr',
@@ -25,6 +26,7 @@ export const visibleHashTags = [
   'beautiful',
   'bitcoin',
   'catstr',
+  'coffeechain',
   'colorful',
   'cute',
   'dogstr',

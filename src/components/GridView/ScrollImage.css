@@ -41,7 +41,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5em;
-  z-index: 1000;
+  z-index: 100;
 }
 
 .left-bottom-menu button {
@@ -56,6 +56,27 @@
   color: white;
 }
 
+.bottom-menu {
+  position: fixed;
+  bottom: 1em;
+  left: 50%;
+  translate: -50%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  z-index: 220;
+  background: transparent;
+}
+
+.bottom-menu button {
+  border: none;
+  background-color: transparent;
+}
+
+.bottom-menu button svg {
+  height: 24px;
+  color: white;
+}
 
 @media screen and (max-width: 768px) {
   .left-bottom-menu {

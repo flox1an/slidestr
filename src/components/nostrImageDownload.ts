@@ -46,7 +46,8 @@ export const buildFilter = (tags: string[], npubs: string[], withReposts = false
 export const prepareContent = (content: string) => {
   return content
     .replace(/https?:\/\/[^\s]+/g, '') // remove all urls
-    .replace(/#[^\s]+/g, ''); // remove all tags
+    .replace(/#[^\s]+/g, '') // remove all tags
+    .trim();
 };
 
 export const urlFix = (url: string) => {
