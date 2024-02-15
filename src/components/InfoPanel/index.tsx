@@ -7,6 +7,8 @@ import { ViewMode } from '../SlideShow';
 import AuthorProfile from '../AuthorProfile';
 import useProfile from '../../utils/useProfile';
 import { useGlobalState } from '../../utils/globalState';
+import IconLink from '../Icons/IconLink';
+import { nip19 } from 'nostr-tools';
 
 type InfoPanelProps = {
   image: NostrImage;
@@ -31,9 +33,19 @@ const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) =>
 
   return (
     <div className="infoPanel">
-      {profile && <div className="infoPanelAuthor">{profile}</div>}
+      {profile && (
+        <div className="infoPanelAuthor">
+          {profile}
+          {image?.noteId && (
+            <a className="link" target="_blank" href={`https://nostrapp.link/#${nip19.noteEncode(image?.noteId)}`}>
+              <IconLink></IconLink>
+            </a>
+          )}
+        </div>
+      )}
 
-      <div className="infoPanelContent">{image?.content}</div>
+      <div className="infoPanelContent">{image?.content} </div>
+
       {image.tags.length > 0 && (
         <div className="infoPanelTags">
           {uniq(image?.tags)

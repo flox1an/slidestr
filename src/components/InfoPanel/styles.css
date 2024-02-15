@@ -13,7 +13,16 @@
   width: 80dvw;
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
+
+.infoPanel .link svg {
+    padding: 0.5em;
+    width: 1.5em;
+    height: 1.5em;
+    cursor: pointer;
+    color: white;
+  }
 
 .infoPanelContent {
   padding-left: 1em;
@@ -65,6 +74,15 @@
   }
 }
 
+.infoPanelAuthor {
+    display: flex;
+    flex-direction: row;
+}
+
+.infoPanelAuthor .link {
+    padding: 1em;
+}
+
 .infoPanelAuthor .author-info {
     position: relative;
     left: initial;
@@ -72,6 +90,7 @@
     padding-left: 1em;
     padding-top: 1em;
     display: flex;
+    flex-grow: 1;
     flex-direction: row;
     gap: 8px;
     align-items: center;
