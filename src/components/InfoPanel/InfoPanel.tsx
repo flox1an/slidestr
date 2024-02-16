@@ -1,7 +1,7 @@
 import { uniq } from 'lodash';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import useNav, { Settings } from '../../utils/useNav';
-import './styles.css';
+import './InfoPanel.css';
 import IconChevronDown from '../Icons/IconChevronDown';
 import { ViewMode } from '../SlideShow';
 import AuthorProfile from '../AuthorProfile';
@@ -32,9 +32,9 @@ const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) =>
   );
 
   return (
-    <div className="infoPanel">
+    <div className="info-panel">
       {profile && (
-        <div className="infoPanelAuthor">
+        <div className="info-panel-author">
           {profile}
           {image?.noteId && (
             <a className="link" target="_blank" href={`https://nostrapp.link/#${nip19.noteEncode(image?.noteId)}`}>
@@ -44,12 +44,11 @@ const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) =>
         </div>
       )}
 
-      <div className="infoPanelContent">{image?.content} </div>
+      <div className="info-panel-content">{image?.content} </div>
 
       {image.tags.length > 0 && (
-        <div className="infoPanelTags">
+        <div className="info-panel-tags">
           {uniq(image?.tags)
-            .filter(t => t[0] == 't')
             .map(t => (
               <>
                 <span
@@ -66,7 +65,7 @@ const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) =>
             ))}
         </div>
       )}
-      <div className="infoPanelFooter">
+      <div className="info-panel-footer">
         <button onClick={() => onClose()}>
           <IconChevronDown />
         </button>

@@ -1,4 +1,4 @@
-.infoPanel {
+.info-panel {
   position: absolute;
   left: 50%;
   translate: -50%;
@@ -16,39 +16,39 @@
   gap: 4px;
 }
 
-.infoPanel .link svg {
-    padding: 0.5em;
-    width: 1.5em;
-    height: 1.5em;
-    cursor: pointer;
-    color: white;
-  }
+.info-panel .link svg {
+  padding: 0.5em;
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+  color: white;
+}
 
-.infoPanelContent {
+.info-panel-content {
   padding-left: 1em;
   padding-right: 1em;
 }
 
-.infoPanelFooter {
+.info-panel-footer {
   text-align: center;
 }
 
-.infoPanelFooter button {
+.info-panel-footer button {
   border: none;
   background-color: transparent;
 }
 
-.infoPanelFooter button svg {
+.info-panel-footer button svg {
   height: 24px;
   color: white;
 }
 
-.infoPanelTags {
+.info-panel-tags {
   padding-left: 1em;
   padding-right: 1em;
 }
 
-.infoPanelTags .tag {
+.info-panel-tags .tag {
   display: inline;
   padding: 0.2em 0.6em;
   margin-right: 0.2em;
@@ -61,12 +61,13 @@
   overflow: visible;
 }
 
-.infoPanelTags .tag:hover {
+.info-panel-tags .tag:hover {
   background-color: #555;
+  gap: 8px;
 }
 
 @media screen and (max-width: 768px) {
-  .infoPanel {
+  .info-panel {
     left: 0;
     width: 100dvw;
     translate: 0;
@@ -74,24 +75,24 @@
   }
 }
 
-.infoPanelAuthor {
-    display: flex;
-    flex-direction: row;
+.info-panel-author {
+  display: flex;
+  flex-direction: row;
 }
 
-.infoPanelAuthor .link {
-    padding: 1em;
+.info-panel-author .link {
+  padding: 1em;
 }
 
-.infoPanelAuthor .author-info {
-    position: relative;
-    left: initial;
-    bottom: initial;
-    padding-left: 1em;
-    padding-top: 1em;
-    display: flex;
-    flex-grow: 1;
-    flex-direction: row;
-    gap: 8px;
-    align-items: center;
+.info-panel-author .author-info {
+  position: relative;
+  left: initial;
+  bottom: initial;
+  padding-left: 1em;
+  padding-top: 1em;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
 }

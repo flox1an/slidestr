@@ -217,9 +217,8 @@ export const defaultRelays = [
   'wss://relay.nostr.band',
   'wss://relay.snort.social',
   'wss://nos.lol',
-  //'wss://eden.nostr.land',
   'wss://nostr.wine',
-  // "wss://nostr1.current.fyi/",
+  'wss://relay.primal.net',
+  'wss://relay.mostr.pub',
   'wss://purplepag.es/', // needed for user profiles
-  //"wss://feeds.nostr.band/pics",
 ];
