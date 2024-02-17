@@ -24,15 +24,15 @@ import { NDKEvent } from '@nostr-dev-kit/ndk';
 import { useGlobalState } from '../utils/globalState';
 import useAutoLogin from '../utils/useAutoLogin';
 import IconUser from './Icons/IconUser';
-import ScrollView from './GridView/ScrollView';
+import ScrollView from './ScrollView/ScrollView';
 import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
 import IconFullScreen from './Icons/IconFullScreen';
-import GridView from './GridView';
 import useZapsAndReations from '../utils/useZapAndReaction';
 import IconHeart from './Icons/IconHeart';
 import IconBolt from './Icons/IconBolt';
 import IconSearch from './Icons/IconSearch';
+import GridView from './GridView';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 

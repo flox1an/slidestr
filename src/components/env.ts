@@ -2,6 +2,25 @@ import { nip19 } from 'nostr-tools';
 
 export const appName = 'slidestr.net';
 
+export const topics = {
+  art: ['art', 'artstr', 'beautiful', 'colorful', 'psychedelic'],
+  bitcoin: ['bitcoin', 'plebchain'],
+  nostr: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom'],
+  animals: ['catstr', 'cute', 'dogstr'],
+  photography: [
+    'naturephotography',
+    'photo',
+    'photography',
+    'photos',
+    'photostr',
+    'picoftheday',
+    'streetphotography',
+    'picstr',
+  ],
+  lifestyle: ['fashion', 'flowerstr', 'foodstr', 'style', 'weedstr', 'travel', 'travelstr', 'happy', 'life', 'love'],
+  gardening: ['gardening', 'gardenstr', 'nature'],
+};
+
 export const defaultHashTags = [
   'artstr',
   'catstr',

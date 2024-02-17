@@ -31,7 +31,7 @@ const DetailsView = ({ images, currentImage, setCurrentImage }: DetailsViewProps
     () => (currentImage !== undefined ? images[currentImage] : undefined),
     [images, currentImage]
   );
-  
+
   const nextImageData = useMemo(
     () => (currentImage !== undefined ? images[currentImage + 1] : undefined),
     [images, currentImage]

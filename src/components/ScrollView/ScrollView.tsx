@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import { Settings } from '../../utils/useNav';
-import AuthorProfile from '../AuthorProfile';
+import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { Helmet } from 'react-helmet';
 import useProfile from '../../utils/useProfile';
 import ScrollImage from './ScrollImage';
@@ -47,7 +47,7 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
   const { activeProfile, profileNpub, title } = useProfile(settings, state.activeImage);
 
   const infoPanelAvailable = state.activeImage && (state.activeImage.content || state.activeImage.tags.length > 0);
-console.log(JSON.stringify([state?.activeImage?.content, state?.activeImage?.tags]));
+  console.log(JSON.stringify([state?.activeImage?.content, state?.activeImage?.tags]));
   return (
     <div ref={containerRef} className="scrollview" tabIndex={0}>
       <Helmet>

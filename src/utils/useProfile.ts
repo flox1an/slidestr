@@ -8,7 +8,7 @@ const useProfile = (settings: Settings, activeImage?: NostrImage) => {
   const { getProfile } = useNDK();
   const [title, setTitle] = useState(appName);
 
-  const profileNpub =  settings.npubs.length == 1 ?settings.npubs[0] : activeImage && activeImage?.author;
+  const profileNpub = settings.npubs.length == 1 ? settings.npubs[0] : activeImage && activeImage?.author;
 
   const activeProfile = profileNpub && getProfile(profileNpub);
 

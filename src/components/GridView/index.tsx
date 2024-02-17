@@ -3,7 +3,7 @@ import { NostrImage, urlFix } from '../nostrImageDownload';
 import './GridView.css';
 import GridImage from './GridImage';
 import { Settings } from '../../utils/useNav';
-import AuthorProfile from '../AuthorProfile';
+import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { useSwipeable } from 'react-swipeable';
 import { Helmet } from 'react-helmet';
 import useProfile from '../../utils/useProfile';
@@ -62,7 +62,7 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
 
   useEffect(() => {
     document.body.addEventListener('keydown', onKeyDown);
-    setState({activeImage: undefined});
+    setState({ activeImage: undefined });
 
     if (currentImage) {
       console.log('setting hash to #g' + currentImage);
@@ -84,19 +84,18 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
         <DetailsView images={sortedImages} currentImage={currentImage} setCurrentImage={setCurrentImage} />
       ) : null}
        */}
-      {activeProfile && (
+      {(activeProfile || settings.tags.length == 1) && (
         <div className="profile-header">
-          <AuthorProfile
-            src={urlFix(activeProfile.image || '')}
-            author={activeProfile.displayName || activeProfile.name}
-            npub={activeProfile.npub}
-            setViewMode={setViewMode}
-          ></AuthorProfile>
-          {/*
-          <span>{activeProfile.banner}</span>
-          <span>{activeProfile.bio}</span>
-          {activeProfile.website}
-          */}
+          {activeProfile ? (
+            <AuthorProfile
+              src={urlFix(activeProfile.image || '')}
+              author={activeProfile.displayName || activeProfile.name}
+              npub={activeProfile.npub}
+              setViewMode={setViewMode}
+            ></AuthorProfile>
+          ) : (
+            settings.tags.map(t => <h2>#{t}</h2>)
+          )}
         </div>
       )}
 

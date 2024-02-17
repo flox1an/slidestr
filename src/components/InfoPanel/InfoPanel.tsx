@@ -1,10 +1,10 @@
-import { uniq } from 'lodash';
+import uniq from 'lodash/uniq';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import useNav, { Settings } from '../../utils/useNav';
 import './InfoPanel.css';
 import IconChevronDown from '../Icons/IconChevronDown';
 import { ViewMode } from '../SlideShow';
-import AuthorProfile from '../AuthorProfile';
+import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import useProfile from '../../utils/useProfile';
 import { useGlobalState } from '../../utils/globalState';
 import IconLink from '../Icons/IconLink';
@@ -48,21 +48,20 @@ const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) =>
 
       {image.tags.length > 0 && (
         <div className="info-panel-tags">
-          {uniq(image?.tags)
-            .map(t => (
-              <>
-                <span
-                  className="tag"
-                  onClick={() => {
-                    //setCurrentImage(undefined);
-                    setViewMode('grid');
-                    nav({ ...currentSettings, tags: [t], npubs: [] });
-                  }}
-                >
-                  {t}
-                </span>{' '}
-              </>
-            ))}
+          {uniq(image?.tags).map(t => (
+            <>
+              <span
+                className="tag"
+                onClick={() => {
+                  //setCurrentImage(undefined);
+                  setViewMode('grid');
+                  nav({ ...currentSettings, tags: [t], npubs: [] });
+                }}
+              >
+                {t}
+              </span>{' '}
+            </>
+          ))}
         </div>
       )}
       <div className="info-panel-footer">

@@ -1,8 +1,8 @@
-import './SlideShow.css';
-import useImageLoaded from '../utils/useImageLoaded';
-import { createImgProxyUrl } from './nostrImageDownload';
-import useNav from '../utils/useNav';
-import { ViewMode } from './SlideShow';
+import './AuthorProfile.css';
+import useImageLoaded from '../../utils/useImageLoaded';
+import { createImgProxyUrl } from '../nostrImageDownload';
+import useNav from '../../utils/useNav';
+import { ViewMode } from '../SlideShow';
 
 type AvatarImageProps = {
   src?: string;

@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
-import AuthorProfile from '../AuthorProfile';
+import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import Slide from './Slide';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import useDebouncedEffect from '../../utils/useDebouncedEffect';

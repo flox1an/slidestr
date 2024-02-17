@@ -81,29 +81,6 @@
   }
 }
 
-.author-info {
-  cursor: pointer;
-  color: white;
-  position: absolute;
-  bottom: 2em;
-  left: 2em;
-  z-index: 200;
-}
-
-.author-image {
-  margin-bottom: 0.5em;
-  display: block;
-  transition: opacity 1s ease-in-out;
-  background-size: cover;
-  background-repeat: no-repeat;
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-in;
-  animation-name: showAuthor;
-  background-color: transparent;
-}
 
 .slide {
   position: fixed;
@@ -296,20 +273,5 @@
 @media screen and (max-width: 768px) {
   .controls {
     top: 2em;
-  }
-
-  .author-image {
-    width: 48px;
-    height: 48px;
-  }
-
-  .author-info {
-    width: 80vw;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .author-name {
-    display: none;
   }
 }

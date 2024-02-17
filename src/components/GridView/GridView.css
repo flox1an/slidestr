@@ -64,8 +64,12 @@
 }
 
 .profile-header {
-  padding:2em;
+  padding: 2em;
   padding-bottom: 1em;
+}
+
+.profile-header h2 {
+  margin: 0px;
 }
 
 .profile-header .author-info {
