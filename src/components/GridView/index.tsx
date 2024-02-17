@@ -92,6 +92,8 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
               author={activeProfile.displayName || activeProfile.name}
               npub={activeProfile.npub}
               setViewMode={setViewMode}
+              followButton
+              externalLink
             ></AuthorProfile>
           ) : (
             settings.tags.map(t => <h2>#{t}</h2>)

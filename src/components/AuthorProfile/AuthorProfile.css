@@ -12,6 +12,11 @@
     align-items: center;
   }
   
+  .author-info a svg {
+    height: 24px;
+    color: white;
+  }
+
   .author-image {
     display: block;
     transition: opacity 1s ease-in-out;

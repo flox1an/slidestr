@@ -4,7 +4,9 @@
   translate: -50%;
   bottom: 0px;
   overflow-wrap: break-word;
-  background: #111;
+  background-color: #111;
+  /* background: rgba(0,0,0,.8); */
+  /* backdrop-filter: blur(50px); */
   box-sizing: border-box;
   border-radius: 16px 16px 0 0;
   z-index: 220;

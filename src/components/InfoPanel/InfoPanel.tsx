@@ -28,6 +28,7 @@ const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) =>
       author={activeProfile.displayName || activeProfile.name}
       npub={profileNpub}
       setViewMode={setViewMode}
+      followButton
     ></AuthorProfile>
   );
 
