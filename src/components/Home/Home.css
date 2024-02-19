@@ -1,0 +1,41 @@
+.home {
+    box-sizing: border-box;
+    width: 100vw;
+    max-width: 50em;
+  padding: 2em;
+  margin: auto;
+}
+
+.home .topics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.home .topic {
+  background-color: #222;
+  border-radius: 16px;
+  padding: 1em;
+  cursor: pointer;
+  height: 6em;
+  background-size: cover;
+}
+
+.home .topic-title {
+  font-size: 30px;
+  padding-bottom: 0.5em;
+  text-transform: capitalize;
+}
+
+.home .tag {
+  display: inline;
+  padding: 0.2em 0.6em;
+  margin-right: 0.2em;
+  border-radius: 24px;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: white;
+  line-height: 2.2em;
+  font-size: 1rem;
+  cursor: pointer;
+  overflow: visible;
+}

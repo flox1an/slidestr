@@ -1,0 +1,79 @@
+@keyframes showGridImage {
+  from {
+    opacity: 0;
+    visibility: visible;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.gridview {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  height: 100dvh;
+  overflow: scroll;
+}
+
+.imagegrid {
+  display: block;
+  padding: 1rem;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+.imagegrid img.image {
+  border-radius: 0.5rem;
+  width: 100%;
+  cursor: pointer;
+  visibility: hidden;
+}
+
+.imagegrid video.image {
+  border-radius: 0.5rem;
+  width: 100%;
+  cursor: pointer;
+}
+
+.imagegrid .image.show {
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in;
+  animation-name: showGridImage;
+  visibility: visible;
+}
+
+@media screen and (max-width: 600px) {
+  .imagegrid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-gap: 8px;
+    padding: 8px;
+  }
+}
+
+.imagegrid .image:hover {
+  filter: brightness(1.1);
+  outline: 1px solid #fff;
+}
+
+.profile-header {
+  padding: 2em;
+  padding-bottom: 1em;
+}
+
+.profile-header h2 {
+  margin: 0px;
+}
+
+.profile-header .author-info {
+  position: relative;
+  bottom: initial;
+  left: initial;
+}
+
+@media screen and (max-width: 768px) {
+  .profile-header .author-info .author-name {
+    display: block;
+  }
+}
