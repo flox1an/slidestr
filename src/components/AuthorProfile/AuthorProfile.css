@@ -15,6 +15,11 @@
   .author-info a svg {
     height: 24px;
     color: white;
+    line-height: 1em;
+  }
+
+  .author-name {
+    padding-right: 1em;
   }
 
   .author-image {

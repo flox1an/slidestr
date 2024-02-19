@@ -1,24 +1,32 @@
+import { Dictionary } from 'lodash';
 import { nip19 } from 'nostr-tools';
 
 export const appName = 'slidestr.net';
+type Topic = {
+  tags: string[];
+};
 
-export const topics = {
-  art: ['art', 'artstr', 'beautiful', 'colorful', 'psychedelic'],
-  bitcoin: ['bitcoin', 'plebchain'],
-  nostr: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom'],
-  animals: ['catstr', 'cute', 'dogstr'],
-  photography: [
-    'naturephotography',
-    'photo',
-    'photography',
-    'photos',
-    'photostr',
-    'picoftheday',
-    'streetphotography',
-    'picstr',
-  ],
-  lifestyle: ['fashion', 'flowerstr', 'foodstr', 'style', 'weedstr', 'travel', 'travelstr', 'happy', 'life', 'love'],
-  gardening: ['gardening', 'gardenstr', 'nature'],
+export const topics: Dictionary<Topic> = {
+  art: { tags: ['art', 'artstr', 'beautiful', 'colorful', 'psychedelic'] },
+  bitcoin: { tags: ['bitcoin', 'plebchain'] },
+  nostr: { tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom'] },
+  animals: { tags: ['catstr', 'dogstr', 'animal', 'animals'] },
+  photography: {
+    tags: [
+      'naturephotography',
+      'photo',
+      'photography',
+      'photos',
+      'photostr',
+      'picoftheday',
+      'streetphotography',
+      'picstr',
+    ],
+  },
+  lifestyle: {
+    tags: ['fashion', 'flowerstr', 'foodstr', 'style', 'weedstr', 'travel', 'travelstr', 'happy', 'life', 'love'],
+  },
+  gardening: { tags: ['gardening', 'gardenstr', 'nature'] },
 };
 
 export const defaultHashTags = [

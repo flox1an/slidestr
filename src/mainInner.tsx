@@ -3,6 +3,7 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { NDKProvider } from '@nostr-dev-kit/ndk-react';
 import { defaultRelays } from './components/env';
+import Home from './components/Home';
 
 const MainInner = () => {
   //const [state] = useGlobalState();
@@ -10,7 +11,7 @@ const MainInner = () => {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <App />,
+      element: <Home />,
     },
     {
       path: 'global',
