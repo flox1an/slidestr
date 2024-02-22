@@ -1,0 +1,42 @@
+.login-dialog {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  border-radius: 20px;
+  background-color: #111;
+  z-index: 200;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  gap: 24px;
+}
+
+.login-dialog input[type='text'] {
+  min-width: 20em;
+  display: block;
+  width: 100%;
+  background-color: #111;
+  border-radius: 8px;
+  border: 1px solid #222;
+  height: 3em;
+  font-family: unset;
+  font-size: unset;
+  padding: 0.1em;
+  padding-left: 0.5em;
+  box-sizing: border-box;
+}
+
+.login-dialog .login-address {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.login-dialog .login-extension {
+  align-self: center;
+}
+
+.login-dialog .login-extension button {
+  height: 3em;
+}

@@ -39,7 +39,7 @@ export const buildFilter = (tags: string[], npubs: string[], withReposts = false
     }
   }
 
-  console.log('filter', filter);
+  // console.log('filter', filter);
   return filter;
 };
 

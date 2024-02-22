@@ -4,10 +4,10 @@ import useNav from '../utils/useNav';
 import CloseButton from './CloseButton/CloseButton';
 import TagEditor, { Tag } from './TagEditor';
 import { defaultHashTags } from './env';
-import { useNDK } from '@nostr-dev-kit/ndk-react';
 import { createImgProxyUrl } from './nostrImageDownload';
 import { useGlobalState } from '../utils/globalState';
 import { ViewMode } from './SlideShow';
+import useProfile from '../ngine/hooks/useProfile';
 
 type SettingsProps = {
   onClose: () => void;
@@ -18,7 +18,6 @@ type Mode = 'all' | 'tags' | 'user';
 
 const SettingsDialog = ({ onClose, setViewMode }: SettingsProps) => {
   const { nav, currentSettings } = useNav();
-  const { getProfile } = useNDK();
   const [state, setState] = useGlobalState();
   const [showAdult, setShowAdult] = useState(currentSettings.showAdult || false);
   const [showReplies, setShowReplies] = useState(currentSettings.showReplies || false);
@@ -66,7 +65,7 @@ const SettingsDialog = ({ onClose, setViewMode }: SettingsProps) => {
     onClose();
   };
 
-  const activeProfile = npubs.length > 0 ? getProfile(npubs[0]) : undefined;
+  const activeProfile = useProfile(npubs[0]);
 
   return (
     <>

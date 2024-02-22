@@ -1,4 +1,3 @@
-import { useNDK } from '@nostr-dev-kit/ndk-react';
 import './SlideShow.css';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -6,21 +5,20 @@ import {
   buildFilter,
   extractImageUrls,
   isImage,
-  isAdultRelated,
-  isReply,
   isVideo,
   prepareContent,
   Post,
   createImgProxyUrl,
+  isReply,
+  isAdultRelated,
 } from './nostrImageDownload';
-import { blockedPublicKeys, adultContentTags, adultNPubs, mixedAdultNPubs } from './env';
+import { adultContentTags, adultNPubs, blockedPublicKeys, mixedAdultNPubs } from './env';
 import Settings from './Settings';
 import SlideView from './SlideView';
 import { nip19 } from 'nostr-tools';
 import uniqBy from 'lodash/uniqBy';
 import AdultContentInfo from './AdultContentInfo';
 import useNav from '../utils/useNav';
-import { NDKEvent } from '@nostr-dev-kit/ndk';
 import { useGlobalState } from '../utils/globalState';
 import useAutoLogin from '../utils/useAutoLogin';
 import IconUser from './Icons/IconUser';
@@ -33,6 +31,9 @@ import IconHeart from './Icons/IconHeart';
 import IconBolt from './Icons/IconBolt';
 import IconSearch from './Icons/IconSearch';
 import GridView from './GridView';
+import useEvents from '../ngine/hooks/useEvents';
+import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
+import Login from './Login/Login';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -72,30 +73,65 @@ FEATURES:
 export type ViewMode = 'grid' | 'slideshow' | 'scroll';
 
 const SlideShow = () => {
-  const { ndk, loginWithNip07, getProfile } = useNDK();
   const [posts, setPosts] = useState<Post[]>([]);
   const images = useRef<NostrImage[]>([]);
-  const fetchTimeoutHandle = useRef(0);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [showSettings, setShowSettings] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+
   const { currentSettings: settings } = useNav();
   const [state, setState] = useGlobalState();
-  const { autoLogin, setAutoLogin } = useAutoLogin();
-  const currentSubId = useRef('1');
+  const { setAutoLogin } = useAutoLogin();
   const [imageIdx, setImageIdx] = useState<number | undefined>();
-
   const { zapClick, heartClick, zapState, heartState } = useZapsAndReations(state.activeImage, state.userNPub);
 
+  const { events } = useEvents(buildFilter(settings.tags, settings.npubs, settings.showReposts), {
+    cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
+  });
+
+
+  useEffect(() => {
+    setPosts(
+      events
+        .filter(
+          event =>
+            !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
+            (settings.showReplies || !isReply(event)) &&
+            (settings.showAdult || !isAdultRelated(event, settings.tags.length > 0))
+        )
+        .map(event => {
+          // Hack: Write URL in the content for file events
+          if (event.kind === 1063) {
+            const urlTag = event?.tags?.find(t => t[0] == 'url');
+            if (urlTag) {
+              event.content = urlTag[1];
+            }
+          }
+
+          // Convert reposts to the original event
+          if (event.kind === 6 && event.content) {
+            try {
+              const repostedEvent = JSON.parse(event.content);
+              if (repostedEvent) {
+                event = repostedEvent;
+                //event.isRepost = true;
+              }
+            } catch (e) {
+              // ingore, the content is no valid json
+            }
+          }
+
+          return { event };
+        })
+    );
+  }, [events]);
+  /*
   useEffect(() => {
     const fetch = () => {
-      if (!ndk) {
-        console.error('NDK not available.');
-        return;
-      }
 
       currentSubId.current = `${Math.floor(Math.random() * 10000000)}`;
 
-      const postSubscription = ndk.subscribe(buildFilter(settings.tags, settings.npubs, settings.showReposts), {
+      const postSubscription = ndk.subscribe(), {
         subId: currentSubId.current,
       });
 
@@ -155,6 +191,13 @@ const SlideShow = () => {
       fetch();
     }
   }, [settings, ndk]);
+*/
+
+  useEffect(() => {
+    // reset all
+    setPosts([]);
+    images.current = [];
+  }, [settings]);
 
   useEffect(() => {
     images.current = uniqBy(
@@ -203,19 +246,13 @@ const SlideShow = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      if (autoLogin && window.nostr) {
-        // auto login when alby is available
-        onLogin();
-      }
-    }, 100);
-
     document.body.addEventListener('keydown', onKeyDown);
     return () => {
       document.body.removeEventListener('keydown', onKeyDown);
     };
   }, []);
 
+  /*
   useEffect(() => {
     if (state.userNPub) {
       setState({ profile: getProfile(state.userNPub) });
@@ -223,7 +260,7 @@ const SlideShow = () => {
       setState({ profile: undefined });
     }
   }, [state.userNPub, getProfile, setState]);
-
+*/
   const fullScreen = document.fullscreenElement !== null;
 
   const showAdultContentWarning =
@@ -236,29 +273,18 @@ const SlideShow = () => {
     return <AdultContentInfo></AdultContentInfo>;
   }
 
-  const onLogin = async () => {
-    setAutoLogin(true);
-    const result = await loginWithNip07();
-    if (!result) {
-      console.error('Login failed.');
-      return;
-    }
-
-    setState({ userNPub: result.npub });
+  const toggleViewMode = () => {
+    setViewMode(view => (view == 'grid' ? 'scroll' : 'grid'));
   };
 
   const onLogout = () => {
     setAutoLogin(false);
     setState({ userNPub: undefined, profile: undefined });
   };
-
-  const toggleViewMode = () => {
-    setViewMode(view => (view == 'grid' ? 'scroll' : 'grid'));
-  };
-
   return (
     <>
       {showSettings && <Settings onClose={() => setShowSettings(false)} setViewMode={setViewMode}></Settings>}
+      {showLogin && <Login onClose={() => setShowLogin(false)}/>}
 
       <div className="top-controls">
         {state.userNPub && state.profile ? (
@@ -266,7 +292,7 @@ const SlideShow = () => {
             <img className="profile" onClick={onLogout} src={createImgProxyUrl(state.profile.image, 80, 80)} />
           )
         ) : (
-          <button onClick={onLogin} className="login">
+          <button onClick={() => setShowLogin(true)} className="login">
             <IconUser></IconUser>
           </button>
         )}

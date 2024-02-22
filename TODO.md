@@ -1,5 +1,19 @@
 # TODO 
 
+
+# delete the events when the filter changes
+
+- Improve Login dialog
+- Fix key listeners when text input is opened
+- Fix/Test zaps
+- Reimplement Likes/Zaps based in ngine code
+- Investigate profile caching
+- fix build errors
+- build masonary view for desktop
+- move settings dialog to main start screen
+- replace search icon with nav back button
+- record demo explaination video
+
 - hashtag view (single hasttag), header
 - masonry, mit subtitles (user displayname, tags (most imporant), desc?, date) (ggf. nur desktop)
 - NIP 46
