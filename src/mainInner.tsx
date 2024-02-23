@@ -8,18 +8,16 @@ import NDK from '@nostr-dev-kit/ndk';
 import { useEffect } from 'react';
 import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
 
-const cacheAdapterDexie = new NDKCacheAdapterDexie({ dbName: "slidestr" });
+const cacheAdapterDexie = new NDKCacheAdapterDexie({ dbName: 'slidestr' });
 const ndk = new NDK({
   explicitRelayUrls: defaultRelays,
-  outboxRelayUrls: ["wss://purplepag.es"],
-  enableOutboxModel: true, 
-  //signer: new NDKNip07Signer(),
-  cacheAdapter: cacheAdapterDexie as any // types don't in the current version
+  outboxRelayUrls: ['wss://purplepag.es'],
+  enableOutboxModel: true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cacheAdapter: cacheAdapterDexie as any, // types don't in the current version
 });
 
 const MainInner = () => {
-  //const [state] = useGlobalState();
-
   const router = createBrowserRouter([
     {
       path: '/',
@@ -55,10 +53,11 @@ const MainInner = () => {
     ndk.connect();
   }, []);
 
-
-  return (<NgineProvider ndk={ndk}>
+  return (
+    <NgineProvider ndk={ndk}>
       <RouterProvider router={router} />
-    </NgineProvider>)
+    </NgineProvider>
+  );
 };
 
 export default MainInner;

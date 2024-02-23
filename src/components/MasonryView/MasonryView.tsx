@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet';
 import useProfile from '../../utils/useProfile';
 import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
-import { Dictionary, groupBy } from 'lodash';
+import MasonryImage from './MasonryImage';
 
 type MasonryViewProps = {
   settings: Settings;
@@ -18,22 +18,45 @@ type MasonryViewProps = {
   setViewMode: React.Dispatch<React.SetStateAction<ViewMode>>;
 };
 
+type MImage = NostrImage & {
+  orgIndex: number
+}
+
 const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: MasonryViewProps) => {
   const { activeProfile, title } = useProfile(settings);
   const [_, setState] = useGlobalState();
 
-  const numColumns = 4;
-
   const sortedImages = useMemo(
     () => {
-      const sorted = images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)); // sort by timestamp descending
-      const grouped = groupBy(sorted, (i: number) => Math.floor(i / numColumns)) as Dictionary<NostrImage[]>;
-      console.log(grouped);
-      return grouped;
+      const columnCount = 5;
+
+       //const sorted = images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)); // sort by timestamp descending
+
+      // Initialize an array of arrays to hold the columns.
+      const columns: MImage[][] = Array.from({ length: columnCount }, () => []);
+
+      // Initialize an array to keep track of the total height of each column.
+      //const columnHeights: number[] = new Array(columnCount).fill(0);
+      let columnIndex = 0;
+      // Iterate over each image and assign it to the column with the least total height.
+      images.forEach((image, idx) => {
+        // Find the column with the least total height.
+        // const columnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+
+        // Add the image to the selected column.
+        columns[columnIndex].push({orgIndex: idx, ...image});
+
+        // Update the total height of the selected column.
+        //columnHeights[columnIndex] += image.height;
+
+        columnIndex = (columnIndex + 1) % columnCount;
+      });
+
+      return columns;
     },
+
     [images] // settings is not used here, but we need to include it to trigger a re-render when it changes
   );
-  console.log(sortedImages);
 
   const showNextImage = () => {
     setCurrentImage(idx => (idx !== undefined ? idx + 1 : 0));
@@ -108,22 +131,26 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
           )}
         </div>
       )}
-      {/*
-      <div className="imagegrid">
-        {sortedImages[0] && sortedImages[0].map((image, idx) => (
-          <GridImage
-            index={idx}
-            key={image.url}
-            image={image}
-            onClick={e => {
-              e.stopPropagation();
-              setCurrentImage(idx);
-              setViewMode('scroll');
-            }}
-          ></GridImage>
-        ))}
-      </div>
-     */}
+      {
+        <div className="imagegrid">
+          {sortedImages.map((columnImages, colIdx) => (
+            <div className="column" key={colIdx}>
+              {columnImages.map((image) => (
+                <MasonryImage
+                  index={image.orgIndex}
+                  key={image.url}
+                  image={image}
+                  onClick={e => {
+                    e.stopPropagation();
+                    setCurrentImage(image.orgIndex);
+                    setViewMode('scroll');
+                  }}
+                ></MasonryImage>
+              ))}
+            </div>
+          ))}
+        </div>
+      }
     </div>
   );
 };

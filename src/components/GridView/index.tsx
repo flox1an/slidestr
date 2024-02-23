@@ -22,10 +22,10 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
   const { activeProfile, title } = useProfile(settings);
   const [_, setState] = useGlobalState();
 
-  const sortedImages = useMemo(
-    () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
-    [images, settings] // settings is not used here, but we need to include it to trigger a re-render when it changes
-  );
+  //const sortedImages = useMemo(
+  //  () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
+  //  [images, settings] // settings is not used here, but we need to include it to trigger a re-render when it changes
+  //);
 
   const showNextImage = () => {
     setCurrentImage(idx => (idx !== undefined ? idx + 1 : 0));
@@ -102,7 +102,7 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
       )}
 
       <div className="imagegrid">
-        {sortedImages.map((image, idx) => (
+        {images.map((image, idx) => (
           <GridImage
             index={idx}
             key={image.url}

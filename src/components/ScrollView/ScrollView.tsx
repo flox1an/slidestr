@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import { Settings } from '../../utils/useNav';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
@@ -23,10 +23,10 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
   const [state, setState] = useGlobalState();
   const [showInfoPanel, setShowInfoPanel] = useState(false);
 
-  const sortedImages = useMemo(
-    () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
-    [images] // settings is not used here, but we need to include it to trigger a re-render when it changes
-  );
+  // const sortedImages = useMemo(
+  //   () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
+  //   [images] // settings is not used here, but we need to include it to trigger a re-render when it changes
+  // );
 
   useEffect(() => {
     if (currentImage) {
@@ -37,12 +37,12 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
   }, []);
 
   useEffect(() => {
-    if (currentImage && sortedImages) {
-      setState({ activeImage: sortedImages[currentImage] });
+    if (currentImage && images) {
+      setState({ activeImage: images[currentImage] });
     } else {
       setState({ activeImage: undefined });
     }
-  }, [sortedImages, currentImage, setState]);
+  }, [images, currentImage, setState]);
 
   const { activeProfile, profileNpub, title } = useProfile(settings, state.activeImage);
 
@@ -54,7 +54,7 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
         <title>{title}</title>
       </Helmet>
 
-      {sortedImages.map((image, idx) => (
+      {images.map((image, idx) => (
         <ScrollImage
           key={image.url}
           image={image}

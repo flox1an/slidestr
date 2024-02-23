@@ -34,6 +34,7 @@ import GridView from './GridView';
 import useEvents from '../ngine/hooks/useEvents';
 import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
 import Login from './Login/Login';
+import MasonryView from './MasonryView/MasonryView';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -349,13 +350,13 @@ const SlideShow = () => {
       )}
 
       {viewMode == 'grid' && (
-        <GridView
+        <MasonryView
           images={images.current}
           settings={settings}
           setCurrentImage={setImageIdx}
           currentImage={imageIdx}
           setViewMode={setViewMode}
-        ></GridView>
+        ></MasonryView>
       )}
       {viewMode == 'scroll' && (
         <ScrollView
