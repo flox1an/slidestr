@@ -7,6 +7,7 @@ import IconLink from '../Icons/IconLink';
 import FollowButton from '../FollowButton/FollowButton';
 import { nip19 } from 'nostr-tools';
 import { useGlobalState } from '../../utils/globalState';
+import React from 'react';
 
 type AvatarImageProps = {
   src?: string;

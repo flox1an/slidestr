@@ -12,6 +12,10 @@
   gap: 24px;
 }
 
+.login-dialog h2 {
+  text-align: center;
+}
+
 .login-dialog input[type='text'] {
   min-width: 20em;
   display: block;
@@ -57,4 +61,11 @@
 
 .login-dialog .login-extension button {
   height: 3em;
+}
+
+.login-dialog .close-button {
+  cursor: pointer;
+  position: absolute;
+  right:1.2em;
+  top:1em;
 }

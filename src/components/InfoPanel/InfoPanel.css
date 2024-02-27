@@ -16,6 +16,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding-top: 8px;
 }
 
 .info-panel .link svg {
@@ -80,18 +81,19 @@
 .info-panel-author {
   display: flex;
   flex-direction: row;
+  padding-left: 1em;
+  padding-right: 1em;
+
 }
 
 .info-panel-author .link {
-  padding: 1em;
+  align-self: center;
 }
 
 .info-panel-author .author-info {
   position: relative;
   left: initial;
   bottom: initial;
-  padding-left: 1em;
-  padding-top: 1em;
   display: flex;
   flex-grow: 1;
   flex-direction: row;

@@ -256,7 +256,7 @@ export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).da
 export const spamAccounts = [];
 
 export const defaultRelays = [
-  // 'ws://localhost:4869',
+  //'ws://localhost:4869',
   'wss://relay.damus.io',
   'wss://relay.nostr.band',
   'wss://relay.snort.social',

@@ -1,3 +1,4 @@
+import React from 'react';
 import { MouseEventHandler, SyntheticEvent, useMemo, useState } from 'react';
 import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
 import useProfile from '../../ngine/hooks/useProfile';

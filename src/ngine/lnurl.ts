@@ -35,7 +35,7 @@ export function useLnurlVerify(lnurlVerifyUrl?: string) {
   const [isPaid, setIsPaid] = useState(false);
 
   useEffect(() => {
-    let pollingInterval: NodeJS.Timeout | undefined;
+    let pollingInterval: ReturnType<typeof setTimeout> | undefined;
 
     const pollLnurlPayment = async () => {
       try {

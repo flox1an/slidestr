@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './Login.css';
 import { useBunkerLogin, useExtensionLogin } from '../../ngine/context';
 import { useGlobalState } from '../../utils/globalState';
+import React from 'react';
 
 type LoginProps = {
   onClose: () => void;
@@ -37,7 +38,6 @@ const Login = ({ onClose }: LoginProps) => {
     }
 
     setState({ userNPub: result.npub });
-
 };
 */
   const loginWithAddress = async () => {
@@ -63,6 +63,7 @@ const Login = ({ onClose }: LoginProps) => {
 
   return (
     <div className="login-dialog">
+      <div className="close-button" onClick={() => onClose()}>✕</div>
       <h2>Login</h2>
       <div className="login-address">
         <input

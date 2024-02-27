@@ -30,7 +30,7 @@ const useNav = () => {
       showReplies: replies,
       showReposts: reposts,
       followers,
-      list
+      list,
     };
   }, [tags, npub, searchParams, list]);
 

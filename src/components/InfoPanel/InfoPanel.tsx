@@ -1,3 +1,4 @@
+import React from 'react';
 import uniq from 'lodash/uniq';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import useNav, { Settings } from '../../utils/useNav';

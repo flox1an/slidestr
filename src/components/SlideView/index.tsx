@@ -23,7 +23,7 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
   const [paused, setPaused] = useState(false);
   const upcomingImage = useRef<NostrImage>();
   const [loading, setLoading] = useState(true);
-  const viewTimeoutHandle = useRef<NodeJS.Timeout>();
+  const viewTimeoutHandle = useRef<ReturnType<typeof setTimeout>>();
   const [activeNpub, setActiveNpub] = useState<string | undefined>(undefined);
   const [slideShowStarted, setSlideShowStarted] = useState(false);
   const [activeContent, setActiveContent] = useState<string | undefined>(undefined);

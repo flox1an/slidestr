@@ -1,10 +1,10 @@
+import React from 'react';
 import { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
 import './ScrollImage.css';
 import useOnScreen from '../../utils/useOnScreen';
 import IconMicMuted from '../Icons/IconMicMuted';
 import IconMicOn from '../Icons/IconMicOn';
-import useWindowSize from '@/utils/useWindowSize';
 
 interface ScrollImageProps {
   image: NostrImage;

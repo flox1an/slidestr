@@ -6,9 +6,8 @@ import Login from '../Login/Login';
 import { useGlobalState } from '../../utils/globalState';
 import IconUser from '../Icons/IconUser';
 import { createImgProxyUrl } from '../nostrImageDownload';
-import { Link, Outlet } from 'react-router-dom';
-import IconDots from '../Icons/IconDots';
-import IconPlay from '../Icons/IconPlay';
+import { Outlet } from 'react-router-dom';
+import React from 'react';
 
 const Layout = () => {
   const { disclaimerAccepted, setDisclaimerAccepted } = useDisclaimerState();
