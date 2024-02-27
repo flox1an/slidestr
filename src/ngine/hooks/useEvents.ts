@@ -19,7 +19,6 @@ export default function useEvents(filter: NDKFilter | NDKFilter[], opts?: Subscr
   }, [filter]);
 
   useEffect(() => {
-
     if (filter && !opts?.disable) {
       console.log('useEvents: new Subscription');
       setEvents([]);

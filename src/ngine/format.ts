@@ -1,7 +1,7 @@
-import type { Currency, Rates } from "./types";
+import type { Currency, Rates } from './types';
 
 export function formatSats(n: number) {
-  const intl = new Intl.NumberFormat("en", {
+  const intl = new Intl.NumberFormat('en', {
     minimumFractionDigits: 0,
     maximumFractionDigits: n < 1e8 ? 2 : 8,
   });
@@ -20,8 +20,8 @@ export function formatSats(n: number) {
 }
 
 export function formatSatAmount(n: number, currency: Currency, rates: Rates) {
-  const intl = new Intl.NumberFormat("en", {
-    style: "currency",
+  const intl = new Intl.NumberFormat('en', {
+    style: 'currency',
     currency,
     maximumFractionDigits: 2,
   });
@@ -34,15 +34,15 @@ export function formatRelativeTime(timestamp: number) {
   const elapsed = now - timestamp;
 
   if (elapsed < 60) {
-    return `${elapsed} second${elapsed !== 1 ? "s" : ""} ago`;
+    return `${elapsed} second${elapsed !== 1 ? 's' : ''} ago`;
   } else if (elapsed < 3600) {
     const minutes = Math.floor(elapsed / 60);
-    return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+    return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
   } else if (elapsed < 86400) {
     const hours = Math.floor(elapsed / 3600);
-    return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+    return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
   } else {
     const days = Math.floor(elapsed / 86400);
-    return `${days} day${days !== 1 ? "s" : ""} ago`;
+    return `${days} day${days !== 1 ? 's' : ''} ago`;
   }
 }

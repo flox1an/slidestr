@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { NostrEvent } from "@nostr-dev-kit/ndk";
-import { useQuery, useQueries } from "@tanstack/react-query";
-import { bech32 } from "bech32";
-import { NDKUserProfile } from "@nostr-dev-kit/ndk";
+import { useState, useEffect } from 'react';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
+import { useQuery, useQueries } from '@tanstack/react-query';
+import { bech32 } from 'bech32';
+import { NDKUserProfile } from '@nostr-dev-kit/ndk';
 
 const BECH32_MAX_BYTES = 42000;
 
@@ -16,11 +16,11 @@ interface LNURLService {
 }
 
 export function useLnurl(profile: NDKUserProfile | undefined) {
-  const key = profile?.lud16 ?? "none";
+  const key = profile?.lud16 ?? 'none';
   const query = useQuery({
-    queryKey: ["lnurl", key],
+    queryKey: ['lnurl', key],
     queryFn: async () => {
-      if (key === "none") {
+      if (key === 'none') {
         return null;
       }
       return loadService(key);
@@ -49,7 +49,7 @@ export function useLnurlVerify(lnurlVerifyUrl?: string) {
           }
         }
       } catch (error) {
-        console.error("Error polling LNURL:", error);
+        console.error('Error polling LNURL:', error);
       }
     };
 
@@ -66,9 +66,9 @@ export function useLnurlVerify(lnurlVerifyUrl?: string) {
 }
 
 export function useLnurls(profiles: NDKUserProfile[]) {
-  const queries = profiles.map((profile) => {
+  const queries = profiles.map(profile => {
     return {
-      queryKey: ["lnurl", profile.lud16],
+      queryKey: ['lnurl', profile.lud16],
       queryFn: async () => {
         if (profile.lud16) {
           return loadService(profile.lud16);
@@ -94,28 +94,21 @@ async function fetchJson<T>(url: string) {
   return null;
 }
 
-export async function loadService(
-  service?: string,
-): Promise<LNURLService | null> {
+export async function loadService(service?: string): Promise<LNURLService | null> {
   if (service) {
-    const isServiceUrl = service.toLowerCase().startsWith("lnurl");
+    const isServiceUrl = service.toLowerCase().startsWith('lnurl');
     if (isServiceUrl) {
       const serviceUrl = bech32ToText(service);
       return await fetchJson(serviceUrl);
     } else {
-      const ns = service.split("@");
+      const ns = service.split('@');
       return await fetchJson(`https://${ns[1]}/.well-known/lnurlp/${ns[0]}`);
     }
   }
   return null;
 }
 
-export async function loadInvoice(
-  payService: LNURLService,
-  amount: number,
-  comment?: string,
-  nostr?: NostrEvent,
-) {
+export async function loadInvoice(payService: LNURLService, amount: number, comment?: string, nostr?: NostrEvent) {
   if (!amount || !payService) return null;
 
   const callback = new URL(payService.callback);
@@ -123,30 +116,28 @@ export async function loadInvoice(
   if (callback.search.length > 0) {
     callback.search
       .slice(1)
-      .split("&")
-      .forEach((a) => {
-        const pSplit = a.split("=");
+      .split('&')
+      .forEach(a => {
+        const pSplit = a.split('=');
         query.set(pSplit[0], pSplit[1]);
       });
   }
-  query.set("amount", Math.floor(amount * 1000).toString());
+  query.set('amount', Math.floor(amount * 1000).toString());
   if (comment && payService?.commentAllowed) {
-    query.set("comment", comment);
+    query.set('comment', comment);
   }
   if (payService.nostrPubkey && nostr) {
-    query.set("nostr", JSON.stringify(nostr));
+    query.set('nostr', JSON.stringify(nostr));
   }
 
   const baseUrl = `${callback.protocol}//${callback.host}${callback.pathname}`;
   // @ts-ignore
-  const queryJoined = [...query.entries()]
-    .map((v) => `${v[0]}=${encodeURIComponent(v[1])}`)
-    .join("&");
+  const queryJoined = [...query.entries()].map(v => `${v[0]}=${encodeURIComponent(v[1])}`).join('&');
   try {
     const rsp = await fetch(`${baseUrl}?${queryJoined}`);
     if (rsp.ok) {
       const data = await rsp.json();
-      if (data.status === "ERROR") {
+      if (data.status === 'ERROR') {
         throw new Error(data.reason);
       } else {
         return data;

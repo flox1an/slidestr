@@ -212,7 +212,7 @@ export const NgineProvider = ({ ndk, links, children, enableFiatRates = false }:
         const profile = await user.fetchProfile({
           cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
         });
-        
+
         setSession({
           method: 'nip46',
           pubkey,

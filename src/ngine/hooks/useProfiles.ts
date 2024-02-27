@@ -1,11 +1,7 @@
-import { useState, useEffect } from "react";
-import {
-  NDKUserProfile,
-  NDKSubscriptionCacheUsage,
-  NDKKind,
-} from "@nostr-dev-kit/ndk";
+import { useState, useEffect } from 'react';
+import { NDKUserProfile, NDKSubscriptionCacheUsage, NDKKind } from '@nostr-dev-kit/ndk';
 
-import { useNDK } from "../context";
+import { useNDK } from '../context';
 
 export default function useProfiles(pubkeys: string[]) {
   const ndk = useNDK();
@@ -20,10 +16,10 @@ export default function useProfiles(pubkeys: string[]) {
         },
         {
           cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
-        },
+        }
       )
-      .then((profileSet) => {
-        return setProfiles([...profileSet].map((ev) => JSON.parse(ev.content)));
+      .then(profileSet => {
+        return setProfiles([...profileSet].map(ev => JSON.parse(ev.content)));
       });
   }, [pubkeys]);
 

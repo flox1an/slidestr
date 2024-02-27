@@ -8,7 +8,7 @@ export type HeartState = 'none' | 'liked' | 'liking';
 export type ZapState = 'none' | 'zapped' | 'zapping' | 'error';
 
 const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) => {
-  const ndk  = useNDK();
+  const ndk = useNDK();
 
   const [zapState, setZapState] = useState<ZapState>('none');
   const [heartState, setHeartState] = useState<HeartState>('none');

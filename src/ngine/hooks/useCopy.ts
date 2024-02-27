@@ -1,6 +1,6 @@
 export default function useCopy() {
   const copy = async (text: string) => {
-    if (typeof navigator === "undefined") {
+    if (typeof navigator === 'undefined') {
       return;
     }
 

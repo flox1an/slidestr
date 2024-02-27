@@ -61,10 +61,6 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
     }
   };
 
-
-  
-
-
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => nextImage(),
     onSwipedRight: () => previousImage(),

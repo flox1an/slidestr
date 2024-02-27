@@ -1,9 +1,9 @@
-import { useMemo } from "react";
-import { decode } from "light-bolt11-decoder";
-import { NDKKind } from "@nostr-dev-kit/ndk";
-import type { NDKEvent, NostrEvent } from "@nostr-dev-kit/ndk";
+import { useMemo } from 'react';
+import { decode } from 'light-bolt11-decoder';
+import { NDKKind } from '@nostr-dev-kit/ndk';
+import type { NDKEvent, NostrEvent } from '@nostr-dev-kit/ndk';
 
-import { unixNow } from "../time";
+import { unixNow } from '../time';
 
 export function makeZapRequest({
   p,
@@ -25,36 +25,31 @@ export function makeZapRequest({
     pubkey,
     kind: NDKKind.ZapRequest,
     created_at: unixNow(),
-    content: comment || "",
-    tags: [
-      ["p", p],
-      ...[event ? event.tagReference() : []],
-      ["amount", String(msats)],
-      ["relays", ...relays],
-    ],
+    content: comment || '',
+    tags: [['p', p], ...[event ? event.tagReference() : []], ['amount', String(msats)], ['relays', ...relays]],
   };
 }
 
 export function getZapRequest(zap: NDKEvent): NostrEvent | undefined {
-  let zapRequest = zap.tagValue("description");
+  let zapRequest = zap.tagValue('description');
   if (zapRequest) {
     try {
-      if (zapRequest.startsWith("%")) {
+      if (zapRequest.startsWith('%')) {
         zapRequest = decodeURIComponent(zapRequest);
       }
       return JSON.parse(zapRequest);
     } catch (e) {
-      console.warn("Invalid zap", zapRequest);
+      console.warn('Invalid zap', zapRequest);
     }
   }
 }
 
 export function getZapAmount(zap: NDKEvent): number {
   try {
-    const invoice = zap.tagValue("bolt11");
+    const invoice = zap.tagValue('bolt11');
     if (invoice) {
       const decoded = decode(invoice) as { sections: { name: string; value: string }[] };
-      const amount = decoded.sections.find(({ name }) => name === "amount");
+      const amount = decoded.sections.find(({ name }) => name === 'amount');
       return amount ? Number(amount.value) / 1000 : 0;
     }
     return 0;
@@ -83,13 +78,13 @@ export function parseZap(z: NDKEvent): ZapRequest | null {
   if (!zr) {
     return null;
   }
-  const eTag = zr ? zr.tags.find((t) => t[0] === "e") : null;
+  const eTag = zr ? zr.tags.find(t => t[0] === 'e') : null;
   const e = eTag ? eTag[1] : undefined;
-  const pTag = zr ? zr.tags.find((t) => t[0] === "p") : null;
+  const pTag = zr ? zr.tags.find(t => t[0] === 'p') : null;
   const p = pTag ? pTag[1] : z.pubkey;
-  const aTag = zr ? zr.tags.find((t) => t[0] === "a") : null;
+  const aTag = zr ? zr.tags.find(t => t[0] === 'a') : null;
   const a = aTag ? aTag[1] : undefined;
-  const relaysTag = zr ? zr.tags.find((t) => t[0] === "relays") || [] : [];
+  const relaysTag = zr ? zr.tags.find(t => t[0] === 'relays') || [] : [];
   return {
     ...getZapRequest(z),
     amount: getZapAmount(z),
@@ -103,7 +98,7 @@ export function parseZap(z: NDKEvent): ZapRequest | null {
 export function zapsSummary(zaps: NDKEvent[]): ZapsSummary {
   const zapRequests = zaps
     .map(parseZap)
-    .filter((z) => z !== null)
+    .filter(z => z !== null)
     // @ts-ignore
     .sort((a, b) => b.amount - a.amount) as ZapRequest[];
   const total = zapRequests.reduce((acc, { amount }) => {
@@ -118,15 +113,15 @@ export interface ZapSplit {
 }
 
 export function getZapSplits(ev: NDKEvent): ZapSplit[] {
-  const zapTags = ev.getMatchingTags("zap");
+  const zapTags = ev.getMatchingTags('zap');
   return zapTagsToSplits(zapTags);
 }
 
 export function zapTagsToSplits(zapTags: string[][]): ZapSplit[] {
   const totalWeight = zapTags.reduce((acc, t) => {
-    return acc + Number(t[3] ?? "");
+    return acc + Number(t[3] ?? '');
   }, 0);
-  return zapTags.map((t) => {
+  return zapTags.map(t => {
     const [, pubkey, , weight] = t;
     const percentage = (Number(weight) / totalWeight) * 100;
     return { pubkey, percentage };
@@ -154,7 +149,7 @@ export function useRanking(zaps: NDKEvent[]): Rank[] {
 
         return result;
       },
-      {} as Record<string, number>,
+      {} as Record<string, number>
     );
   }, [zapRequests]);
 
@@ -163,7 +158,7 @@ export function useRanking(zaps: NDKEvent[]): Rank[] {
       .sort((a, b) => {
         return b[1] - a[1];
       })
-      .map((e) => {
+      .map(e => {
         return { pubkey: e[0], amount: e[1] };
       });
   }, [byAmount]);

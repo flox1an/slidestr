@@ -285,7 +285,7 @@ const SlideShow = () => {
   const toggleViewMode = () => {
     setViewMode(view => (view == 'grid' ? 'scroll' : 'grid'));
   };
-  
+
   return (
     <>
       {showSettings && <Settings onClose={() => setShowSettings(false)} setViewMode={setViewMode}></Settings>}
@@ -295,8 +295,7 @@ const SlideShow = () => {
           onClick={() => {
             if (viewMode == 'scroll' || viewMode == 'slideshow') {
               setViewMode('grid');
-            }
-            else navigate('/');
+            } else navigate('/');
           }}
         >
           ✕

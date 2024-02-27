@@ -81,7 +81,6 @@
   }
 }
 
-
 .slide {
   position: fixed;
   top: 0;
@@ -111,7 +110,6 @@
 .slide.paused {
   animation-play-state: paused;
 }
-
 
 .bottom-controls {
   position: fixed;

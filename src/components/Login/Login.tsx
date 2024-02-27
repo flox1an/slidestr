@@ -63,7 +63,9 @@ const Login = ({ onClose }: LoginProps) => {
 
   return (
     <div className="login-dialog">
-      <div className="close-button" onClick={() => onClose()}>✕</div>
+      <div className="close-button" onClick={() => onClose()}>
+        ✕
+      </div>
       <h2>Login</h2>
       <div className="login-address">
         <input

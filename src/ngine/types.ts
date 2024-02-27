@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import type { NDKKind, NDKEvent } from "@nostr-dev-kit/ndk";
+import type { ReactNode } from 'react';
+import type { NDKKind, NDKEvent } from '@nostr-dev-kit/ndk';
 
 // Reactions
 
@@ -36,7 +36,7 @@ export interface Links {
 // Sessions
 
 // todo: nip05 with nip46
-export type LoginMethod = "nip07" | "nip46" | "npub" | "nsec";
+export type LoginMethod = 'nip07' | 'nip46' | 'npub' | 'nsec';
 
 export interface Session {
   method: LoginMethod;
@@ -68,9 +68,9 @@ export type Tags = Tag[];
 
 // Money
 
-export type RateSymbol = "BTCUSD" | "BTCEUR";
-export type FiatCurrency = "USD" | "EUR";
-export type Currency = "BTC" | "USD" | "EUR";
+export type RateSymbol = 'BTCUSD' | 'BTCEUR';
+export type FiatCurrency = 'USD' | 'EUR';
+export type Currency = 'BTC' | 'USD' | 'EUR';
 
 export interface Rates {
   time: number;

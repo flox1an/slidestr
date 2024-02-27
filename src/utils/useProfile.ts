@@ -15,7 +15,7 @@ const useProfile = (settings: Settings, activeImage?: NostrImage) => {
 
   const pubKeyHex = profileNpub ? (nip19.decode(profileNpub).data as string) : '';
   const activeProfile = useProfileNgine(pubKeyHex, NDKSubscriptionCacheUsage.ONLY_RELAY);
-  
+
   // console.log({profileNpub, pubKeyHex, activeProfile})
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const useProfile = (settings: Settings, activeImage?: NostrImage) => {
     activeProfile,
     title,
     profileNpub,
-    pubKeyHex
+    pubKeyHex,
   };
 };
 

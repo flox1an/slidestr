@@ -17,7 +17,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const { nav, currentSettings } = useNav();
 
   const tagClick = (tag: string) => {
-    nav({ ...currentSettings, tags: [tag], npubs:[], list: undefined });
+    nav({ ...currentSettings, tags: [tag], npubs: [], list: undefined });
   };
   const profileClick = (npub: string) => {
     nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined });

@@ -49,4 +49,9 @@
 .footer {
   padding: 2em;
   text-align: center;
+  color: #888;
+}
+
+.footer a {
+  color: #ccc;
 }

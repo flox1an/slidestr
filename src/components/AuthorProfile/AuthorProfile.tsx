@@ -28,8 +28,8 @@ const AuthorProfile = ({
 }: AvatarImageProps) => {
   const avatarLoaded = useImageLoaded(src);
   const { nav, currentSettings } = useNav();
-  const [ state ] = useGlobalState();
-  
+  const [state] = useGlobalState();
+
   const followButtonAvailable = followButton && state.userNPub;
 
   return (
@@ -55,7 +55,9 @@ const AuthorProfile = ({
         {author}
       </span>
 
-      {followButtonAvailable && npub && <FollowButton pubkey={nip19.decode(npub).data as string} className="btn btn-primary" />}
+      {followButtonAvailable && npub && (
+        <FollowButton pubkey={nip19.decode(npub).data as string} className="btn btn-primary" />
+      )}
 
       {externalLink && npub && (
         <a target="_blank" href={`https://nostrapp.link/#${npub}`}>
