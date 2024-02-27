@@ -1,8 +1,9 @@
-import { MouseEventHandler, SyntheticEvent, useState } from 'react';
+import { MouseEventHandler, SyntheticEvent, useMemo, useState } from 'react';
 import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
 import useProfile from '../../ngine/hooks/useProfile';
 import useNav from '../../utils/useNav';
 import LazyLoad from 'react-lazy-load';
+import uniq from 'lodash/uniq';
 
 interface MasonryImageProps {
   image: NostrImage;
@@ -13,16 +14,23 @@ interface MasonryImageProps {
 const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const [loaded, setLoaded] = useState(false);
   const { nav, currentSettings } = useNav();
+  console.log('MasonryImage');
 
   const tagClick = (tag: string) => {
-    nav({ ...currentSettings, tags: [tag] });
+    nav({ ...currentSettings, tags: [tag], npubs:[], list: undefined });
   };
   const profileClick = (npub: string) => {
-    nav({ ...currentSettings, tags: [], npubs: [npub] });
+    nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined });
   };
 
   const mediaIsVideo = isVideo(image.url);
   const profile = useProfile(image.authorId);
+
+  const showAuthor = currentSettings.npubs == undefined || currentSettings.npubs.length != 1; // if we are looking at a single profile, don't show the author
+
+  const description = image.content && image.content?.substring(0, 60) + (image.content.length > 60 ? ' ... ' : ' ');
+  const showTags = useMemo(() => uniq(image.tags).slice(0, 5), [image.tags]);
+
   return (
     <LazyLoad>
       <>
@@ -55,25 +63,22 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
             ></img>
           )}
         </a>
-        <div style={{ display: 'block', lineHeight: '1.4em', paddingBottom: '.75em', paddingTop: '.5em' }}>
-          {currentSettings.npubs.length != 1 ? (
-           <div style={{  paddingBottom: '.25em' }}>
-              <a onClick={() => profileClick(image.author)}>{profile?.displayName || profile?.name}</a> 
+        {(showAuthor || description || showTags.length > 0) && (
+          <div style={{ display: 'block', lineHeight: '1.4em', paddingBottom: '.5em', paddingTop: '.5em' }}>
+            {showAuthor && (
+              <div style={{ paddingBottom: '.25em' }}>
+                <a onClick={() => profileClick(image.author)}>{profile?.displayName || profile?.name}</a>
               </div>
-           
-          ) : (
-            ''
-          )}
+            )}
+            {description}
 
-          {image.content?.substring(0, 60)}
-          {image.content && image.content?.length > 60 ? '... ' : ' '}
-
-          {image.tags.slice(0, 5).map(t => (
-            <>
-              <a onClick={() => tagClick(t)}>#{t}</a>{' '}
-            </>
-          ))}
-        </div>
+            {showTags.map(t => (
+              <>
+                <a onClick={() => tagClick(t)}>#{t}</a>{' '}
+              </>
+            ))}
+          </div>
+        )}
       </>
     </LazyLoad>
   );

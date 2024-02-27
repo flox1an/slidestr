@@ -9,3 +9,4 @@ export function convertFiatToSats(amt: string, rates: Rates): string {
   const inFiat = Number(amt);
   return String(((inFiat / rates.ask) * 1e8).toFixed(0));
 }
+

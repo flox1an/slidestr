@@ -11,6 +11,10 @@
     gap: 8px;
     align-items: center;
   }
+
+  .author-info a {
+    line-height: 1em;
+  }
   
   .author-info a svg {
     height: 24px;

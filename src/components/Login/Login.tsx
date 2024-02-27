@@ -52,6 +52,7 @@ const Login = ({ onClose }: LoginProps) => {
 
   const loginWithExtension = async () => {
     const user = await extensionLogin();
+    console.log(user);
     if (user) {
       setState({ userNPub: user.npub, profile: user.profile });
       onClose();
@@ -69,6 +70,8 @@ const Login = ({ onClose }: LoginProps) => {
           placeholder="Nostr Address / Bunker URL"
           value={address}
           onChange={e => setAddress(e.target.value)}
+          onKeyDown={e => e.stopPropagation()}
+          onKeyUp={e => e.stopPropagation()}
         ></input>
         <button onClick={() => loginWithAddress()}>Login</button>
       </div>

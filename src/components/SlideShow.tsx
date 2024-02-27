@@ -8,7 +8,6 @@ import {
   isVideo,
   prepareContent,
   Post,
-  createImgProxyUrl,
   isReply,
   isAdultRelated,
 } from './nostrImageDownload';
@@ -20,8 +19,6 @@ import uniqBy from 'lodash/uniqBy';
 import AdultContentInfo from './AdultContentInfo';
 import useNav from '../utils/useNav';
 import { useGlobalState } from '../utils/globalState';
-import useAutoLogin from '../utils/useAutoLogin';
-import IconUser from './Icons/IconUser';
 import ScrollView from './ScrollView/ScrollView';
 import IconPlay from './Icons/IconPlay';
 import IconGrid from './Icons/IconGrid';
@@ -30,11 +27,10 @@ import useZapsAndReations from '../utils/useZapAndReaction';
 import IconHeart from './Icons/IconHeart';
 import IconBolt from './Icons/IconBolt';
 import IconSearch from './Icons/IconSearch';
-import GridView from './GridView';
 import useEvents from '../ngine/hooks/useEvents';
 import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
-import Login from './Login/Login';
 import MasonryView from './MasonryView/MasonryView';
+import useAuthorsFromList from '../utils/useAuthorsFromList';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -78,18 +74,18 @@ const SlideShow = () => {
   const images = useRef<NostrImage[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [showSettings, setShowSettings] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
 
-  const { currentSettings: settings } = useNav();
-  const [state, setState] = useGlobalState();
-  const { setAutoLogin } = useAutoLogin();
+  const { nav, currentSettings: settings } = useNav();
+  const [state] = useGlobalState();
   const [imageIdx, setImageIdx] = useState<number | undefined>();
   const { zapClick, heartClick, zapState, heartState } = useZapsAndReations(state.activeImage, state.userNPub);
 
-  const { events } = useEvents(buildFilter(settings.tags, settings.npubs, settings.showReposts), {
+  const listAuthors = useAuthorsFromList(settings.list);
+  const authorsToQuery = listAuthors ? listAuthors : settings.npubs.map(p => nip19.decode(p).data as string);
+  //const authorsToQuery = settings.npubs.map(p => nip19.decode(p).data as string);
+  const { events } = useEvents(buildFilter(settings.tags, authorsToQuery, settings.showReposts), {
     cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
   });
-
 
   useEffect(() => {
     setPosts(
@@ -230,6 +226,9 @@ const SlideShow = () => {
     if (event.key.toLowerCase() === 'g') {
       setViewMode('grid');
     }
+    if (event.key.toLowerCase() === 'h') {
+      nav({ ...settings, npubs: [], tags: [] });
+    }
     if (event.key.toLowerCase() === 'x') {
       setViewMode('scroll');
     }
@@ -278,26 +277,9 @@ const SlideShow = () => {
     setViewMode(view => (view == 'grid' ? 'scroll' : 'grid'));
   };
 
-  const onLogout = () => {
-    setAutoLogin(false);
-    setState({ userNPub: undefined, profile: undefined });
-  };
   return (
     <>
       {showSettings && <Settings onClose={() => setShowSettings(false)} setViewMode={setViewMode}></Settings>}
-      {showLogin && <Login onClose={() => setShowLogin(false)}/>}
-
-      <div className="top-controls">
-        {state.userNPub && state.profile ? (
-          state.profile.image && (
-            <img className="profile" onClick={onLogout} src={createImgProxyUrl(state.profile.image, 80, 80)} />
-          )
-        ) : (
-          <button onClick={() => setShowLogin(true)} className="login">
-            <IconUser></IconUser>
-          </button>
-        )}
-      </div>
 
       {state.showNavButtons && (
         <div className="bottom-controls">

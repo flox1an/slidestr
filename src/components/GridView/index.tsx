@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import './GridView.css';
 import GridImage from './GridImage';
@@ -19,14 +19,8 @@ type GridViewProps = {
 };
 
 const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: GridViewProps) => {
-  const { activeProfile, title } = useProfile(settings);
+  const { activeProfile, title, profileNpub } = useProfile(settings);
   const [_, setState] = useGlobalState();
-
-  //const sortedImages = useMemo(
-  //  () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
-  //  [images, settings] // settings is not used here, but we need to include it to trigger a re-render when it changes
-  //);
-
   const showNextImage = () => {
     setCurrentImage(idx => (idx !== undefined ? idx + 1 : 0));
   };
@@ -79,18 +73,14 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      {/*
-      {currentImage !== undefined ? (
-        <DetailsView images={sortedImages} currentImage={currentImage} setCurrentImage={setCurrentImage} />
-      ) : null}
-       */}
+
       {(activeProfile || settings.tags.length == 1) && (
         <div className="profile-header">
           {activeProfile ? (
             <AuthorProfile
               src={urlFix(activeProfile.image || '')}
               author={activeProfile.displayName || activeProfile.name}
-              npub={activeProfile.npub}
+              npub={profileNpub}
               setViewMode={setViewMode}
               followButton
               externalLink

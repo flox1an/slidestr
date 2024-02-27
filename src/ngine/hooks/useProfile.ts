@@ -14,6 +14,7 @@ export default function useProfile(
       const user = ndk.getUser({ hexpubkey: pubkey });
       return user.fetchProfile({
         cacheUsage,
+        groupable: true,
       });
     },
   });

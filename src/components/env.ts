@@ -7,10 +7,25 @@ type Topic = {
 };
 
 export const topics: Dictionary<Topic> = {
-  art: { tags: ['art', 'artstr', 'beautiful', 'colorful', 'psychedelic'] },
+  art: {
+    tags: [
+      'art',
+      'artstr',
+      'beautiful',
+      'colorful',
+      'digitalart',
+      'fediart',
+      'fineart',
+      'mastoart',
+      'mastodonart',
+      'painting',
+      'psychedelic',
+      'zeichnen',
+    ],
+  },
   bitcoin: { tags: ['bitcoin', 'plebchain'] },
-  nostr: { tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom'] },
-  animals: { tags: ['catstr', 'dogstr', 'animal', 'animals'] },
+  nostr: { tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom', 'purple'] },
+  animals: { tags: ['catstr', 'dogstr', 'animal', 'animals', 'bird', 'birds', 'pets'] },
   photography: {
     tags: [
       'naturephotography',
@@ -19,8 +34,9 @@ export const topics: Dictionary<Topic> = {
       'photos',
       'photostr',
       'picoftheday',
-      'streetphotography',
       'picstr',
+      'streetphotography',
+      'fujifilm'
     ],
   },
   lifestyle: {
@@ -240,7 +256,8 @@ export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).da
 export const spamAccounts = [];
 
 export const defaultRelays = [
-  'wss://relay.damus.io',
+ // 'ws://localhost:4869',
+ 'wss://relay.damus.io',
   'wss://relay.nostr.band',
   'wss://relay.snort.social',
   'wss://nos.lol',
@@ -248,4 +265,5 @@ export const defaultRelays = [
   'wss://relay.primal.net',
   'wss://relay.mostr.pub',
   'wss://purplepag.es/', // needed for user profiles
+  
 ];

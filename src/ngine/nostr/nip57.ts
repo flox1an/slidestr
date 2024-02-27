@@ -53,7 +53,7 @@ export function getZapAmount(zap: NDKEvent): number {
   try {
     const invoice = zap.tagValue("bolt11");
     if (invoice) {
-      const decoded = decode(invoice);
+      const decoded = decode(invoice) as { sections: { name: string; value: string }[] };
       const amount = decoded.sections.find(({ name }) => name === "amount");
       return amount ? Number(amount.value) / 1000 : 0;
     }

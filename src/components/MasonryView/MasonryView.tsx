@@ -9,6 +9,7 @@ import useProfile from '../../utils/useProfile';
 import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
 import MasonryImage from './MasonryImage';
+import useWindowSize from '../../utils/useWindowSize';
 
 type MasonryViewProps = {
   settings: Settings;
@@ -19,18 +20,20 @@ type MasonryViewProps = {
 };
 
 type MImage = NostrImage & {
-  orgIndex: number
-}
+  orgIndex: number;
+};
+
 
 const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: MasonryViewProps) => {
-  const { activeProfile, title } = useProfile(settings);
+  const { activeProfile, title, profileNpub } = useProfile(settings);
   const [_, setState] = useGlobalState();
-
+  const {width = 800} = useWindowSize();
+console.log('MasonryView', width);
+  const columnCount = Math.min(7, Math.floor(width/280));
   const sortedImages = useMemo(
     () => {
-      const columnCount = 5;
-
-       //const sorted = images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)); // sort by timestamp descending
+      console.log('Updating sortedImages');
+      //const sorted = images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)); // sort by timestamp descending
 
       // Initialize an array of arrays to hold the columns.
       const columns: MImage[][] = Array.from({ length: columnCount }, () => []);
@@ -44,7 +47,7 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
         // const columnIndex = columnHeights.indexOf(Math.min(...columnHeights));
 
         // Add the image to the selected column.
-        columns[columnIndex].push({orgIndex: idx, ...image});
+        columns[columnIndex].push({ orgIndex: idx, ...image });
 
         // Update the total height of the selected column.
         //columnHeights[columnIndex] += image.height;
@@ -55,9 +58,9 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
       return columns;
     },
 
-    [images] // settings is not used here, but we need to include it to trigger a re-render when it changes
+    [images, columnCount] // settings is not used here, but we need to include it to trigger a re-render when it changes
   );
-
+  // console.log(sortedImages);
   const showNextImage = () => {
     setCurrentImage(idx => (idx !== undefined ? idx + 1 : 0));
   };
@@ -67,7 +70,7 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
   };
 
   const onKeyDown = (event: KeyboardEvent) => {
-    console.log(event);
+    //console.log(event);
 
     if (event.key === 'ArrowRight') {
       showNextImage();
@@ -106,22 +109,21 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
   }, []);
 
   return (
-    <div className="gridview" {...swipeHandlers}>
+    <div
+      className="gridview"
+      style={{ gridTemplateColumns: `repeat(${columnCount}, calc(100%/${columnCount} - 12px))` }}
+      {...swipeHandlers}
+    >
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      {/*
-      {currentImage !== undefined ? (
-        <DetailsView images={sortedImages} currentImage={currentImage} setCurrentImage={setCurrentImage} />
-      ) : null}
-       */}
       {(activeProfile || settings.tags.length == 1) && (
         <div className="profile-header">
           {activeProfile ? (
             <AuthorProfile
               src={urlFix(activeProfile.image || '')}
               author={activeProfile.displayName || activeProfile.name}
-              npub={activeProfile.npub}
+              npub={profileNpub}
               setViewMode={setViewMode}
               followButton
               externalLink
@@ -135,7 +137,7 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
         <div className="imagegrid">
           {sortedImages.map((columnImages, colIdx) => (
             <div className="column" key={colIdx}>
-              {columnImages.map((image) => (
+              {columnImages.map(image => (
                 <MasonryImage
                   index={image.orgIndex}
                   key={image.url}

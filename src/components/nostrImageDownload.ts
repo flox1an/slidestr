@@ -1,5 +1,4 @@
 import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
-import { nip19 } from 'nostr-tools';
 import { adultContentTags, adultPublicKeys, mixedAdultNPubs } from './env';
 import uniq from 'lodash/uniq';
 
@@ -21,18 +20,18 @@ export type NostrImage = {
   post: Post;
 };
 
-export const buildFilter = (tags: string[], npubs: string[], withReposts = false) => {
+export const buildFilter = (tags: string[], authors: string[], withReposts = false) => {
   const filter: NDKFilter = {
     kinds: [1, 1063] as number[],
-    limit: npubs.length > 0 ? 1000 : 500,
+    limit: authors.length > 0 ? 100 : 50,
   };
 
   if (withReposts) {
     filter.kinds?.push(6);
   }
 
-  if (npubs && npubs.length > 0) {
-    filter.authors = npubs.map(p => nip19.decode(p).data as string);
+  if (authors && authors.length > 0) {
+    filter.authors = authors
   } else {
     if (tags && tags.length > 0) {
       filter['#t'] = tags;

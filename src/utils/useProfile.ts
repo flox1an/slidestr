@@ -32,6 +32,7 @@ const useProfile = (settings: Settings, activeImage?: NostrImage) => {
     activeProfile,
     title,
     profileNpub,
+    pubKeyHex
   };
 };
 

@@ -3,7 +3,7 @@
   flex-direction: column;
   padding: 2em;
   border-radius: 20px;
-  background-color: #111;
+  background-color: #222;
   z-index: 200;
   position: fixed;
   top: 50%;
@@ -16,15 +16,27 @@
   min-width: 20em;
   display: block;
   width: 100%;
-  background-color: #111;
+  background-color: #444;
+  color: #fff;
   border-radius: 8px;
-  border: 1px solid #222;
+  border: 0px;
   height: 3em;
   font-family: unset;
   font-size: unset;
   padding: 0.1em;
-  padding-left: 0.5em;
+  padding-left: 1em;
   box-sizing: border-box;
+}
+
+.login-dialog input[type='text']::placeholder {
+  color: #888;
+  opacity: 1;
+}
+
+.login-dialog input[type='text']:active,
+.login-dialog input[type='text']:focus {
+  border: 0px;
+  outline: 0px;
 }
 
 .login-dialog .login-address {

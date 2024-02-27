@@ -8,10 +8,11 @@ export type Settings = {
   tags: string[];
   npubs: string[];
   followers: boolean;
+  list?: string;
 };
 
 const useNav = () => {
-  const { tags, npub } = useParams();
+  const { tags, npub, list } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -20,11 +21,6 @@ const useNav = () => {
     const replies = searchParams.get('replies') === 'true';
     const reposts = searchParams.get('reposts') === 'true';
     const followers = window.location.pathname.startsWith('/followers');
-
-    console.log(
-      `tags = ${tags}, npub = ${npub}, adult = ${adult}, replies = ${replies}, reposts = ${reposts}, followers = ${followers}`
-    );
-
     const useTags = tags?.split(',') || [];
 
     return {
@@ -34,8 +30,9 @@ const useNav = () => {
       showReplies: replies,
       showReposts: reposts,
       followers,
+      list
     };
-  }, [tags, npub, searchParams]);
+  }, [tags, npub, searchParams, list]);
 
   const nav = (settings: Settings) => {
     const validTags = settings.tags.filter(t => t.length > 0);
@@ -53,9 +50,10 @@ const useNav = () => {
     }
 
     const postfix = searchParams.length > 0 ? `?${searchParams.join('&')}` : '';
-
     if (settings.followers) {
       navigate(`/followers${postfix}`);
+    } else if (settings.list !== undefined) {
+      navigate(`/list/${settings.list}${postfix}`);
     } else if (validTags.length > 0) {
       navigate(`/tags/${validTags.join('%2C')}${postfix}`);
     } else if (validNpubs.length == 1) {

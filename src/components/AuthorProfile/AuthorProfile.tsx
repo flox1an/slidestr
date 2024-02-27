@@ -4,6 +4,9 @@ import { createImgProxyUrl } from '../nostrImageDownload';
 import useNav from '../../utils/useNav';
 import { ViewMode } from '../SlideShow';
 import IconLink from '../Icons/IconLink';
+import FollowButton from '../FollowButton/FollowButton';
+import { nip19 } from 'nostr-tools';
+import { useGlobalState } from '../../utils/globalState';
 
 type AvatarImageProps = {
   src?: string;
@@ -24,28 +27,34 @@ const AuthorProfile = ({
 }: AvatarImageProps) => {
   const avatarLoaded = useImageLoaded(src);
   const { nav, currentSettings } = useNav();
+  const [ state ] = useGlobalState();
+  
+  const followButtonAvailable = followButton && state.userNPub;
+
   return (
-    <div
-      className="author-info"
-      onClick={() => {
-        setViewMode && setViewMode('grid');
-        npub && nav({ ...currentSettings, tags: [], npubs: [npub] });
-      }}
-    >
+    <div className="author-info">
       <div
         className="author-image"
+        onClick={() => {
+          setViewMode && setViewMode('grid');
+          npub && nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined });
+        }}
         style={{
           backgroundImage: avatarLoaded && src ? `url(${createImgProxyUrl(src, 80, 80)})` : 'none',
         }}
       ></div>
 
-      <span className="author-name">{author}</span>
+      <span
+        className="author-name"
+        onClick={() => {
+          setViewMode && setViewMode('grid');
+          npub && nav({ ...currentSettings, tags: [], npubs: [npub] });
+        }}
+      >
+        {author}
+      </span>
 
-      {followButton && (
-        <button type="submit" className="btn btn-primary" onClick={() => {}}>
-          Follow
-        </button>
-      )}
+      {followButtonAvailable && npub && <FollowButton pubkey={nip19.decode(npub).data as string} className="btn btn-primary" />}
 
       {externalLink && npub && (
         <a target="_blank" href={`https://nostrapp.link/#${npub}`}>

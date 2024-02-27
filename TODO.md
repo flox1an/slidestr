@@ -4,15 +4,16 @@
 # delete the events when the filter changes
 
 - Improve Login dialog
-- Fix key listeners when text input is opened
 - Fix/Test zaps
+- repair auto login
+- store NIP46 secret key
 - Reimplement Likes/Zaps based in ngine code
 - Investigate profile caching
-- fix build errors
-- build masonary view for desktop
+- build masonary view only for desktop / window->columns
 - move settings dialog to main start screen
 - replace search icon with nav back button
 - record demo explaination video
+- global can not be accessed any more
 
 - hashtag view (single hasttag), header
 - masonry, mit subtitles (user displayname, tags (most imporant), desc?, date) (ggf. nur desktop)
