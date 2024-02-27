@@ -45,6 +45,12 @@ const Home = () => {
             </div>
           </>
         )}
+        <div className="footer">
+          Made with 💜 by{' '}
+          <a href="https://njump.me/npub1klr0dy2ul2dx9llk58czvpx73rprcmrvd5dc7ck8esg8f8es06qs427gxc" target="blank">
+            Florian
+          </a>
+        </div>
       </div>
     </div>
   );

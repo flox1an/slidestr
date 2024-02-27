@@ -45,3 +45,8 @@
   cursor: pointer;
   overflow: visible;
 }
+
+.footer {
+  padding: 2em;
+  text-align: center;
+}

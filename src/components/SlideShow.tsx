@@ -321,12 +321,7 @@ const SlideShow = () => {
             </>
           )}
 
-          {(viewMode == 'scroll' || viewMode == 'slideshow') && (
-            <button onClick={() => toggleViewMode()} title={'view grid (G)'}>
-              <IconGrid />
-            </button>
-          )}
-          {viewMode == 'grid' && (
+          {viewMode == 'grid' && !isMobile && (
             <button
               onClick={e => {
                 e.stopPropagation();
