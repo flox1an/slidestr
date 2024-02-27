@@ -4,6 +4,7 @@ import './ScrollImage.css';
 import useOnScreen from '../../utils/useOnScreen';
 import IconMicMuted from '../Icons/IconMicMuted';
 import IconMicOn from '../Icons/IconMicOn';
+import useWindowSize from '@/utils/useWindowSize';
 
 interface ScrollImageProps {
   image: NostrImage;
@@ -20,7 +21,11 @@ const ScrollImage = ({ image, currentImage, setCurrentImage, index }: ScrollImag
   const isVisible = useOnScreen(containerRef);
   const nearCurrentImage = useMemo(() => Math.abs((currentImage || 0) - index) < 3, [currentImage, index]);
   const mediaIsVideo = useMemo(() => isVideo(image.url), [image.url]);
-  const currentImageProxyUrl = image.url // useMemo(() => createImgProxyUrl(image.url, 800, -1), [image.url]); // TODO only use proxy for smaller displays and mobile
+
+  const currentImageProxyUrl = useMemo(
+    () => (isMobile ? createImgProxyUrl(image.url, 800, -1) : image.url),
+    [image.url, isMobile]
+  );
 
   /*
   const toggleVideoPause = (video: HTMLVideoElement | null) => {

@@ -1,9 +1,15 @@
+.home-container {
+  flex-direction: row;
+  display: flex;
+  width: 100dvw;
+  justify-content: center;
+}
+
 .home {
-    box-sizing: border-box;
-    width: 100vw;
-    max-width: 50em;
-  padding: 2em;
-  margin: auto;
+  box-sizing: border-box;
+  padding: 1em;
+  max-width: 40em;
+  width: 100%;
 }
 
 .home .topics {

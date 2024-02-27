@@ -14,7 +14,6 @@ interface MasonryImageProps {
 const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const [loaded, setLoaded] = useState(false);
   const { nav, currentSettings } = useNav();
-  console.log('MasonryImage');
 
   const tagClick = (tag: string) => {
     nav({ ...currentSettings, tags: [tag], npubs:[], list: undefined });
@@ -37,7 +36,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
         <a id={'g' + index}>
           {mediaIsVideo ? (
             <video
-              className={`image ${loaded ? 'show' : ''}`}
+              className={`mason-image ${loaded ? 'show' : ''}`}
               data-node-id={image.noteId}
               key={image.url}
               controls={false}
@@ -54,7 +53,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
                 console.log('not found: ', e.currentTarget.src);
                 e.currentTarget.src = '/notfound.png';
               }}
-              className={`image ${loaded ? 'show' : ''}`}
+              className={`mason-image ${loaded ? 'show' : ''}`}
               onLoad={() => setLoaded(true)}
               loading="lazy"
               key={image.url}

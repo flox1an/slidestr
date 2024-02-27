@@ -1,5 +1,5 @@
 import './SlideShow.css';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   NostrImage,
   buildFilter,
@@ -31,6 +31,9 @@ import useEvents from '../ngine/hooks/useEvents';
 import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
 import MasonryView from './MasonryView/MasonryView';
 import useAuthorsFromList from '../utils/useAuthorsFromList';
+import GridView from './GridView';
+import useWindowSize from '../utils/useWindowSize';
+import { Link, useNavigate } from 'react-router-dom';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -70,6 +73,9 @@ FEATURES:
 export type ViewMode = 'grid' | 'slideshow' | 'scroll';
 
 const SlideShow = () => {
+  const { width } = useWindowSize();
+  const isMobile = useMemo(() => width && width <= 768, [width]);
+
   const [posts, setPosts] = useState<Post[]>([]);
   const images = useRef<NostrImage[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -79,10 +85,12 @@ const SlideShow = () => {
   const [state] = useGlobalState();
   const [imageIdx, setImageIdx] = useState<number | undefined>();
   const { zapClick, heartClick, zapState, heartState } = useZapsAndReations(state.activeImage, state.userNPub);
+  const navigate = useNavigate();
 
   const listAuthors = useAuthorsFromList(settings.list);
-  const authorsToQuery = listAuthors ? listAuthors : settings.npubs.map(p => nip19.decode(p).data as string);
-  //const authorsToQuery = settings.npubs.map(p => nip19.decode(p).data as string);
+  const authorsToQuery =
+    listAuthors && listAuthors.length > 0 ? listAuthors : settings.npubs.map(p => nip19.decode(p).data as string);
+
   const { events } = useEvents(buildFilter(settings.tags, authorsToQuery, settings.showReposts), {
     cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
   });
@@ -216,6 +224,7 @@ const SlideShow = () => {
       }),
       'url'
     );
+    // console.log(images.current);
   }, [posts]);
 
   const onKeyDown = (event: KeyboardEvent) => {
@@ -276,10 +285,23 @@ const SlideShow = () => {
   const toggleViewMode = () => {
     setViewMode(view => (view == 'grid' ? 'scroll' : 'grid'));
   };
-
+  
   return (
     <>
       {showSettings && <Settings onClose={() => setShowSettings(false)} setViewMode={setViewMode}></Settings>}
+      <div className="top-left-controls">
+        <a
+          className="back-button"
+          onClick={() => {
+            if (viewMode == 'scroll' || viewMode == 'slideshow') {
+              setViewMode('grid');
+            }
+            else navigate('/');
+          }}
+        >
+          ✕
+        </a>
+      </div>
 
       {state.showNavButtons && (
         <div className="bottom-controls">
@@ -331,15 +353,24 @@ const SlideShow = () => {
         </div>
       )}
 
-      {viewMode == 'grid' && (
-        <MasonryView
-          images={images.current}
-          settings={settings}
-          setCurrentImage={setImageIdx}
-          currentImage={imageIdx}
-          setViewMode={setViewMode}
-        ></MasonryView>
-      )}
+      {viewMode == 'grid' &&
+        (isMobile ? (
+          <GridView
+            images={images.current}
+            settings={settings}
+            setCurrentImage={setImageIdx}
+            currentImage={imageIdx}
+            setViewMode={setViewMode}
+          ></GridView>
+        ) : (
+          <MasonryView
+            images={images.current}
+            settings={settings}
+            setCurrentImage={setImageIdx}
+            currentImage={imageIdx}
+            setViewMode={setViewMode}
+          ></MasonryView>
+        ))}
       {viewMode == 'scroll' && (
         <ScrollView
           images={images.current}

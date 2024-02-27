@@ -240,3 +240,25 @@
     top: 2em;
   }
 }
+
+.top-left-controls {
+  position: absolute;
+  top: 2em;
+  left: 2em;
+  z-index: 200;
+}
+
+.back-button {
+  display: block;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 3px 10px 3px 10px;
+  color: #ddd;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+}

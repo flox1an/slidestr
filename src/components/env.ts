@@ -1,4 +1,3 @@
-import { Dictionary } from 'lodash';
 import { nip19 } from 'nostr-tools';
 
 export const appName = 'slidestr.net';
@@ -6,7 +5,7 @@ type Topic = {
   tags: string[];
 };
 
-export const topics: Dictionary<Topic> = {
+export const topics: { [key: string]: Topic } = {
   art: {
     tags: [
       'art',
@@ -36,7 +35,7 @@ export const topics: Dictionary<Topic> = {
       'picoftheday',
       'picstr',
       'streetphotography',
-      'fujifilm'
+      'fujifilm',
     ],
   },
   lifestyle: {
@@ -232,6 +231,7 @@ export const adultNPubs = [
   'npub1yk6fz5gx6m79g3xvxk3ca9u87mh8t73w2u2tzvdmrqwauvsqtsnsq6rcqm', // bloodywing
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
+  'npub1f3n7hq0a6vyfsjrv9vfdwtasa0g98ve96he68rxsvq9x6cl8tvxqmv6ca4', // Lady Sex (nude anime)
 
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
@@ -256,8 +256,8 @@ export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).da
 export const spamAccounts = [];
 
 export const defaultRelays = [
- // 'ws://localhost:4869',
- 'wss://relay.damus.io',
+  // 'ws://localhost:4869',
+  'wss://relay.damus.io',
   'wss://relay.nostr.band',
   'wss://relay.snort.social',
   'wss://nos.lol',
@@ -265,5 +265,4 @@ export const defaultRelays = [
   'wss://relay.primal.net',
   'wss://relay.mostr.pub',
   'wss://purplepag.es/', // needed for user profiles
-  
 ];

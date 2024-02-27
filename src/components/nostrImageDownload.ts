@@ -23,7 +23,7 @@ export type NostrImage = {
 export const buildFilter = (tags: string[], authors: string[], withReposts = false) => {
   const filter: NDKFilter = {
     kinds: [1, 1063] as number[],
-    limit: authors.length > 0 ? 100 : 50,
+    limit: authors.length > 0 ? 1000 : 500,
   };
 
   if (withReposts) {
@@ -31,7 +31,7 @@ export const buildFilter = (tags: string[], authors: string[], withReposts = fal
   }
 
   if (authors && authors.length > 0) {
-    filter.authors = authors
+    filter.authors = authors;
   } else {
     if (tags && tags.length > 0) {
       filter['#t'] = tags;

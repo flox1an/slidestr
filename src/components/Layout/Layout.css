@@ -1,37 +1,37 @@
 
 
-.top-controls {
-    position: absolute;
-    top: 2em;
-    right: 2em;
-    z-index: 200;
-  }
-  
-  .top-controls button svg {
-    height: 24px;
-    width: 24px;
-    border-radius: 0px;
-    padding: 0px;
-    color: white;
-  }
-  
-  .top-controls button {
-    background-color: transparent;
-    vertical-align: middle;
-  }
-  
-  .top-controls button.login {
-    display: inline;
-    cursor: pointer;
-    width: 48px;
-    height: 48px;
-  }
-  
-  .top-controls img.profile {
-    width: 3em;
-    height: 3em;
-    border-radius: 12px;
-    margin-left: 0.5em;
-    vertical-align: middle;
-    cursor: pointer;
-  }
+.top-right-controls {
+  position: absolute;
+  top: 2em;
+  right: 2em;
+  z-index: 200;
+}
+
+.top-right-controls button svg {
+  height: 24px;
+  width: 24px;
+  border-radius: 0px;
+  padding: 0px;
+  color: white;
+}
+
+.top-right-controls button {
+  background-color: transparent;
+  vertical-align: middle;
+}
+
+.top-right-controls button.login {
+  display: inline;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+}
+
+.top-right-controls img.profile {
+  width: 3em;
+  height: 3em;
+  border-radius: 12px;
+  margin-left: 0.5em;
+  vertical-align: middle;
+  cursor: pointer;
+}

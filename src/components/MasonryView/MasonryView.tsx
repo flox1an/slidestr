@@ -23,13 +23,12 @@ type MImage = NostrImage & {
   orgIndex: number;
 };
 
-
 const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: MasonryViewProps) => {
   const { activeProfile, title, profileNpub } = useProfile(settings);
   const [_, setState] = useGlobalState();
-  const {width = 800} = useWindowSize();
-console.log('MasonryView', width);
-  const columnCount = Math.min(7, Math.floor(width/280));
+  const { width } = useWindowSize();
+  console.log('MasonryView', width);
+  const columnCount = Math.min(7, Math.floor((width || 800) / 230));
   const sortedImages = useMemo(
     () => {
       console.log('Updating sortedImages');
@@ -109,11 +108,7 @@ console.log('MasonryView', width);
   }, []);
 
   return (
-    <div
-      className="gridview"
-      style={{ gridTemplateColumns: `repeat(${columnCount}, calc(100%/${columnCount} - 12px))` }}
-      {...swipeHandlers}
-    >
+    <div className="mason-view" {...swipeHandlers}>
       <Helmet>
         <title>{title}</title>
       </Helmet>
@@ -134,7 +129,10 @@ console.log('MasonryView', width);
         </div>
       )}
       {
-        <div className="imagegrid">
+        <div
+          className="mason-imagegrid"
+          style={{ gridTemplateColumns: `repeat(${columnCount}, calc(100%/${columnCount} - 12px))` }}
+        >
           {sortedImages.map((columnImages, colIdx) => (
             <div className="column" key={colIdx}>
               {columnImages.map(image => (

@@ -6,7 +6,9 @@ import Login from '../Login/Login';
 import { useGlobalState } from '../../utils/globalState';
 import IconUser from '../Icons/IconUser';
 import { createImgProxyUrl } from '../nostrImageDownload';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
+import IconDots from '../Icons/IconDots';
+import IconPlay from '../Icons/IconPlay';
 
 const Layout = () => {
   const { disclaimerAccepted, setDisclaimerAccepted } = useDisclaimerState();
@@ -28,7 +30,7 @@ const Layout = () => {
     <>
       {showLogin && <Login onClose={() => setShowLogin(false)} />}
 
-      <div className="top-controls">
+      <div className="top-right-controls">
         {state.userNPub && state.profile ? (
           state.profile.image && (
             <img className="profile" onClick={onLogout} src={createImgProxyUrl(state.profile.image, 80, 80)} />

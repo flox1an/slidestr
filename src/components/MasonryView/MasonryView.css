@@ -9,7 +9,7 @@
   }
 }
 
-.gridview {
+.mason-view {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -18,7 +18,7 @@
   overflow-x: hidden;
 }
 
-.imagegrid {
+.mason-imagegrid {
   display: grid;
   grid-template-columns: repeat(7, calc(100%/7 - 12px));
   width: 100vw;
@@ -27,55 +27,51 @@
   padding:12px;
 }
 
-.imagegrid .column {
+.mason-imagegrid .column {
   display: flex;
   flex-direction: column;
   gap:12px;
   line-height: 0px;
 }
-.imagegrid .column a {
+.mason-imagegrid .column a {
   color: white;
   cursor: pointer;
 }
 
-.imagegrid img.image {
+.mason-imagegrid img.mason-image {
   border-radius: 0.5rem;
   width: 100%;
   cursor: pointer;
   visibility: hidden;
-  min-height: 10em;
   background: #222;
 }
 
-.imagegrid video.image {
+.mason-imagegrid video.mason-image {
   border-radius: 0.5rem;
   width: 100%;
   cursor: pointer;
 }
 
-.imagegrid .image.show {
+.mason-imagegrid .mason-image.show {
   animation-duration: 0.5s;
   animation-timing-function: ease-in;
   animation-name: showGridImage;
   visibility: visible;
 }
 
-.imagegrid .image:hover {
+.mason-imagegrid .image:hover {
   filter: brightness(1.1);
   outline: 1px solid #fff;
 }
 
 .profile-header {
-  padding: 2em;
-  padding-bottom: 1em;
+  padding: 1.2em;
+  padding-bottom: 0.6em;
+  padding-left: 5em;
   display: flex;
   flex-direction: row;
+  line-height: 64px;
 }
-
-.profile-header .home-link {
-  line-height: normal;
-  color: white;
-} 
 
 .profile-header h2 {
   margin: 0px;

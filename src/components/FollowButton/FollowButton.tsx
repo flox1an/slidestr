@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
-import { useAtom } from "jotai";
-import { NDKEvent, NDKKind } from "@nostr-dev-kit/ndk";
+import { useState, useMemo } from 'react';
+import { useAtom } from 'jotai';
+import { NDKEvent, NDKKind } from '@nostr-dev-kit/ndk';
 
-import { useNDK, useSigner } from "../../ngine/context";
-import { followsAtom, useSession } from "../../ngine/state";
+import { useNDK, useSigner } from '../../ngine/context';
+import { followsAtom, useSession } from '../../ngine/state';
 
 interface FollowButtonProps {
   pubkey: string;
@@ -25,19 +25,19 @@ export default function FollowButton({ pubkey, className, ...rest }: FollowButto
   const loggedInUser = session?.pubkey;
   const isFollowed = useMemo(() => {
     console.log(contacts, pubkey);
-    return contacts?.tags.some((t) => t[0] === "p" && t[1] === pubkey);
+    return contacts?.tags.some(t => t[0] === 'p' && t[1] === pubkey);
   }, [contacts, pubkey]);
 
   async function follow(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
     setIsBusy(true);
-    const tags = (contacts?.tags || []).concat([["p", pubkey]]);
+    const tags = (contacts?.tags || []).concat([['p', pubkey]]);
     const ev = {
       pubkey: loggedInUser as string,
       kind: NDKKind.Contacts,
       tags,
       created_at: unixNow(),
-      content: "",
+      content: '',
     };
     try {
       const signed = new NDKEvent(ndk, ev);
@@ -51,16 +51,16 @@ export default function FollowButton({ pubkey, className, ...rest }: FollowButto
     }
   }
 
-  async function unfollow(e: React.MouseEvent<HTMLButtonElement, MouseEvent>)  {
+  async function unfollow(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
     setIsBusy(true);
-    const tags = (contacts?.tags || []).filter((t) => t[1] !== pubkey);
+    const tags = (contacts?.tags || []).filter(t => t[1] !== pubkey);
     const ev = {
       pubkey: loggedInUser as string,
       kind: NDKKind.Contacts,
       tags,
       created_at: unixNow(),
-      content: "",
+      content: '',
     };
     try {
       const signed = new NDKEvent(ndk, ev);
@@ -79,16 +79,13 @@ export default function FollowButton({ pubkey, className, ...rest }: FollowButto
       disabled={!pubkey || !contacts || !canSign || isBusy}
       //={isBusy}
       //variant="solid"
-      onClick={e=> isFollowed ? unfollow(e) : follow(e)}
+      style={{ backgroundColor: isFollowed ? '#888' : 'white' }}
+      onClick={e => (isFollowed ? unfollow(e) : follow(e))}
       className={className}
       //colorScheme={isFollowed ? "red" : "brand"}
       {...rest}
     >
-      {isFollowed ? (
-        "Unfollow"
-      ) : (
-        "Follow"
-      )}
+      {isFollowed ? 'Unfollow' : 'Follow'}
     </button>
   );
 }
