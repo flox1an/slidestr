@@ -21,9 +21,9 @@ const Home = () => {
               style={{
                 backgroundImage: `linear-gradient(170deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%), url('/images/${tk}.jpg')`,
               }}
-              onClick={() => nav({ ...currentSettings, tags: topics[tk].tags })}
+              onClick={() => nav({ ...currentSettings, topic: tk, npubs: [], tags: [], list: undefined })}
             >
-              <div className="topic-title">{tk}</div>
+              <div className="topic-title">{topics[tk].name || tk}</div>
             </div>
           ))}
         </div>
@@ -37,7 +37,7 @@ const Home = () => {
                   style={{
                     background: `linear-gradient(to bottom, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 100%), red)`,
                   }}
-                  onClick={() => nav({ ...currentSettings, tags: [], npubs: [], list: l.nevent })}
+                  onClick={() => nav({ ...currentSettings, tags: [], npubs: [], list: l.nevent, topic: undefined })}
                 >
                   <div className="topic-title">{l.name}</div>
                 </div>

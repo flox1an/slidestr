@@ -41,11 +41,14 @@ const Layout = () => {
         )}
       </div>
 
+      <Outlet />
+      {/*
       {disclaimerAccepted ? (
         <Outlet />
       ) : (
         <Disclaimer disclaimerAccepted={disclaimerAccepted} setDisclaimerAccepted={setDisclaimerAccepted} />
       )}
+       */}
     </>
   );
 };

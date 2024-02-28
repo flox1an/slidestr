@@ -8,7 +8,6 @@
   display: flex;
   flex-direction: row;
   gap: 8px;
-  align-items: center;
 }
 
 .author-info a {
@@ -50,8 +49,27 @@
   }
 }
 
+.author-identity {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+.author-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 8px;
+}
+
 @media screen and (max-width: 768px) {
   .author-name {
-    display: none;
+    max-width: 14em;
+    line-height: 24px;
+  }
+
+  .author-info {
+    flex-direction: column;
   }
 }

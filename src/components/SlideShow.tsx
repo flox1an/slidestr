@@ -11,7 +11,7 @@ import {
   isReply,
   isAdultRelated,
 } from './nostrImageDownload';
-import { adultContentTags, adultNPubs, blockedPublicKeys, mixedAdultNPubs } from './env';
+import { adultContentTags, adultNPubs, blockedPublicKeys, mixedAdultNPubs, topics } from './env';
 import Settings from './Settings';
 import SlideView from './SlideView';
 import { nip19 } from 'nostr-tools';
@@ -91,7 +91,9 @@ const SlideShow = () => {
   const authorsToQuery =
     listAuthors && listAuthors.length > 0 ? listAuthors : settings.npubs.map(p => nip19.decode(p).data as string);
 
-  const { events } = useEvents(buildFilter(settings.tags, authorsToQuery, settings.showReposts), {
+  const filterTags = settings.topic ? topics[settings.topic].tags : settings.tags;
+
+  const { events } = useEvents(buildFilter(filterTags, authorsToQuery, settings.showReposts), {
     cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
   });
 
@@ -236,7 +238,7 @@ const SlideShow = () => {
       setViewMode('grid');
     }
     if (event.key.toLowerCase() === 'h') {
-      nav({ ...settings, npubs: [], tags: [] });
+      nav({ ...settings, npubs: [], list: undefined, topic: undefined, tags: [] });
     }
     if (event.key.toLowerCase() === 'x') {
       setViewMode('scroll');
@@ -281,10 +283,6 @@ const SlideShow = () => {
   if (showAdultContentWarning) {
     return <AdultContentInfo></AdultContentInfo>;
   }
-
-  const toggleViewMode = () => {
-    setViewMode(view => (view == 'grid' ? 'scroll' : 'grid'));
-  };
 
   return (
     <>

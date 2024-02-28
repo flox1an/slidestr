@@ -3,10 +3,10 @@
 
 # delete the events when the filter changes
 
-- Improve Login dialog
-- Fix/Test zaps
+- mobile view for profile does not fit follow button
 - repair auto login
 - store NIP46 secret key
+- Fix/Test zaps
 - Reimplement Likes/Zaps based in ngine code
 - Investigate profile caching
 - build masonary view only for desktop / window->columns

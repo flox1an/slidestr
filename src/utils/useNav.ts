@@ -9,10 +9,11 @@ export type Settings = {
   npubs: string[];
   followers: boolean;
   list?: string;
+  topic?: string;
 };
 
 const useNav = () => {
-  const { tags, npub, list } = useParams();
+  const { tags, npub, list, topic } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -31,8 +32,9 @@ const useNav = () => {
       showReposts: reposts,
       followers,
       list,
+      topic,
     };
-  }, [tags, npub, searchParams, list]);
+  }, [tags, npub, searchParams, list, topic]);
 
   const nav = (settings: Settings) => {
     const validTags = settings.tags.filter(t => t.length > 0);
@@ -50,7 +52,9 @@ const useNav = () => {
     }
 
     const postfix = searchParams.length > 0 ? `?${searchParams.join('&')}` : '';
-    if (settings.followers) {
+    if (settings.topic) {
+      navigate(`/topic/${settings.topic}${postfix}`);
+    } else if (settings.followers) {
       navigate(`/followers${postfix}`);
     } else if (settings.list !== undefined) {
       navigate(`/list/${settings.list}${postfix}`);

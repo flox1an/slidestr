@@ -40,6 +40,10 @@ const App = () => {
           element: <SlideShow />,
         },
         {
+          path: 'topic/:topic',
+          element: <SlideShow />,
+        },
+        {
           path: 'profile/:npub',
           element: <SlideShow />,
         },

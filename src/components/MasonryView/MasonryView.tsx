@@ -10,6 +10,7 @@ import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
 import MasonryImage from './MasonryImage';
 import useWindowSize from '../../utils/useWindowSize';
+import { topics } from '../env';
 
 type MasonryViewProps = {
   settings: Settings;
@@ -112,7 +113,7 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      {(activeProfile || settings.tags.length == 1) && (
+      {(activeProfile || settings.topic || settings.tags.length == 1) && (
         <div className="profile-header">
           {activeProfile ? (
             <AuthorProfile
@@ -123,6 +124,8 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
               followButton
               externalLink
             ></AuthorProfile>
+          ) : settings.topic ? (
+            <h2>Topic: {topics[settings.topic].name || settings.topic}</h2>
           ) : (
             settings.tags.map(t => <h2>#{t}</h2>)
           )}

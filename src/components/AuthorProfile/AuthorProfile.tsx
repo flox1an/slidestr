@@ -34,36 +34,38 @@ const AuthorProfile = ({
 
   return (
     <div className="author-info">
-      <div
-        className="author-image"
-        onClick={() => {
-          setViewMode && setViewMode('grid');
-          npub && nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined });
-        }}
-        style={{
-          backgroundImage: avatarLoaded && src ? `url(${createImgProxyUrl(src, 80, 80)})` : 'none',
-        }}
-      ></div>
+      <div className="author-identity">
+        <div
+          className="author-image"
+          onClick={() => {
+            setViewMode && setViewMode('grid');
+            npub && nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined, topic: undefined });
+          }}
+          style={{
+            backgroundImage: avatarLoaded && src ? `url(${createImgProxyUrl(src, 80, 80)})` : 'none',
+          }}
+        ></div>
+        <span
+          className="author-name"
+          onClick={() => {
+            setViewMode && setViewMode('grid');
+            npub && nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined, topic: undefined });
+          }}
+        >
+          {author}
+        </span>
+      </div>
+      <div className="author-actions">
+        {followButtonAvailable && npub && (
+          <FollowButton pubkey={nip19.decode(npub).data as string} className="btn btn-primary" />
+        )}
 
-      <span
-        className="author-name"
-        onClick={() => {
-          setViewMode && setViewMode('grid');
-          npub && nav({ ...currentSettings, tags: [], npubs: [npub] });
-        }}
-      >
-        {author}
-      </span>
-
-      {followButtonAvailable && npub && (
-        <FollowButton pubkey={nip19.decode(npub).data as string} className="btn btn-primary" />
-      )}
-
-      {externalLink && npub && (
-        <a target="_blank" href={`https://nostrapp.link/#${npub}`}>
-          <IconLink></IconLink>
-        </a>
-      )}
+        {externalLink && npub && (
+          <a target="_blank" href={`https://nostrapp.link/#${npub}`}>
+            <IconLink></IconLink>
+          </a>
+        )}
+      </div>
     </div>
   );
 };

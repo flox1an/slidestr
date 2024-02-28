@@ -2,11 +2,17 @@ import { nip19 } from 'nostr-tools';
 
 export const appName = 'slidestr.net';
 type Topic = {
+  name?: string;
   tags: string[];
 };
 
 export const topics: { [key: string]: Topic } = {
+  bitcoinatlantis: {
+    name: 'Bitcoin Atlantis / Madeira',
+    tags: ['bitcoinatlantis', 'madeira', 'btcatlantis', 'soveng', 'funchal', 'freemadeira'],
+  },
   art: {
+    name: 'Art',
     tags: [
       'art',
       'artstr',
@@ -22,10 +28,11 @@ export const topics: { [key: string]: Topic } = {
       'zeichnen',
     ],
   },
-  bitcoin: { tags: ['bitcoin', 'plebchain'] },
-  nostr: { tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom', 'purple'] },
-  animals: { tags: ['catstr', 'dogstr', 'animal', 'animals', 'bird', 'birds', 'pets'] },
+  bitcoin: { name: '₿itcoin', tags: ['bitcoin', 'plebchain'] },
+  nostr: { name: 'Nostr', tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom', 'purple'] },
+  animals: { name: 'Animals', tags: ['catstr', 'dogstr', 'animal', 'animals', 'bird', 'birds', 'pets'] },
   photography: {
+    name: 'Photography',
     tags: [
       'naturephotography',
       'photo',
@@ -39,9 +46,10 @@ export const topics: { [key: string]: Topic } = {
     ],
   },
   lifestyle: {
+    name: 'Lifestyle',
     tags: ['fashion', 'flowerstr', 'foodstr', 'style', 'weedstr', 'travel', 'travelstr', 'happy', 'life', 'love'],
   },
-  gardening: { tags: ['gardening', 'gardenstr', 'nature'] },
+  gardenandfarm: { name: 'Gardening und Farming', tags: ['gardening', 'gardenstr', 'nature', 'farming', 'farmstr'] },
 };
 
 export const defaultHashTags = [
