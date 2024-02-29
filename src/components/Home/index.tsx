@@ -3,6 +3,7 @@ import useNav from '../../utils/useNav';
 import './Home.css';
 import { useGlobalState } from '../../utils/globalState';
 import usePeopleLists from '../../utils/useLists';
+import { createImgProxyUrl } from '../nostrImageDownload';
 
 const Home = () => {
   const { nav, currentSettings } = useNav();
@@ -19,7 +20,7 @@ const Home = () => {
             <div
               className="topic"
               style={{
-                backgroundImage: `linear-gradient(170deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%), url('/images/${tk}.jpg')`,
+                backgroundImage: `linear-gradient(170deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%), url(${createImgProxyUrl('https://slidestr.net/images/'+tk+'.jpg', 600, -1)})`,
               }}
               onClick={() =>
                 nav({ ...currentSettings, topic: tk, npubs: [], tags: [], list: undefined, follows: false })
