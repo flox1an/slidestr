@@ -71,6 +71,9 @@
   display: flex;
   flex-direction: row;
   line-height: 64px;
+  padding-right: 6em;
+  width: 100vw;
+  box-sizing: border-box;
 }
 
 .profile-header h2 {

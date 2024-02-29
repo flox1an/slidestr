@@ -67,6 +67,9 @@
   padding: 1.2em;
   padding-bottom: 0.6em;
   padding-left: 5em;
+  padding-right: 6em;
+  width: 100vw;
+  box-sizing: border-box;
 }
 
 .profile-header h2 {
