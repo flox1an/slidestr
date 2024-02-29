@@ -52,7 +52,7 @@ const App = () => {
           element: <SlideShow />,
         },
         {
-          path: '/followers',
+          path: '/follows',
           element: <SlideShow />,
         },
         {

@@ -21,7 +21,6 @@ import useNav from '../utils/useNav';
 import { useGlobalState } from '../utils/globalState';
 import ScrollView from './ScrollView/ScrollView';
 import IconPlay from './Icons/IconPlay';
-import IconGrid from './Icons/IconGrid';
 import IconFullScreen from './Icons/IconFullScreen';
 import useZapsAndReations from '../utils/useZapAndReaction';
 import IconHeart from './Icons/IconHeart';
@@ -33,7 +32,9 @@ import MasonryView from './MasonryView/MasonryView';
 import useAuthorsFromList from '../utils/useAuthorsFromList';
 import GridView from './GridView';
 import useWindowSize from '../utils/useWindowSize';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
+import { followsAtom } from '../ngine/state';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -86,10 +87,15 @@ const SlideShow = () => {
   const [imageIdx, setImageIdx] = useState<number | undefined>();
   const { zapClick, heartClick, zapState, heartState } = useZapsAndReations(state.activeImage, state.userNPub);
   const navigate = useNavigate();
-
+  state.profile;
   const listAuthors = useAuthorsFromList(settings.list);
-  const authorsToQuery =
-    listAuthors && listAuthors.length > 0 ? listAuthors : settings.npubs.map(p => nip19.decode(p).data as string);
+  const [contacts] = useAtom(followsAtom);
+
+  const authorsToQuery = settings.follows
+    ? contacts?.tags.filter(t => t[0] === 'p').map(t => t[1]) || []
+    : listAuthors && listAuthors.length > 0
+      ? listAuthors
+      : settings.npubs.map(p => nip19.decode(p).data as string);
 
   const filterTags = settings.topic ? topics[settings.topic].tags : settings.tags;
 

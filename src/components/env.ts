@@ -9,7 +9,7 @@ type Topic = {
 export const topics: { [key: string]: Topic } = {
   bitcoinatlantis: {
     name: 'Bitcoin Atlantis / Madeira',
-    tags: ['bitcoinatlantis', 'madeira', 'btcatlantis', 'soveng', 'funchal', 'freemadeira'],
+    tags: ['atlantis', 'bitcoinatlantis', 'madeira', 'btcatlantis', 'soveng', 'funchal', 'freemadeira', 'ba24'],
   },
   art: {
     name: 'Art',

@@ -39,7 +39,8 @@ const AuthorProfile = ({
           className="author-image"
           onClick={() => {
             setViewMode && setViewMode('grid');
-            npub && nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined, topic: undefined });
+            npub &&
+              nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined, topic: undefined, follows: false });
           }}
           style={{
             backgroundImage: avatarLoaded && src ? `url(${createImgProxyUrl(src, 80, 80)})` : 'none',
@@ -49,7 +50,8 @@ const AuthorProfile = ({
           className="author-name"
           onClick={() => {
             setViewMode && setViewMode('grid');
-            npub && nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined, topic: undefined });
+            npub &&
+              nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined, topic: undefined, follows: false });
           }}
         >
           {author}

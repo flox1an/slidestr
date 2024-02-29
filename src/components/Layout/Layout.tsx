@@ -10,7 +10,7 @@ import { Outlet } from 'react-router-dom';
 import React from 'react';
 
 const Layout = () => {
-  const { disclaimerAccepted, setDisclaimerAccepted } = useDisclaimerState();
+  //const { disclaimerAccepted, setDisclaimerAccepted } = useDisclaimerState();
   const [state, setState] = useGlobalState();
   const [showLogin, setShowLogin] = useState(false);
 

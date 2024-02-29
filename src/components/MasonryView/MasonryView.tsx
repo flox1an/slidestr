@@ -28,11 +28,11 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
   const { activeProfile, title, profileNpub } = useProfile(settings);
   const [_, setState] = useGlobalState();
   const { width } = useWindowSize();
-  console.log('MasonryView', width);
+
   const columnCount = Math.min(7, Math.floor((width || 800) / 230));
   const sortedImages = useMemo(
     () => {
-      console.log('Updating sortedImages');
+      // console.log('Updating sortedImages');
       //const sorted = images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)); // sort by timestamp descending
 
       // Initialize an array of arrays to hold the columns.

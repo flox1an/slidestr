@@ -57,7 +57,7 @@ const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) =>
                 onClick={() => {
                   //setCurrentImage(undefined);
                   setViewMode('grid');
-                  nav({ ...currentSettings, tags: [t], npubs: [], list: undefined, topic: undefined });
+                  nav({ ...currentSettings, tags: [t], npubs: [], list: undefined, topic: undefined, follows: false });
                 }}
               >
                 {t}

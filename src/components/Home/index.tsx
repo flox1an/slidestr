@@ -21,23 +21,49 @@ const Home = () => {
               style={{
                 backgroundImage: `linear-gradient(170deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%), url('/images/${tk}.jpg')`,
               }}
-              onClick={() => nav({ ...currentSettings, topic: tk, npubs: [], tags: [], list: undefined })}
+              onClick={() =>
+                nav({ ...currentSettings, topic: tk, npubs: [], tags: [], list: undefined, follows: false })
+              }
             >
               <div className="topic-title">{topics[tk].name || tk}</div>
             </div>
           ))}
         </div>
+        {state.userNPub && (
+          <>
+            {' '}
+            <h2>Your...</h2>
+            <div
+              className="topic"
+              style={{}}
+              onClick={() =>
+                nav({
+                  ...currentSettings,
+                  topic: undefined,
+                  npubs: [],
+                  tags: [],
+                  list: undefined,
+                  follows: true,
+                  showReplies: false,
+                  showReposts: true,
+                })
+              }
+            >
+              <div className="topic-title">Follows</div>
+            </div>
+          </>
+        )}
         {lists && lists.length > 0 && (
           <>
-            <h2>Lists</h2>
+            <h2>Your lists</h2>
             <div className="topics">
               {lists.map(l => (
                 <div
                   className="topic"
-                  style={{
-                    background: `linear-gradient(to bottom, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 100%), red)`,
-                  }}
-                  onClick={() => nav({ ...currentSettings, tags: [], npubs: [], list: l.nevent, topic: undefined })}
+                  style={{}}
+                  onClick={() =>
+                    nav({ ...currentSettings, tags: [], npubs: [], list: l.nevent, topic: undefined, follows: false })
+                  }
                 >
                   <div className="topic-title">{l.name}</div>
                 </div>

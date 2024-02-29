@@ -7,7 +7,7 @@ export type Settings = {
   showReposts: boolean;
   tags: string[];
   npubs: string[];
-  followers: boolean;
+  follows: boolean;
   list?: string;
   topic?: string;
 };
@@ -21,7 +21,7 @@ const useNav = () => {
     const adult = searchParams.get('adult') === 'true' || searchParams.get('nsfw') === 'true';
     const replies = searchParams.get('replies') === 'true';
     const reposts = searchParams.get('reposts') === 'true';
-    const followers = window.location.pathname.startsWith('/followers');
+    const follows = window.location.pathname.startsWith('/follows');
     const useTags = tags?.split(',') || [];
 
     return {
@@ -30,7 +30,7 @@ const useNav = () => {
       showAdult: adult,
       showReplies: replies,
       showReposts: reposts,
-      followers,
+      follows,
       list,
       topic,
     };
@@ -54,8 +54,8 @@ const useNav = () => {
     const postfix = searchParams.length > 0 ? `?${searchParams.join('&')}` : '';
     if (settings.topic) {
       navigate(`/topic/${settings.topic}${postfix}`);
-    } else if (settings.followers) {
-      navigate(`/followers${postfix}`);
+    } else if (settings.follows) {
+      navigate(`/follows${postfix}`);
     } else if (settings.list !== undefined) {
       navigate(`/list/${settings.list}${postfix}`);
     } else if (validTags.length > 0) {
