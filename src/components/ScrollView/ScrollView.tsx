@@ -37,7 +37,7 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
   }, []);
 
   useEffect(() => {
-    if (currentImage && images) {
+    if (currentImage != undefined && images) {
       setState({ activeImage: images[currentImage] });
     } else {
       setState({ activeImage: undefined });

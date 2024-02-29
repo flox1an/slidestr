@@ -232,7 +232,7 @@ const SlideShow = () => {
       }),
       'url'
     );
-    // console.log(images.current);
+
   }, [posts]);
 
   const onKeyDown = (event: KeyboardEvent) => {
@@ -244,7 +244,7 @@ const SlideShow = () => {
       setViewMode('grid');
     }
     if (event.key.toLowerCase() === 'h') {
-      nav({ ...settings, npubs: [], list: undefined, topic: undefined, tags: [] });
+      nav({ ...settings, npubs: [], list: undefined, topic: undefined, tags: [], follows: false });
     }
     if (event.key.toLowerCase() === 'x') {
       setViewMode('scroll');
