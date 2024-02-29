@@ -76,6 +76,8 @@ const Home = () => {
           <a href="https://njump.me/npub1klr0dy2ul2dx9llk58czvpx73rprcmrvd5dc7ck8esg8f8es06qs427gxc" target="blank">
             Florian
           </a>
+          <br />
+          Source: <a href="https://git.v0l.io/florian/nostr-slideshow">https://git.v0l.io/florian/nostr-slideshow</a>
         </div>
       </div>
     </div>

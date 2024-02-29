@@ -232,7 +232,6 @@ const SlideShow = () => {
       }),
       'url'
     );
-
   }, [posts]);
 
   const onKeyDown = (event: KeyboardEvent) => {
