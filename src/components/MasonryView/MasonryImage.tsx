@@ -5,6 +5,8 @@ import useProfile from '../../ngine/hooks/useProfile';
 import useNav from '../../utils/useNav';
 import LazyLoad from 'react-lazy-load';
 import uniq from 'lodash/uniq';
+import { timeDifference } from '../../utils/time';
+import { unixNow } from '../../ngine/time';
 
 interface MasonryImageProps {
   image: NostrImage;
@@ -39,6 +41,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
 
   const description = image.content && image.content?.substring(0, 60) + (image.content.length > 60 ? ' ... ' : ' ');
   const showTags = useMemo(() => uniq(image.tags).slice(0, 5), [image.tags]);
+  const now = unixNow();
 
   return (
     <LazyLoad>
@@ -79,7 +82,8 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
           )}
         </a>
         {(showAuthor || description || showTags.length > 0) && (
-          <div style={{ display: 'block', lineHeight: '1.4em', paddingBottom: '.5em', paddingTop: '.5em' }}>
+          <div style={{ display: 'block', lineHeight: '1.4em', paddingBottom: '.5em', paddingTop: '.5em', position: 'relative' }}>
+            <div className="time">{image.timestamp && timeDifference(now, image.timestamp)}</div>
             {showAuthor && (
               <div style={{ paddingBottom: '.25em' }}>
                 <a onClick={() => profileClick(image.author)}>{profile?.displayName || profile?.name}</a>

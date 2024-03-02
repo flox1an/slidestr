@@ -1,6 +1,4 @@
 import './Layout.css';
-import Disclaimer from '../Disclaimer';
-import useDisclaimerState from '../../utils/useDisclaimerState';
 import { useState } from 'react';
 import Login from '../Login/Login';
 import { useGlobalState } from '../../utils/globalState';

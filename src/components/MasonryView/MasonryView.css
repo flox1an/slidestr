@@ -91,3 +91,13 @@
     display: block;
   }
 }
+
+.mason-imagegrid .time {
+  position: absolute;
+  right: 0px;
+  top:0px;
+  color: #666;
+  padding-top: .5em;
+  background-color: #111;
+  padding-left: .4em;
+}
