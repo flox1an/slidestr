@@ -19,7 +19,7 @@ const usePeopleLists = (npub?: string) => {
       const titleTag = e.getMatchingTags('title').slice(0, 1).flat();
       const descriptionTag = e.getMatchingTags('description').slice(0, 1).flat();
 
-      const name = titleTag.length>0 ? titleTag[1] : nameTag ? nameTag[1] : 'unknown';
+      const name = titleTag.length > 0 ? titleTag[1] : nameTag ? nameTag[1] : 'unknown';
       const description = descriptionTag.length > 0 && descriptionTag[1];
       const people = e.tags.filter(t => t[0] === 'p')?.map(t => t[1]);
 

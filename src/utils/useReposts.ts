@@ -11,7 +11,16 @@ const useReposts = (npub?: string) => {
     { disable: !npub }
   );
 
-  const reposts = useMemo(() => events.flatMap(e => e.getMatchingTags('e').map(t => t[1]).flat()), [events]);
+  const reposts = useMemo(
+    () =>
+      events.flatMap(e =>
+        e
+          .getMatchingTags('e')
+          .map(t => t[1])
+          .flat()
+      ),
+    [events]
+  );
 
   return reposts;
 };

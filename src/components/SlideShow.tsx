@@ -86,11 +86,13 @@ const SlideShow = () => {
   const { nav, currentSettings: settings } = useNav();
   const [state] = useGlobalState();
   const [imageIdx, setImageIdx] = useState<number | undefined>();
-  const { zapClick, heartClick, zapState, heartState, repostClick, repostState } = useZapsAndReations(state.activeImage, state.userNPub);
+  const { zapClick, heartClick, zapState, heartState, repostClick, repostState } = useZapsAndReations(
+    state.activeImage,
+    state.userNPub
+  );
   const navigate = useNavigate();
   const listAuthors = useAuthorsFromList(settings.list);
   const [contacts] = useAtom(followsAtom);
-
 
   const filter = useMemo(() => {
     const authorsToQuery = settings.follows
@@ -325,7 +327,10 @@ const SlideShow = () => {
         <div className="bottom-controls">
           {state.userNPub && state.activeImage && (
             <>
-              <button className={`repost ${repostState?'reposted':''}`} onClick={() => !repostState && repostClick()}>
+              <button
+                className={`repost ${repostState ? 'reposted' : ''}`}
+                onClick={() => !repostState && repostClick()}
+              >
                 <IconRepost></IconRepost>
               </button>
               <button
