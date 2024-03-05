@@ -133,6 +133,14 @@
   color: white;
 }
 
+.bottom-controls button.reposted {
+  cursor: default;
+}
+
+.bottom-controls button.reposted svg {
+  color: lawngreen;
+}
+
 .bottomPanel {
   position: absolute;
   bottom: 0px;

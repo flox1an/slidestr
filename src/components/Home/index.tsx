@@ -51,26 +51,46 @@ const Home = () => {
         </div>
         {state.userNPub && (
           <>
-            {' '}
             <h2>Your...</h2>
-            <div
-              className="topic"
-              style={{}}
-              onClick={() =>
-                nav({
-                  ...currentSettings,
-                  topic: undefined,
-                  npubs: [],
-                  tags: [],
-                  list: undefined,
-                  follows: true,
-                  showReplies: false,
-                  showReposts: true,
-                  showAdult,
-                })
-              }
-            >
-              <div className="topic-title">Follows</div>
+            <div className="topics">
+              <div
+                className="topic"
+                style={{}}
+                onClick={() =>
+                  nav({
+                    ...currentSettings,
+                    topic: undefined,
+                    npubs: [],
+                    tags: [],
+                    list: undefined,
+                    follows: true,
+                    showReplies: false,
+                    showReposts: true,
+                    showAdult,
+                  })
+                }
+              >
+                <div className="topic-title">Your follows</div>
+              </div>
+              <div
+                className="topic"
+                style={{}}
+                onClick={() =>
+                  nav({
+                    ...currentSettings,
+                    topic: undefined,
+                    npubs: [state.userNPub || ''],
+                    tags: [],
+                    list: undefined,
+                    follows: false,
+                    showReplies: false,
+                    showReposts: true,
+                    showAdult,
+                  })
+                }
+              >
+                <div className="topic-title">Your own profile</div>
+              </div>
             </div>
           </>
         )}

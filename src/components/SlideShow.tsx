@@ -35,6 +35,7 @@ import useWindowSize from '../utils/useWindowSize';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { followsAtom } from '../ngine/state';
+import IconRepost from './Icons/IconRepost';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -85,11 +86,11 @@ const SlideShow = () => {
   const { nav, currentSettings: settings } = useNav();
   const [state] = useGlobalState();
   const [imageIdx, setImageIdx] = useState<number | undefined>();
-  const { zapClick, heartClick, zapState, heartState } = useZapsAndReations(state.activeImage, state.userNPub);
+  const { zapClick, heartClick, zapState, heartState, repostClick, repostState } = useZapsAndReations(state.activeImage, state.userNPub);
   const navigate = useNavigate();
-  state.profile;
   const listAuthors = useAuthorsFromList(settings.list);
   const [contacts] = useAtom(followsAtom);
+
 
   const filter = useMemo(() => {
     const authorsToQuery = settings.follows
@@ -114,7 +115,7 @@ const SlideShow = () => {
   const { events } = useEvents(filter, {
     cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
     // when seeing global, close stream because of too many updates.
-    closeOnEose: settings.npubs.length == 0 && settings.tags.length == 0 
+    closeOnEose: settings.npubs.length == 0 && settings.tags.length == 0,
   });
 
   useEffect(() => {
@@ -324,6 +325,9 @@ const SlideShow = () => {
         <div className="bottom-controls">
           {state.userNPub && state.activeImage && (
             <>
+              <button className={`repost ${repostState?'reposted':''}`} onClick={() => !repostState && repostClick()}>
+                <IconRepost></IconRepost>
+              </button>
               <button
                 className={`heart ${heartState}`}
                 onClick={() => state.activeImage && heartClick(state.activeImage)}

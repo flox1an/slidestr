@@ -2,13 +2,15 @@ import { useNDK } from '../ngine/context';
 import { NostrImage } from '../components/nostrImageDownload';
 import { NDKEvent, NDKFilter } from '@nostr-dev-kit/ndk';
 import { nip19 } from 'nostr-tools';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import useReposts from './useReposts';
 
 export type HeartState = 'none' | 'liked' | 'liking';
 export type ZapState = 'none' | 'zapped' | 'zapping' | 'error';
 
 const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) => {
   const ndk = useNDK();
+  const reposts = useReposts(userNPub);
 
   const [zapState, setZapState] = useState<ZapState>('none');
   const [heartState, setHeartState] = useState<HeartState>('none');
@@ -22,6 +24,11 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
 
     return { selfLiked: events && events.size > 0 };
   };
+
+  const repostState = useMemo(
+    () => reposts.some(r => r == currentImageData?.post.event.id),
+    [currentImageData?.post.event.id, reposts]
+  );
 
   useEffect(() => {
     setZapState('none');
@@ -98,11 +105,39 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     currentImage.post.wasZapped = true;
   };
 
+  const repostClick = async () => {
+    if (!userNPub) return;
+
+    const orgEvent = currentImageData?.post.event;
+    if (!orgEvent) return;
+
+    const relayUrl = orgEvent.relay?.url;
+    if (!relayUrl) {
+      console.error('no relay url found for original event.');
+      return;
+    }
+
+    const repostEvent = new NDKEvent(ndk, {
+      kind: 6, // Repost
+      pubkey: nip19.decode(userNPub).data as string,
+      created_at: Math.floor(new Date().getTime() / 1000),
+      content: JSON.stringify(orgEvent.rawEvent),
+      tags: [
+        ['e', orgEvent.id, relayUrl],
+        ['p', orgEvent.author.pubkey],
+      ],
+    });
+    console.log(repostEvent);
+    await repostEvent.publish();
+  };
+
   return {
     zapState,
     heartState,
     zapClick,
     heartClick,
+    repostClick,
+    repostState,
   };
 };
 
