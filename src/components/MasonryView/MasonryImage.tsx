@@ -82,7 +82,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
           )}
         </a>
         {(showAuthor || description || showTags.length > 0) && (
-          <div style={{ display: 'block', lineHeight: '1.4em', paddingBottom: '.5em', paddingTop: '.5em', position: 'relative' }}>
+          <div className="info-section">
             <div className="time">{image.timestamp && timeDifference(now, image.timestamp)}</div>
             {showAuthor && (
               <div style={{ paddingBottom: '.25em' }}>

@@ -1,6 +1,7 @@
 import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
 import { adultContentTags, adultPublicKeys, mixedAdultNPubs } from './env';
 import uniq from 'lodash/uniq';
+import { unixNow } from '../ngine/time';
 
 export type Post = {
   event: NDKEvent;
@@ -23,7 +24,7 @@ export type NostrImage = {
 export const buildFilter = (tags: string[], authors: string[], withReposts = false) => {
   const filter: NDKFilter = {
     kinds: [1, 1063] as number[],
-    limit: authors.length > 0 ? 1000 : 500,
+    limit: authors.length > 0 ? 1000 : tags.length > 0 ? 500 : 500,
   };
 
   if (withReposts) {
@@ -32,10 +33,10 @@ export const buildFilter = (tags: string[], authors: string[], withReposts = fal
 
   if (authors && authors.length > 0) {
     filter.authors = authors;
+  } else if (tags && tags.length > 0) {
+    filter['#t'] = tags;
   } else {
-    if (tags && tags.length > 0) {
-      filter['#t'] = tags;
-    }
+    filter.since = unixNow() - 60 * 60 * 24; // 24h
   }
 
   // console.log('filter', filter);
@@ -67,6 +68,8 @@ export const urlFix = (url: string) => {
 };
 
 export const extractImageUrls = (text: string): string[] => {
+  if (text == undefined) return [];
+
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const matchedUrls = (text.match(urlRegex) || []).map(u => urlFix(u));
   return uniq(matchedUrls);

@@ -16,10 +16,14 @@ const usePeopleLists = (npub?: string) => {
 
     return eventsWithName.map(e => {
       const nameTag = e.getMatchingTags('d').slice(0, 1).flat();
-      const name = nameTag ? nameTag[1] : 'unknown';
+      const titleTag = e.getMatchingTags('title').slice(0, 1).flat();
+      const descriptionTag = e.getMatchingTags('description').slice(0, 1).flat();
+
+      const name = titleTag.length>0 ? titleTag[1] : nameTag ? nameTag[1] : 'unknown';
+      const description = descriptionTag.length > 0 && descriptionTag[1];
       const people = e.tags.filter(t => t[0] === 'p')?.map(t => t[1]);
 
-      return { id: e.id, nevent: e.encode(), name, people };
+      return { id: e.id, nevent: e.encode(), name, people, description };
     });
   }, [events]);
 

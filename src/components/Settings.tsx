@@ -182,7 +182,7 @@ const SettingsDialog = ({ onClose, setViewMode }: SettingsProps) => {
               </div>
             </>
           )}
-          <div className="content-warning">
+          <div className={`content-warning ${showAdult ? 'active' : ''}`}>
             <div>
               <input name="adult" type="checkbox" checked={showAdult} onChange={e => setShowAdult(e.target.checked)} />
             </div>

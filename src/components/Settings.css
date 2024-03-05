@@ -81,15 +81,25 @@
 .content-warning {
   padding: 16px;
   border-radius: 16px;
-  border: 1px solid #ff563f;
+  border: 1px solid #444;
+
   display: flex;
   gap: 12px;
 }
 
-.warning {
+.content-warning.active {
+  border: 1px solid #ff563f;
+}
+
+.content-warning.active .warning {
   color: #ff563f;
+}
+
+.content-warning .warning {
+  color: #444;
   font-weight: 500;
   font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .settings .replies,

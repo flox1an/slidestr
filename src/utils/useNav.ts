@@ -52,6 +52,7 @@ const useNav = () => {
     }
 
     const postfix = searchParams.length > 0 ? `?${searchParams.join('&')}` : '';
+    console.log(settings);
     if (settings.topic) {
       navigate(`/topic/${settings.topic}${postfix}`);
     } else if (settings.follows) {
@@ -63,7 +64,7 @@ const useNav = () => {
     } else if (validNpubs.length == 1) {
       navigate(`/p/${validNpubs[0]}${postfix}`);
     } else {
-      navigate(`/${postfix}`);
+      navigate(`/global${postfix}`);
     }
   };
 

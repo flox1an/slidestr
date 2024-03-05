@@ -64,6 +64,14 @@
   outline: 1px solid #fff;
 }
 
+.mason-imagegrid .info-section {
+  display: block;
+  line-height: 1.4em;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+  position: relative;
+}
+
 .profile-header {
   padding: 1.2em;
   padding-bottom: 0.6em;
@@ -95,9 +103,9 @@
 .mason-imagegrid .time {
   position: absolute;
   right: 0px;
-  top:0px;
+  top: 0px;
   color: #666;
-  padding-top: .5em;
+  padding-top: 0.5em;
   background-color: #111;
-  padding-left: .4em;
+  padding-left: 0.4em;
 }

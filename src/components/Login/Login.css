@@ -55,16 +55,17 @@
   flex-direction: row;
   gap: 8px;
 }
-.login-dialog .login-address button {
+
+.login-dialog button,
+.login-dialog button:visited,
+.login-dialog button:active {
   background-color: rgb(99, 19, 173);
-}
-.login-dialog .login-extension {
-  align-self: center;
+  color: #fff;
+  height: 3em;
 }
 
-.login-dialog .login-extension button {
-  height: 3em;
-  background-color: rgb(99, 19, 173);
+.login-dialog .login-extension {
+  align-self: center;
 }
 
 .login-dialog .close-button {

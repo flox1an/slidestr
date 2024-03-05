@@ -47,7 +47,19 @@ export const topics: { [key: string]: Topic } = {
   },
   lifestyle: {
     name: 'Lifestyle',
-    tags: ['fashion', 'flowerstr', 'foodstr', 'style', 'weedstr', 'travel', 'travelstr', 'happy', 'life', 'love'],
+    tags: [
+      'fashion',
+      'flowerstr',
+      'foodstr',
+      'style',
+      'weedstr',
+      'travel',
+      'travelstr',
+      'happy',
+      'life',
+      'love',
+      'hiking',
+    ],
   },
   gardenandfarm: { name: 'Gardening und Farming', tags: ['gardening', 'gardenstr', 'nature', 'farming', 'farmstr'] },
 };
@@ -132,6 +144,7 @@ export const adultContentTags = [
   'nakedart',
   'nasstr',
   'nodestr',
+  'naughty',
   'nsfw',
   'nude',
   'nudeart',
@@ -240,6 +253,7 @@ export const adultNPubs = [
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
   'npub1f3n7hq0a6vyfsjrv9vfdwtasa0g98ve96he68rxsvq9x6cl8tvxqmv6ca4', // Lady Sex (nude anime)
+  'npub1ylq5s3xsdmzgzvgzll6ghcs3qa8a9ajl955hj4tcpmyruvjsl8nq5wqhd8', // Dnera
 
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures

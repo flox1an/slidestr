@@ -30,7 +30,6 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
   };
 
   const onKeyDown = (event: KeyboardEvent) => {
-    console.log(event);
 
     if (event.key === 'ArrowRight') {
       showNextImage();

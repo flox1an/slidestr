@@ -91,19 +91,34 @@ const SlideShow = () => {
   const listAuthors = useAuthorsFromList(settings.list);
   const [contacts] = useAtom(followsAtom);
 
-  const authorsToQuery = settings.follows
-    ? contacts?.tags.filter(t => t[0] === 'p').map(t => t[1]) || []
-    : listAuthors && listAuthors.length > 0
-      ? listAuthors
-      : settings.npubs.map(p => nip19.decode(p).data as string);
+  const filter = useMemo(() => {
+    const authorsToQuery = settings.follows
+      ? contacts?.tags.filter(t => t[0] === 'p').map(t => t[1]) || []
+      : listAuthors && listAuthors.length > 0
+        ? listAuthors
+        : settings.npubs.map(p => nip19.decode(p).data as string);
 
-  const filterTags = settings.topic ? topics[settings.topic].tags : settings.tags;
+    const filterTags = settings.topic ? topics[settings.topic].tags : settings.tags;
 
-  const { events } = useEvents(buildFilter(filterTags, authorsToQuery, settings.showReposts), {
+    return buildFilter(filterTags, authorsToQuery, settings.showReposts);
+  }, [
+    contacts?.tags,
+    listAuthors,
+    settings.follows,
+    settings.npubs,
+    settings.showReposts,
+    settings.tags,
+    settings.topic,
+  ]);
+
+  const { events } = useEvents(filter, {
     cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
+    // when seeing global, close stream because of too many updates.
+    closeOnEose: settings.npubs.length == 0 && settings.tags.length == 0 
   });
 
   useEffect(() => {
+    // console.log('set posts');
     setPosts(
       events
         .filter(
