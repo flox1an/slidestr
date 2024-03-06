@@ -78,7 +78,8 @@ export const extractImageUrls = (text: string): string[] => {
 export const isReply = ({ tags }: { tags?: NDKTag[] }) => {
   if (!tags) return false;
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
-  return tags.filter((t: string[]) => t[0] === 'e' && t[3] === 'reply').length > 0;
+  // [ "e", "0c77a63189d2d9f7d5c28c589e7784600b31c8ebc33050946a70436e02a442e2", "", "root" ],
+  return tags.filter((t: string[]) => t[0] === 'e' && (t[3] === 'reply' || t[3] === 'root')).length > 0;
 };
 
 export const hasContentWarning = ({ tags }: { tags?: NDKTag[] }) => {
