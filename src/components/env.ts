@@ -1,6 +1,9 @@
 import { nip19 } from 'nostr-tools';
 
-export const appName = 'slidestr.net';
+export const imageProxy = import.meta.env.VITE_IMAGE_PROXY || 'https://imgproxy.slidestr.net';
+
+export const appName = import.meta.env.VITE_APP_NAME || 'slidestr.net';
+
 type Topic = {
   name?: string;
   tags: string[];

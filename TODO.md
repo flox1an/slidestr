@@ -1,11 +1,7 @@
 # TODO 
 - add load more, to load older events
-- repair auto login
-- store NIP46 secret key
 - Fix/Test zaps
 - Reimplement Likes/Zaps based in ngine code
-- Investigate profile caching
-  - Avatar display is laggy, needs caching
 - move settings dialog to main start screen
 - replace search icon with nav back button
 - record demo explaination video
@@ -17,3 +13,4 @@
 - think about use of ui framework, and redesign settings dialog
 - move NSFW block list into a list event on an slidestr.net profile (public nsfw mute list)
 - Add key/salt to imageproxy, see snort impl
+- caching of preprocessed images with index?
