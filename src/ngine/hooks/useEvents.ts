@@ -15,7 +15,7 @@ export default function useEvents(filter: NDKFilter | NDKFilter[], opts?: Subscr
   const [eose, setEose] = useState(false);
   const [events, setEvents] = useState<NDKEvent[]>([]);
   const id = useMemo(() => {
-    console.warn('new ID!!!');
+    // console.warn('new ID!!!');
     return hashSha256(filter);
   }, [filter]);
 

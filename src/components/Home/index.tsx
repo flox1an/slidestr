@@ -5,9 +5,12 @@ import { useGlobalState } from '../../utils/globalState';
 import usePeopleLists from '../../utils/useLists';
 import { createImgProxyUrl } from '../nostrImageDownload';
 import { useState } from 'react';
+import { Helmet } from 'react-helmet';
+import useProfile from '../../utils/useProfile';
 
 const Home = () => {
   const { nav, currentSettings } = useNav();
+  const { title } = useProfile(currentSettings);
   const [showAdult, setShowAdult] = useState(currentSettings.showAdult || false);
   const [state] = useGlobalState();
   const topicKeys = Object.keys(topics);
@@ -15,6 +18,9 @@ const Home = () => {
 
   return (
     <div className="home-container">
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <div className="home">
         <h2>Topics</h2>
         <div className="topics">
@@ -74,7 +80,11 @@ const Home = () => {
               </div>
               <div
                 className="topic"
-                style={{}}
+                style={{
+                  backgroundImage:
+                    state.profile?.banner &&
+                    `linear-gradient(170deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%), url(${createImgProxyUrl(state.profile?.banner, 600, -1)})`,
+                }}
                 onClick={() =>
                   nav({
                     ...currentSettings,

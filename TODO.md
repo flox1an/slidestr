@@ -9,7 +9,6 @@
 - move settings dialog to main start screen
 - replace search icon with nav back button
 - record demo explaination video
-- global can not be accessed any more
 - different header for multiple tags??
 - navigation entry points:
   - Search (custom hashtags, profile search, content search, community seaarch)
