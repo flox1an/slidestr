@@ -6,8 +6,8 @@ import { ViewMode } from '../SlideShow';
 import IconLink from '../Icons/IconLink';
 import FollowButton from '../FollowButton/FollowButton';
 import { nip19 } from 'nostr-tools';
-import { useGlobalState } from '../../utils/globalState';
 import React from 'react';
+import { useSession } from '../../ngine/state';
 
 type AvatarImageProps = {
   src?: string;
@@ -28,9 +28,9 @@ const AuthorProfile = ({
 }: AvatarImageProps) => {
   const avatarLoaded = useImageLoaded(src);
   const { nav, currentSettings } = useNav();
-  const [state] = useGlobalState();
-
-  const followButtonAvailable = followButton && state.userNPub;
+  const session = useSession();
+  
+  const followButtonAvailable = followButton && session?.pubkey;
 
   return (
     <div className="author-info">

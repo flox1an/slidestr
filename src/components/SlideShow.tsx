@@ -34,8 +34,9 @@ import GridView from './GridView';
 import useWindowSize from '../utils/useWindowSize';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { followsAtom } from '../ngine/state';
+import { followsAtom, useSession } from '../ngine/state';
 import IconRepost from './Icons/IconRepost';
+import useProfile from '../ngine/hooks/useProfile';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -86,9 +87,14 @@ const SlideShow = () => {
   const { nav, currentSettings: settings } = useNav();
   const [state] = useGlobalState();
   const [imageIdx, setImageIdx] = useState<number | undefined>();
+
+  const session = useSession();
+  const profile = useProfile(session?.pubkey || ' ');
+  const userNPub = session ? nip19.npubEncode(session?.pubkey) as string : undefined;
+
   const { zapClick, heartClick, zapState, heartState, repostClick, repostState } = useZapsAndReations(
     state.activeImage,
-    state.userNPub
+    userNPub
   );
   const navigate = useNavigate();
   const listAuthors = useAuthorsFromList(settings.list);
@@ -325,7 +331,7 @@ const SlideShow = () => {
 
       {state.showNavButtons && (
         <div className="bottom-controls">
-          {state.userNPub && state.activeImage && (
+          {session?.pubkey && state.activeImage && (
             <>
               <button
                 className={`repost ${repostState ? 'reposted' : ''}`}
@@ -339,7 +345,7 @@ const SlideShow = () => {
               >
                 <IconHeart></IconHeart>
               </button>
-              {(state.profile?.lud06 || state.profile?.lud16) && (
+              {(profile?.lud06 || profile?.lud16) && (
                 <button className={`zap ${zapState}`} onClick={() => state.activeImage && zapClick(state.activeImage)}>
                   <IconBolt></IconBolt>
                 </button>

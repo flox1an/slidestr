@@ -5,12 +5,13 @@ import { Settings } from '../../utils/useNav';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { useSwipeable } from 'react-swipeable';
 import { Helmet } from 'react-helmet';
-import useProfile from '../../utils/useProfile';
+import useActiveProfile from '../../utils/useActiveProfile';
 import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
 import MasonryImage from './MasonryImage';
 import useWindowSize from '../../utils/useWindowSize';
 import { topics } from '../env';
+import useTitle from '../../utils/useTitle';
 
 type MasonryViewProps = {
   settings: Settings;
@@ -25,7 +26,8 @@ type MImage = NostrImage & {
 };
 
 const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: MasonryViewProps) => {
-  const { activeProfile, title, profileNpub } = useProfile(settings);
+  const { activeProfile, activeNpub } = useActiveProfile(settings);
+  const title = useTitle(settings, activeProfile);
   const [_, setState] = useGlobalState();
   const { width } = useWindowSize();
 
@@ -119,7 +121,7 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
             <AuthorProfile
               src={urlFix(activeProfile.image || '')}
               author={activeProfile.displayName || activeProfile.name}
-              npub={profileNpub}
+              npub={activeNpub}
               setViewMode={setViewMode}
               followButton
               externalLink

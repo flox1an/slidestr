@@ -6,9 +6,10 @@ import { Settings } from '../../utils/useNav';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { useSwipeable } from 'react-swipeable';
 import { Helmet } from 'react-helmet';
-import useProfile from '../../utils/useProfile';
+import useActiveProfile from '../../utils/useActiveProfile';
 import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
+import useTitle from '../../utils/useTitle';
 
 type GridViewProps = {
   settings: Settings;
@@ -19,7 +20,8 @@ type GridViewProps = {
 };
 
 const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: GridViewProps) => {
-  const { activeProfile, title, profileNpub } = useProfile(settings);
+  const { activeProfile, activeNpub } = useActiveProfile(settings);
+  const title = useTitle(settings, activeProfile);
   const [_, setState] = useGlobalState();
   const showNextImage = () => {
     setCurrentImage(idx => (idx !== undefined ? idx + 1 : 0));
@@ -78,7 +80,7 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
             <AuthorProfile
               src={urlFix(activeProfile.image || '')}
               author={activeProfile.displayName || activeProfile.name}
-              npub={profileNpub}
+              npub={activeNpub}
               setViewMode={setViewMode}
               followButton
               externalLink

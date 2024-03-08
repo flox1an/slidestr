@@ -3,12 +3,13 @@ import { NostrImage, urlFix } from '../nostrImageDownload';
 import { Settings } from '../../utils/useNav';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { Helmet } from 'react-helmet';
-import useProfile from '../../utils/useProfile';
+import useActiveProfile from '../../utils/useActiveProfile';
 import ScrollImage from './ScrollImage';
 import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
 import IconChevronUp from '../Icons/IconChevronUp';
 import InfoPanel from '../InfoPanel/InfoPanel';
+import useTitle from '../../utils/useTitle';
 
 type ScrollViewProps = {
   settings: Settings;
@@ -44,7 +45,8 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
     }
   }, [images, currentImage, setState]);
 
-  const { activeProfile, profileNpub, title } = useProfile(settings, state.activeImage);
+  const { activeProfile, activeNpub } = useActiveProfile(settings, state.activeImage);
+  const title = useTitle(settings, activeProfile);
 
   const infoPanelAvailable = state.activeImage && (state.activeImage.content || state.activeImage.tags.length > 0);
   // console.log(JSON.stringify([state?.activeImage?.content, state?.activeImage?.tags]));
@@ -68,7 +70,7 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
         <AuthorProfile
           src={urlFix(activeProfile.image || '')}
           author={activeProfile.displayName || activeProfile.name}
-          npub={profileNpub}
+          npub={activeNpub}
           setViewMode={setViewMode}
         ></AuthorProfile>
       )}

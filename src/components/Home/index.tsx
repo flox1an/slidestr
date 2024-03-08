@@ -1,20 +1,26 @@
 import { topics } from '../env';
 import useNav from '../../utils/useNav';
 import './Home.css';
-import { useGlobalState } from '../../utils/globalState';
 import usePeopleLists from '../../utils/useLists';
 import { createImgProxyUrl } from '../nostrImageDownload';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
-import useProfile from '../../utils/useProfile';
+import useActiveProfile from '../../utils/useActiveProfile';
+import useTitle from '../../utils/useTitle';
+import { useSession } from '../../ngine/state';
+import { nip19 } from 'nostr-tools';
+import useProfile from '../../ngine/hooks/useProfile';
 
 const Home = () => {
   const { nav, currentSettings } = useNav();
-  const { title } = useProfile(currentSettings);
+  const { activeProfile } = useActiveProfile(currentSettings);
+  const title = useTitle(currentSettings, activeProfile);
   const [showAdult, setShowAdult] = useState(currentSettings.showAdult || false);
-  const [state] = useGlobalState();
   const topicKeys = Object.keys(topics);
-  const lists = usePeopleLists(state.userNPub);
+  const session = useSession();
+  const lists = usePeopleLists(session?.pubkey);
+  const profile = useProfile(session?.pubkey || ' ');
+  const userNPub = session && nip19.npubEncode(session?.pubkey);
 
   return (
     <div className="home-container">
@@ -55,7 +61,7 @@ const Home = () => {
             <div>All content posted on nostr. Use with care!</div>
           </div>
         </div>
-        {state.userNPub && (
+        {session?.pubkey && (
           <>
             <h2>Your...</h2>
             <div className="topics">
@@ -82,14 +88,14 @@ const Home = () => {
                 className="topic"
                 style={{
                   backgroundImage:
-                    state.profile?.banner &&
-                    `linear-gradient(170deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%), url(${createImgProxyUrl(state.profile?.banner, 600, -1)})`,
+                    profile?.banner &&
+                    `linear-gradient(170deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%), url(${createImgProxyUrl(profile?.banner, 600, -1)})`,
                 }}
                 onClick={() =>
                   nav({
                     ...currentSettings,
                     topic: undefined,
-                    npubs: [state.userNPub || ''],
+                    npubs: userNPub ? [userNPub] : [],
                     tags: [],
                     list: undefined,
                     follows: false,

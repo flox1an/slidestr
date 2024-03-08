@@ -8,8 +8,9 @@ import { Helmet } from 'react-helmet';
 import IconPause from '../Icons/IconPause';
 import IconSpinner from '../Icons/IconSpinner';
 import { Settings } from '../../utils/useNav';
-import useProfile from '../../utils/useProfile';
+import useActiveProfile from '../../utils/useActiveProfile';
 import { ViewMode } from '../SlideShow';
+import useTitle from '../../utils/useTitle';
 
 type SlideViewProps = {
   settings: Settings;
@@ -27,7 +28,8 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
   const [activeNpub, setActiveNpub] = useState<string | undefined>(undefined);
   const [slideShowStarted, setSlideShowStarted] = useState(false);
   const [activeContent, setActiveContent] = useState<string | undefined>(undefined);
-  const { activeProfile, title } = useProfile(settings);
+  const { activeProfile } = useActiveProfile(settings);
+  const title = useTitle(settings, activeProfile);
 
   const queueNextImage = (waitTime: number) => {
     clearTimeout(viewTimeoutHandle.current);

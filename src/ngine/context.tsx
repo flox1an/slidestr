@@ -173,9 +173,8 @@ export const NgineProvider = ({ ndk, links, children, enableFiatRates = false }:
       const pubkey = asURL.pathname.replace(/^\/\//, '');
       return { relays, pubkey };
     } else {
-      console.log(url);
-      //const user = await NDKUser.fromNip05(url, ndk, true);  // TODO needs PR FIX in NDK
-      const user = await getNip05For(url);
+      // const user = await NDKUser.fromNip05(url, ndk, true);  // TODO needs PR FIX in NDK
+      const user = await getNip05For(url); // WORKAROUND local implementation
       if (user) {
         const pubkey = user.pubkey;
         const relays = user.nip46 && user.nip46.length > 0 ? user.nip46 : ['wss://relay.nsecbunker.com'];
@@ -187,16 +186,30 @@ export const NgineProvider = ({ ndk, links, children, enableFiatRates = false }:
     }
   }
 
+  function createOrLoadPrivateKeySigner() {
+    const LS_NIP46_KEY = 'nip64key';
+    const existingKey = localStorage.getItem(LS_NIP46_KEY);
+    if (existingKey) {
+      return new NDKPrivateKeySigner(existingKey);
+    } else {
+      const generatedSigner = NDKPrivateKeySigner.generate();
+      const generatedKey = generatedSigner.privateKey;
+      if (generatedKey) {
+        localStorage.setItem(LS_NIP46_KEY, generatedKey);
+      }
+      return generatedSigner;
+    }
+  }
+
   async function nip46Login(url: string) {
     const settings = await getNostrConnectSettings(url);
     if (settings) {
-      console.log(settings);
       const { pubkey, relays } = settings;
       const bunkerNDK = new NDK({
         explicitRelayUrls: relays,
       });
       await bunkerNDK.connect();
-      const localSigner = NDKPrivateKeySigner.generate();
+      const localSigner = createOrLoadPrivateKeySigner();
       console.log('localSigner', localSigner);
       const signer = new NDKNip46Signer(bunkerNDK, pubkey, localSigner);
       console.log('signer', signer);

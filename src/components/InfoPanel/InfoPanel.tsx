@@ -6,7 +6,7 @@ import './InfoPanel.css';
 import IconChevronDown from '../Icons/IconChevronDown';
 import { ViewMode } from '../SlideShow';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
-import useProfile from '../../utils/useProfile';
+import useActiveProfile from '../../utils/useActiveProfile';
 import { useGlobalState } from '../../utils/globalState';
 import IconLink from '../Icons/IconLink';
 import { nip19 } from 'nostr-tools';
@@ -21,13 +21,13 @@ type InfoPanelProps = {
 const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) => {
   const { nav, currentSettings } = useNav();
   const [state] = useGlobalState();
-  const { activeProfile, profileNpub } = useProfile(settings, state.activeImage);
+  const { activeProfile, activeNpub } = useActiveProfile(settings, state.activeImage);
 
   const profile = activeProfile && (
     <AuthorProfile
       src={urlFix(activeProfile.image || '')}
       author={activeProfile.displayName || activeProfile.name}
-      npub={profileNpub}
+      npub={activeNpub}
       setViewMode={setViewMode}
       followButton
     ></AuthorProfile>

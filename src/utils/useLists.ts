@@ -4,11 +4,10 @@ import { nip19 } from 'nostr-tools';
 
 const KIND_PEOPLE_LIST = 30000;
 
-const usePeopleLists = (npub?: string) => {
-  const pubkey = npub && (nip19.decode(npub).data as string);
+const usePeopleLists = (pubkey?: string) => {
   const { events } = useEvents(
     { kinds: [KIND_PEOPLE_LIST], authors: pubkey ? [pubkey] : [], limit: 50 },
-    { disable: !npub }
+    { disable: !pubkey }
   );
 
   const peopleLists = useMemo(() => {

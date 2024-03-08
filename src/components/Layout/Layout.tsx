@@ -1,16 +1,22 @@
 import './Layout.css';
 import { useState } from 'react';
 import Login from '../Login/Login';
-import { useGlobalState } from '../../utils/globalState';
 import IconUser from '../Icons/IconUser';
 import { createImgProxyUrl } from '../nostrImageDownload';
 import { Outlet } from 'react-router-dom';
 import React from 'react';
+import { useLogOut } from '../../ngine/context';
+import { useSession } from '../../ngine/state';
+import useProfile from '../../ngine/hooks/useProfile';
+import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
 
 const Layout = () => {
   //const { disclaimerAccepted, setDisclaimerAccepted } = useDisclaimerState();
-  const [state, setState] = useGlobalState();
   const [showLogin, setShowLogin] = useState(false);
+  const logOut = useLogOut();
+  const session = useSession();
+  
+  const profile =  useProfile(session?.pubkey || '', NDKSubscriptionCacheUsage.CACHE_FIRST);
 
   //   useEffect(() => {
   //     if (currentSettings.npubs.length == 0 && currentSettings.tags.length == 0) {
@@ -19,22 +25,22 @@ const Layout = () => {
   //   }, []);
 
   const onLogout = () => {
-    //setAutoLogin(false);
-    setState({ userNPub: undefined, profile: undefined });
+    logOut();
   };
+
 
   return (
     <>
       {showLogin && <Login onClose={() => setShowLogin(false)} />}
 
       <div className="top-right-controls">
-        {state.userNPub && state.profile ? (
-          state.profile.image && (
+        {session?.pubkey && profile ? (
+          profile.image && (
             <img
               referrerPolicy="no-referrer"
               className="profile"
               onClick={onLogout}
-              src={createImgProxyUrl(state.profile.image, 80, 80)}
+              src={createImgProxyUrl(profile.image, 80, 80)}
             />
           )
         ) : (

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './Login.css';
 import { useBunkerLogin, useExtensionLogin } from '../../ngine/context';
-import { useGlobalState } from '../../utils/globalState';
 import React from 'react';
 
 type LoginProps = {
@@ -10,7 +9,6 @@ type LoginProps = {
 
 const Login = ({ onClose }: LoginProps) => {
   const [address, setAddress] = useState('');
-  const [_, setState] = useGlobalState();
   const bunkerLogin = useBunkerLogin();
   const extensionLogin = useExtensionLogin();
   /*
@@ -43,7 +41,6 @@ const Login = ({ onClose }: LoginProps) => {
   const loginWithAddress = async () => {
     const user = await bunkerLogin(address);
     if (user) {
-      setState({ userNPub: user.npub, profile: user.profile });
       onClose();
     } else {
       console.error('Error loging in');
@@ -54,7 +51,6 @@ const Login = ({ onClose }: LoginProps) => {
     const user = await extensionLogin();
     console.log(user);
     if (user) {
-      setState({ userNPub: user.npub, profile: user.profile });
       onClose();
     } else {
       console.error('Error loging in');
