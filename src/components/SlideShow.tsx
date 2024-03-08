@@ -90,7 +90,7 @@ const SlideShow = () => {
 
   const session = useSession();
   const profile = useProfile(session?.pubkey || ' ');
-  const userNPub = session ? nip19.npubEncode(session?.pubkey) as string : undefined;
+  const userNPub = session ? (nip19.npubEncode(session?.pubkey) as string) : undefined;
 
   const { zapClick, heartClick, zapState, heartState, repostClick, repostState } = useZapsAndReations(
     state.activeImage,

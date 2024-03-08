@@ -29,7 +29,7 @@ const AuthorProfile = ({
   const avatarLoaded = useImageLoaded(src);
   const { nav, currentSettings } = useNav();
   const session = useSession();
-  
+
   const followButtonAvailable = followButton && session?.pubkey;
 
   return (

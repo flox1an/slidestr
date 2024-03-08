@@ -10,12 +10,13 @@ import Layout from './components/Layout/Layout';
 import SlideShow from './components/SlideShow';
 
 const cacheAdapterDexie = new NDKCacheAdapterDexie({ dbName: 'slidestr' });
+
 const ndk = new NDK({
   explicitRelayUrls: defaultRelays,
   outboxRelayUrls: ['wss://purplepag.es'],
   enableOutboxModel: true,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  cacheAdapter: cacheAdapterDexie as any, // types don't in the current version
+  cacheAdapter: cacheAdapterDexie as any, // types don't match in the current version
 });
 
 const App = () => {

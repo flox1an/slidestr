@@ -4,6 +4,8 @@ export const imageProxy = import.meta.env.VITE_IMAGE_PROXY || 'https://imgproxy.
 
 export const appName = import.meta.env.VITE_APP_NAME || 'slidestr.net';
 
+export const publicUrl = import.meta.env.VITE_PUBLIC_URL || 'https://slidestr.net';
+
 type Topic = {
   name?: string;
   tags: string[];

@@ -15,8 +15,8 @@ const Layout = () => {
   const [showLogin, setShowLogin] = useState(false);
   const logOut = useLogOut();
   const session = useSession();
-  
-  const profile =  useProfile(session?.pubkey || '', NDKSubscriptionCacheUsage.CACHE_FIRST);
+
+  const profile = useProfile(session?.pubkey || '', NDKSubscriptionCacheUsage.CACHE_FIRST);
 
   //   useEffect(() => {
   //     if (currentSettings.npubs.length == 0 && currentSettings.tags.length == 0) {
@@ -27,7 +27,6 @@ const Layout = () => {
   const onLogout = () => {
     logOut();
   };
-
 
   return (
     <>

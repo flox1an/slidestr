@@ -1,4 +1,4 @@
-import { topics } from '../env';
+import { publicUrl, topics } from '../env';
 import useNav from '../../utils/useNav';
 import './Home.css';
 import usePeopleLists from '../../utils/useLists';
@@ -35,7 +35,7 @@ const Home = () => {
               key={tk}
               className="topic"
               style={{
-                backgroundImage: `linear-gradient(170deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%), url(${createImgProxyUrl('https://slidestr.net/images/' + tk + '.jpg', 600, -1)})`,
+                backgroundImage: `linear-gradient(170deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%), url(${createImgProxyUrl(publicUrl + '/images/' + tk + '.jpg', 600, -1)})`,
               }}
               onClick={() =>
                 nav({ ...currentSettings, topic: tk, npubs: [], tags: [], list: undefined, follows: false, showAdult })
