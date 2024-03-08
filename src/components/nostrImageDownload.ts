@@ -121,19 +121,12 @@ export const isVideo = (url: string) => {
 };
 
 export const createImgProxyUrl = (url: string, width = 200, height = 200) => {
-  if (
-    url.includes('imgur.com') /* ||
-
-    url.includes('cdn.midjourney.com') ||
-    url.includes('wasabisys.com') ||
-    url.includes('files.mastodon.social') ||
-    url.includes('files.mastodon.online') ||
-    url.includes('media.mastodon.scot') ||
-    url.includes('media.mas.to') ||
-    url.includes('smutlandia.com') ||
-    url.includes('file.misskey.design') */
-  )
+  // Imggur does not allow localhost as a referrer. Apparently the
+  // imgproxy sets the Referrer header, that is why we disable the
+  // imgproxy for imgur.com here.
+  if (url.includes('imgur.com')) {
     return url;
+  }
 
   const heightParam = height < 0 ? '' : ':' + height;
 

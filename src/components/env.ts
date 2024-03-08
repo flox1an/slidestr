@@ -7,10 +7,6 @@ type Topic = {
 };
 
 export const topics: { [key: string]: Topic } = {
-  bitcoinatlantis: {
-    name: 'Bitcoin Atlantis / Madeira',
-    tags: ['atlantis', 'bitcoinatlantis', 'madeira', 'btcatlantis', 'soveng', 'funchal', 'freemadeira', 'ba24'],
-  },
   art: {
     name: 'Art',
     tags: [
@@ -47,21 +43,48 @@ export const topics: { [key: string]: Topic } = {
   },
   lifestyle: {
     name: 'Lifestyle',
+    tags: ['fashion', 'flowerstr', 'style', 'weedstr', 'travel', 'travelstr', 'happy', 'life', 'love', 'hiking'],
+  },
+  food: {
+    name: 'Food / Cooking / Baking',
     tags: [
-      'fashion',
-      'flowerstr',
+      'baking',
+      'bbq',
+      'breadstr',
+      'breakfast',
+      'cake',
+      'carnivorediet',
+      'cooking',
+      'dessert',
+      'dessertporn',
+      'dinner',
+      'ferment',
+      'finedining',
+      'foodchain',
+      'foodie',
+      'foodporn',
       'foodstr',
-      'style',
-      'weedstr',
-      'travel',
-      'travelstr',
-      'happy',
-      'life',
-      'love',
-      'hiking',
+      'ketodiet',
+      'lowcarb',
+      'lunch',
+      'lunchchain',
+      'meatstr',
+      'noodle',
+      'pasta',
+      'pizza',
+      'plantbased',
+      'proofofsteak',
+      'sandwich',
+      'sourdough',
+      'vegan',
+      'yumstr',
     ],
   },
   gardenandfarm: { name: 'Gardening und Farming', tags: ['gardening', 'gardenstr', 'nature', 'farming', 'farmstr'] },
+  bitcoinatlantis: {
+    name: 'Bitcoin Atlantis / Madeira',
+    tags: ['atlantis', 'bitcoinatlantis', 'madeira', 'btcatlantis', 'soveng', 'funchal', 'freemadeira', 'ba24'],
+  },
 };
 
 export const defaultHashTags = [
@@ -254,6 +277,9 @@ export const adultNPubs = [
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
   'npub1f3n7hq0a6vyfsjrv9vfdwtasa0g98ve96he68rxsvq9x6cl8tvxqmv6ca4', // Lady Sex (nude anime)
   'npub1ylq5s3xsdmzgzvgzll6ghcs3qa8a9ajl955hj4tcpmyruvjsl8nq5wqhd8', // Dnera
+  'npub1vmd8l5h60wqzp5yyjdutleyntqlq86yqxhwxwayek488rngtaras2z99sh', // ANDREIITA
+  'npub1d5ygkef6r0l7w29ek9l9c7hulsvdshms2qh74jp5qpfyad4g6h5s4ap6lz', // 莫谈国事
+  'npub1fr8lj8ny89jm93lk977494le5u2qmhuxg55n7lmtm0e50khzdxxq5almwg', // terry
 
   'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures

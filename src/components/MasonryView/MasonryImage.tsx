@@ -42,6 +42,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const description = image.content && image.content?.substring(0, 60) + (image.content.length > 60 ? ' ... ' : ' ');
   const showTags = useMemo(() => uniq(image.tags).slice(0, 5), [image.tags]);
   const now = unixNow();
+  const showInfo = true;
 
   return (
     <LazyLoad>
@@ -62,6 +63,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
           ) : (
             <>
               <img
+                referrerPolicy="no-referrer"
                 data-node-id={image.noteId}
                 onError={(e: SyntheticEvent<HTMLImageElement>) => {
                   console.log('not found: ', e.currentTarget.src);
@@ -81,7 +83,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
             </>
           )}
         </a>
-        {(showAuthor || description || showTags.length > 0) && (
+        {showInfo && (showAuthor || description || showTags.length > 0) && (
           <div className="info-section">
             <div className="time">{image.timestamp && timeDifference(now, image.timestamp)}</div>
             {showAuthor && (

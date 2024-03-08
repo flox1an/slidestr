@@ -30,6 +30,7 @@ const GridImage = ({ image, onClick, index }: GridImageProps) => {
           ></video>
         ) : (
           <img
+            referrerPolicy="no-referrer"
             data-node-id={image.noteId}
             onError={(e: SyntheticEvent<HTMLImageElement>) => {
               console.log('not found: ', e.currentTarget.src);

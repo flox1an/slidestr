@@ -30,7 +30,12 @@ const Layout = () => {
       <div className="top-right-controls">
         {state.userNPub && state.profile ? (
           state.profile.image && (
-            <img className="profile" onClick={onLogout} src={createImgProxyUrl(state.profile.image, 80, 80)} />
+            <img
+              referrerPolicy="no-referrer"
+              className="profile"
+              onClick={onLogout}
+              src={createImgProxyUrl(state.profile.image, 80, 80)}
+            />
           )
         ) : (
           <button onClick={() => setShowLogin(true)} className="login">

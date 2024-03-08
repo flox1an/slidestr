@@ -92,6 +92,7 @@ const ScrollImage = ({ image, currentImage, setCurrentImage, index }: ScrollImag
           ></video>
         ) : (
           <img
+            referrerPolicy="no-referrer"
             data-node-id={image.noteId}
             onError={(e: SyntheticEvent<HTMLImageElement>) => {
               console.log('not found: ', e.currentTarget.src);
