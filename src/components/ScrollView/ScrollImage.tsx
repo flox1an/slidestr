@@ -5,6 +5,7 @@ import './ScrollImage.css';
 import useOnScreen from '../../utils/useOnScreen';
 import IconMicMuted from '../Icons/IconMicMuted';
 import IconMicOn from '../Icons/IconMicOn';
+import useWindowSize from '../../utils/useWindowSize';
 
 interface ScrollImageProps {
   image: NostrImage;
@@ -14,18 +15,42 @@ interface ScrollImageProps {
 }
 
 const ScrollImage = ({ image, currentImage, setCurrentImage, index }: ScrollImageProps) => {
-  const isMobile = typeof screen.orientation !== 'undefined';
+  const { width } = useWindowSize();
+  const isMobile = useMemo(() => width && width <= 768, [width]);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(isMobile);
+  const [muted, setMuted] = useState(isMobile ? true : false);
   const isVisible = useOnScreen(containerRef);
   const nearCurrentImage = useMemo(() => Math.abs((currentImage || 0) - index) < 3, [currentImage, index]);
   const mediaIsVideo = useMemo(() => isVideo(image.url), [image.url]);
 
-  const currentImageProxyUrl = useMemo(
-    () => (isMobile ? createImgProxyUrl(image.url, 800, -1) : image.url),
-    [image.url, isMobile]
-  );
+  const imageProxyUrl320 = useMemo(() => createImgProxyUrl(image.url, 320, -1), [image.url]);
+
+  const currentImageProxyUrl = useMemo(() => {
+    const imageProxyUrl800 = createImgProxyUrl(image.url, 800, -1);
+    const imageProxyUrl1920 = createImgProxyUrl(image.url, 1920, -1);
+
+    return width == undefined
+      ? imageProxyUrl320
+      : width < 800
+        ? imageProxyUrl320
+        : width < 1920
+          ? imageProxyUrl800
+          : imageProxyUrl1920;
+  }, [image.url, imageProxyUrl320, width]);
+
+  const blurBgUrl = useMemo(() => {
+    if (mediaIsVideo) return '';
+
+    if (isMobile) {
+      // On mobile use the 200x200 grid image
+      return createImgProxyUrl(image.url, 200, 200);
+    } else {
+      // on Desktop use the 320x masonry image
+      return imageProxyUrl320;
+    }
+  }, [image.url, imageProxyUrl320, isMobile, mediaIsVideo]);
 
   /*
   const toggleVideoPause = (video: HTMLVideoElement | null) => {
@@ -69,7 +94,7 @@ const ScrollImage = ({ image, currentImage, setCurrentImage, index }: ScrollImag
       ref={containerRef}
       id={'sc' + index}
       className="scroll-content"
-      style={nearCurrentImage ? { backgroundImage: `url(${!mediaIsVideo ? currentImageProxyUrl : ''})` } : undefined}
+      style={nearCurrentImage ? { backgroundImage: `url(${blurBgUrl})` } : undefined}
     >
       {nearCurrentImage &&
         (mediaIsVideo ? (

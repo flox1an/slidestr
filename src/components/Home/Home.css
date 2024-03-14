@@ -15,7 +15,7 @@
 .home .topics {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 }
 
 .home .topic {
@@ -23,8 +23,9 @@
   border-radius: 16px;
   padding: 1em;
   cursor: pointer;
-  height: 6em;
+  height: 7em;
   background-size: cover;
+  background-position: center;
 }
 
 .home .topic-title {

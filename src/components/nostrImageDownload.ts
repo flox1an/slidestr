@@ -1,5 +1,5 @@
 import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
-import { adultContentTags, adultPublicKeys, mixedAdultNPubs } from './env';
+import { adultContentTags, adultPublicKeys, imageProxy, mixedAdultNPubs } from './env';
 import uniq from 'lodash/uniq';
 import { unixNow } from '../ngine/time';
 
@@ -130,5 +130,5 @@ export const createImgProxyUrl = (url: string, width = 200, height = 200) => {
 
   const heightParam = height < 0 ? '' : ':' + height;
 
-  return `https://imgproxy.slidestr.net/insecure/f:webp/rs:fill:${width}${heightParam}/plain/${url}`;
+  return `${imageProxy}/insecure/f:webp/rs:fill:${width}${heightParam}/plain/${url}`;
 };

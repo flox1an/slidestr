@@ -9,7 +9,54 @@ export const publicUrl = import.meta.env.VITE_PUBLIC_URL || 'https://slidestr.ne
 type Topic = {
   name?: string;
   tags: string[];
+  nsfw?: boolean;
 };
+
+/* All posts with the following hashtags are flagged as adult / NSFW are not shown
+   by default. Users can enable this content through the adult content flag
+   in the UI or through a URL parameter. 
+*/
+export const adultContentTags = [
+  'adult',
+  'ass',
+  'blowjob',
+  'boobs',
+  'boobstr',
+  'buttstr',
+  'erostr',
+  'erotic',
+  'freethenipple',
+  'friskyfriday',
+  'humpday',
+  'kink',
+  'kinkstr',
+  'lolita',
+  'milf',
+  'naked',
+  'nakedart',
+  'nasstr',
+  'nodestr',
+  'naughty',
+  'nsfw',
+  'nude',
+  'nudeart',
+  'nudes',
+  'onlyfans',
+  'orgasm',
+  'porn',
+  'pornhub',
+  'pornstr',
+  'pussy',
+  'sex',
+  'sexy',
+  'suicidegirls',
+  'thighstr',
+  'teenstr',
+  'tits',
+  'titstr',
+  'xxx',
+  'nostrqueen',
+];
 
 export const topics: { [key: string]: Topic } = {
   art: {
@@ -29,26 +76,59 @@ export const topics: { [key: string]: Topic } = {
       'zeichnen',
     ],
   },
+  aiart: {
+    name: 'AI Art',
+    tags: [
+      'aiart',
+      'aiartists',
+      'aiartwork',
+      'automatic1111',
+      'generativeart',
+      'imgnai',
+      'midjourney',
+      'midjourneyart',
+      'stablediffusion',
+    ],
+  },
   bitcoin: { name: '₿itcoin', tags: ['bitcoin', 'plebchain'] },
   nostr: { name: 'Nostr', tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom', 'purple'] },
   animals: { name: 'Animals', tags: ['catstr', 'dogstr', 'animal', 'animals', 'bird', 'birds', 'pets'] },
   photography: {
     name: 'Photography',
     tags: [
+      'fujifilm',
+      'landscapephotography',
+      'moodoftheday',
       'naturephotography',
       'photo',
+      'photobook',
       'photography',
       'photos',
       'photostr',
       'picoftheday',
       'picstr',
       'streetphotography',
-      'fujifilm',
     ],
   },
   lifestyle: {
     name: 'Lifestyle',
-    tags: ['fashion', 'flowerstr', 'style', 'weedstr', 'travel', 'travelstr', 'happy', 'life', 'love', 'hiking'],
+    tags: ['fashion', 'flowerstr', 'style', 'weedstr', 'happy', 'life', 'love', 'tattoo', 'tattoowomen'],
+  },
+  travel: {
+    name: 'Travel',
+    tags: [
+      'beach',
+      'camping',
+      'hiking',
+      'nature',
+      'ocean',
+      'travel',
+      'travelgram',
+      'travelling',
+      'travelstr',
+      'vacation',
+      'vanlife',
+    ],
   },
   food: {
     name: 'Food / Cooking / Baking',
@@ -89,6 +169,11 @@ export const topics: { [key: string]: Topic } = {
   bitcoinatlantis: {
     name: 'Bitcoin Atlantis / Madeira',
     tags: ['atlantis', 'bitcoinatlantis', 'madeira', 'btcatlantis', 'soveng', 'funchal', 'freemadeira', 'ba24'],
+  },
+  nsfw: {
+    name: 'NSFW / Adult Content',
+    tags: adultContentTags,
+    nsfw: true,
   },
 };
 
@@ -148,52 +233,6 @@ export const visibleHashTags = [
   'zapathon',
 ];
 
-/* All posts with the following hashtags are flagged as adult / NSFW are not shown
-   by default. Users can enable this content through the adult content flag
-   in the UI or through a URL parameter. 
-*/
-export const adultContentTags = [
-  'adult',
-  'ass',
-  'blowjob',
-  'boobs',
-  'boobstr',
-  'buttstr',
-  'erostr',
-  'erotic',
-  'freethenipple',
-  'friskyfriday',
-  'humpday',
-  'kink',
-  'kinkstr',
-  'lolita',
-  'milf',
-  'naked',
-  'nakedart',
-  'nasstr',
-  'nodestr',
-  'naughty',
-  'nsfw',
-  'nude',
-  'nudeart',
-  'nudes',
-  'onlyfans',
-  'orgasm',
-  'porn',
-  'pornhub',
-  'pornstr',
-  'pussy',
-  'sex',
-  'sexy',
-  'suicidegirls',
-  'thighstr',
-  'teenstr',
-  'tits',
-  'titstr',
-  'xxx',
-  'nostrqueen',
-];
-
 /* These are shown when using tags but hidden from global (unless NSFW content is enabled) */
 export const mixedAdultNPubs = [
   'npub12jedfuhk2wfr7syr38t2f55652khuyz9f88r63ftm0j2vudxq9sqq7677r', // Erikha
@@ -211,6 +250,7 @@ export const adultNPubs = [
   'npub13n6ednsew67xk7hgse670z7849q5h8su5rgydxtl4lq3r5cx4ecqsd9af4', // Everybody, Every Body
   'npub14agvvpaqjc922sn7vrkg769xujxh2wp2xdcd7xgrzec4ykyam6yshjepay',
   'npub15asxgmzhextsxd8545rldcqgauq3ycxjta6a9m4x70p927jvltpq983udd', // Big Wanker
+  'npub15xnjasjznk2tqude45pd7epjztgl9a550kn3pvztuarv9agfecrq7sv2ww', // Steel Seraphim
   'npub16932qv3sz53t9fdlm2n7scct5ahe9fy9vsct36qd0wcwxm94gyks47dcg6', // Preggers
   'npub16ye5pezunzcx8y0ecjquks0sr5jkj6lrhfjyu2n9qxt5cxgzrvcqgnvx8s', // Aru Moon
   'npub17693mv2qu7mv67zqpcup9n502gmkuhytkxq3sw7qp50vlptq8f7syzv93d', // sha0wgoone
@@ -221,6 +261,7 @@ export const adultNPubs = [
   'npub1935j9y7lzyu8mx0zm8mcr4njzrsautl66ms0w3z7wyea04zh85psqdc3v6',
   'npub19e2tewftsy7ysd6hhkc4wn2czd4ku34z7wqkw5y4q8lm8fzhgxjsfhw825', // Waifposter88
   'npub19sjqp4cvlv2quj0rls8lfs9sy2yquclq60xhatjrjhdu55qh7jtq9v8wy4', // 中本聰
+  'npub19v2wlfdsrvcdhjlvk2ur2wgyc30ult76flhyzaatew5n432a6ahs6ptsgt', // 纪唯一
   'npub19xwjw7f23nsmnsd0j72mvhrdswt4cp6urc5el2zuu8se3yfu87ess524je', // Gone Wild (NSFW)
   'npub1acwrv7aqgu949mw0zxmw2akgsjqp574nnq4vcl9wln5355q79w5ssv9qxg', // Arianna
   'npub1acwrv7aqgu949mw0zxmw2akgsjqp574nnq4vcl9wln5355q79w5ssv9qxg', // Arianna
@@ -228,11 +269,15 @@ export const adultNPubs = [
   'npub1apr6dy5z4f0qs4cnswxj0gf37g46jxvh7xgwgs4wvzm6stu8f0asd4996r', // Anime Girl
   'npub1ccs7rlmctzzv6sj5qcjd3fdlys8zr3q6mnj30l4r4n6xp999yx7qg5qwtg', // gynoiddolls
   'npub1csk2wg33ee9kutyps4nmevyv3putfegj7yd0emsp44ph32wvmamqs7uyan', // Lilura
+  'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
+  'npub1d5ygkef6r0l7w29ek9l9c7hulsvdshms2qh74jp5qpfyad4g6h5s4ap6lz', // 莫谈国事
   'npub1dn42tzy8v8m2xu4y38djf28dfugf5vkg2uucueeldvmucdlcwgjsk49856', // Mila
   'npub1e4n8nah09he25slv00dz3kav3jsu5jvp83aya234ejumcmu2xseqwrp6pl', // Svenno(NSFW)
+  'npub1f3n7hq0a6vyfsjrv9vfdwtasa0g98ve96he68rxsvq9x6cl8tvxqmv6ca4', // Lady Sex (nude anime)
   'npub1femd0mrawr0jmtjr2jwa2nm90haxrpglzdt6tt0djrsav39e53asf74aer', // FemDom Raw
   'npub1fevdattp2nd69c47cvldjp73hd3rjqynt9j7azgsjrdlt6jmhx9qagw3la', // Nova
   'npub1fh8e9pnm8rfln0k7c6uh8wrvmva8enkdzsgzsc7v9jk97up23ewqs6kuue', // nostrporn
+  'npub1fr8lj8ny89jm93lk977494le5u2qmhuxg55n7lmtm0e50khzdxxq5almwg', // terry
   'npub1fut75jn7hztc248vz3g8vfsdtwuy95l6khw533k6dsstsdrxkussf9ax6g', // bliss (not many nude art posts)
   'npub1ga79p6qsjh0xd343q3du2unf2gl6gk0rde36c06mafxkrssmnnesxyzcss', // Orange Incest 🔞
   'npub1grssdyrmdgy5gw5umg50u6rrl9nk738lw4qg2thpcqqaf3lypkqsxt7lhg', // Shades of Red
@@ -264,30 +309,27 @@ export const adultNPubs = [
   'npub1qg550au9hqmpgye4kfrtj7yt85dn60ty5hk0hcm7pktq6g6mzugsufnfcx', // Poppy Clements
   'npub1qnpzqvzjxy79wpuvylw65gkh8n7pk62up9nc63a45a23mv0sf6us62qk5n', // 🔞▶️Play & ⏸️Pause 🔞
   'npub1qrgawjx8cvc0qsd5te5dep3ynmklsye55gu0w9d4y6tk0vcxduassqqgzf', // dustycity
+  'npub1rqnhn57h5fpc5ugd0mwpkkjsfpgz0uf0s4340w9gp5aykze8kvdsr6kq38', //  潔💋
   'npub1rv08kght99a7xwckm0qpmzw09m5gwppequgqd8lwu74eakgaavwsp5cjtw', // CuratedNSFW
   'npub1sg7rwnf96a0fhl85xlvq0unumqqh89qaygwcdy5d3ue8209ekt2suhxg7u', // Anime Mommies Bot
   'npub1sgmuwdfzq2asrh68p6ul9chp32y4938qa7ns637qgmeqgglhtwmq4l5xl9', // Nudeful Art / Athos
   'npub1skvfwq29xn92k08mu2584kx5x6ymz62askpnzjp9d3s8us68pemsmt78a4', // pornstarxyz
   'npub1suddec4n2jv50pgn9eea35r4k83ahr4mcj0zv2uec36w6jeuwagq82xjgl', // quiet.enjoyer
+  'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
   'npub1t252vm7u5qmfwv3k70g6rl2ue7ctvtvrnd60vy8jh5suglv8pw2snyyzfq', // 20th Century Foxes (NSFW)
   'npub1thsprukxnc8rxqggnesqp2wg2temhaadzhhg7n4pttpveyqedlwsqgge9q', // Harmony. Corrupted.
   'npub1tsrs6ptjnq5hluxawfme5sfxalfscapequm3ej0yfw65scwu8lys8q7y7l', // 💜 🔞EUPHORIA 🔞💜
   'npub1ulafm4d3n7ukl7yzg4hfnhfjut74nym5p83e3d67l3j62yc6ysqqrancw2', // naked
   'npub1v3rnmlms82wgxejxwn7rr6kjruy3ty0l4084dx2zp3tn8dlxv28sjnp6pf', // High Elf Archer
   'npub1ve4ztpqvlgu3v6hgrvc4lrdl2ernue7lq2h8tcgaksrkxlm7gnsqkjmz4e', // bluntkaraoke
+  'npub1vmd8l5h60wqzp5yyjdutleyntqlq86yqxhwxwayek488rngtaras2z99sh', // ANDREIITA
+  'npub1vyxmz6xgf84f8x73ww7vts6apag3ngs957eterw5lgay2z7f55tskahsja', // Homer
   'npub1wmsn8fch7kwt987jcdx06uuapn6pwzau59pvy0ql5d3xlmnxa2csj3c5p4', // StefsPicks
   'npub1y77j6jm5hw34xl5m85aumltv88arh2s7q383allkpfe4muarzc5qzfgru0', // sexy-models
   'npub1yk6fz5gx6m79g3xvxk3ca9u87mh8t73w2u2tzvdmrqwauvsqtsnsq6rcqm', // bloodywing
+  'npub1ylq5s3xsdmzgzvgzll6ghcs3qa8a9ajl955hj4tcpmyruvjsl8nq5wqhd8', // Dnera
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
-  'npub1f3n7hq0a6vyfsjrv9vfdwtasa0g98ve96he68rxsvq9x6cl8tvxqmv6ca4', // Lady Sex (nude anime)
-  'npub1ylq5s3xsdmzgzvgzll6ghcs3qa8a9ajl955hj4tcpmyruvjsl8nq5wqhd8', // Dnera
-  'npub1vmd8l5h60wqzp5yyjdutleyntqlq86yqxhwxwayek488rngtaras2z99sh', // ANDREIITA
-  'npub1d5ygkef6r0l7w29ek9l9c7hulsvdshms2qh74jp5qpfyad4g6h5s4ap6lz', // 莫谈国事
-  'npub1fr8lj8ny89jm93lk977494le5u2qmhuxg55n7lmtm0e50khzdxxq5almwg', // terry
-
-  'npub1t07mr7m65lg3ecr5eapu6qe4ayt2wgjpqjs8x58m5kx2r2cutsyqyzzzs9', // NOT NSFW but spammy ai pictures
-  'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());

@@ -19,7 +19,7 @@ const GridImage = ({ image, onClick, index }: GridImageProps) => {
         {mediaIsVideo ? (
           <video
             className={`image ${loaded ? 'show' : ''}`}
-            data-node-id={image.noteId}
+            data-node-id={image.post.event.id}
             key={image.url}
             controls={false}
             autoPlay={false}
@@ -31,7 +31,7 @@ const GridImage = ({ image, onClick, index }: GridImageProps) => {
         ) : (
           <img
             referrerPolicy="no-referrer"
-            data-node-id={image.noteId}
+            data-node-id={image.post.event.id}
             onError={(e: SyntheticEvent<HTMLImageElement>) => {
               console.log('not found: ', e.currentTarget.src);
               e.currentTarget.src = '/notfound.png';

@@ -1,6 +1,7 @@
 # TODO 
+- use noteID as URL?
 - add load more, to load older events
-- Fix/Test zaps
+- Fix Zaps, when not using a alby
 - Reimplement Likes/Zaps based in ngine code
 - move settings dialog to main start screen
 - replace search icon with nav back button

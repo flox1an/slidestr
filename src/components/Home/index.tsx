@@ -3,7 +3,7 @@ import useNav from '../../utils/useNav';
 import './Home.css';
 import usePeopleLists from '../../utils/useLists';
 import { createImgProxyUrl } from '../nostrImageDownload';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import useActiveProfile from '../../utils/useActiveProfile';
 import useTitle from '../../utils/useTitle';
@@ -16,7 +16,7 @@ const Home = () => {
   const { activeProfile } = useActiveProfile(currentSettings);
   const title = useTitle(currentSettings, activeProfile);
   const [showAdult, setShowAdult] = useState(currentSettings.showAdult || false);
-  const topicKeys = Object.keys(topics);
+  const topicKeys = useMemo(() => Object.keys(topics).filter(tk => !topics[tk].nsfw || showAdult), [showAdult]);
   const session = useSession();
   const lists = usePeopleLists(session?.pubkey);
   const profile = useProfile(session?.pubkey || ' ');

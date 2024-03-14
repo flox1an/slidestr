@@ -179,7 +179,7 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
       )}
 
       {activeImages.map(image => (
-        <Slide key={image.url} noteId={image.noteId} url={image.url} paused={paused} type={image.type} />
+        <Slide key={image.url} noteId={image.post.event.id} url={image.url} paused={paused} type={image.type} />
       ))}
     </div>
   );
