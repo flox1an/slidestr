@@ -10,7 +10,10 @@ export type Settings = {
   follows: boolean;
   list?: string;
   topic?: string;
+  type: ContentType;
 };
+
+export type ContentType = 'image' | 'video' | 'all';
 
 const useNav = () => {
   const { tags, npub, list, topic } = useParams();
@@ -21,6 +24,8 @@ const useNav = () => {
     const adult = searchParams.get('adult') === 'true' || searchParams.get('nsfw') === 'true';
     const replies = searchParams.get('replies') === 'true';
     const reposts = searchParams.get('reposts') === 'true';
+    const type = searchParams.get('type') as ContentType || 'all';
+
     const follows = window.location.pathname.startsWith('/follows');
     const useTags = tags?.split(',') || [];
 
@@ -31,6 +36,7 @@ const useNav = () => {
       showReplies: replies,
       showReposts: reposts,
       follows,
+      type,
       list,
       topic,
     };
@@ -49,6 +55,9 @@ const useNav = () => {
     }
     if (settings.showReposts) {
       searchParams.push('reposts=true');
+    }
+    if (settings.type && settings.type != 'all') {
+      searchParams.push(`type=${settings.type}`);
     }
 
     const postfix = searchParams.length > 0 ? `?${searchParams.join('&')}` : '';

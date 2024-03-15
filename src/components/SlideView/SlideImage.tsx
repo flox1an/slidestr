@@ -9,6 +9,8 @@ type SlideImageProps = {
 
 const SlideImage = ({ url, paused, style, noteId }: SlideImageProps) => {
   const loaded = useImageLoaded(url);
+  // const { optimalImageUrl } = useImageSizes(url);
+
   return (
     loaded && (
       <div

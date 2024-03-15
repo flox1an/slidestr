@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import SlideImage from './SlideImage';
 import SlideVideo from './SlideVideo';
+import { ContentType } from '@/utils/useNav';
 
 type SlideProps = {
   url: string;
   paused: boolean;
-  type: 'image' | 'video';
+  type: ContentType;
   onAnimationEnded?: () => void;
   animationDuration?: number;
   noteId: string;

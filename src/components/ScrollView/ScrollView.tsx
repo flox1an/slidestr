@@ -23,11 +23,8 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
   const containerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useGlobalState();
   const [showInfoPanel, setShowInfoPanel] = useState(false);
-
-  // const sortedImages = useMemo(
-  //   () => images.sort((a, b) => (b.timestamp && a.timestamp ? b.timestamp - a.timestamp : 0)), // sort by timestamp descending
-  //   [images] // settings is not used here, but we need to include it to trigger a re-render when it changes
-  // );
+  const { activeProfile, activeNpub } = useActiveProfile(settings, state.activeImage);
+  const title = useTitle(settings, activeProfile);
 
   useEffect(() => {
     if (currentImage) {
@@ -45,11 +42,8 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
     }
   }, [images, currentImage, setState]);
 
-  const { activeProfile, activeNpub } = useActiveProfile(settings, state.activeImage);
-  const title = useTitle(settings, activeProfile);
-
   const infoPanelAvailable = state.activeImage && (state.activeImage.content || state.activeImage.tags.length > 0);
-  // console.log(JSON.stringify([state?.activeImage?.content, state?.activeImage?.tags]));
+
   return (
     <div ref={containerRef} className="scrollview" tabIndex={0}>
       <Helmet>

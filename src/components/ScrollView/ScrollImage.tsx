@@ -6,6 +6,7 @@ import useOnScreen from '../../utils/useOnScreen';
 import IconMicMuted from '../Icons/IconMicMuted';
 import IconMicOn from '../Icons/IconMicOn';
 import useWindowSize from '../../utils/useWindowSize';
+import useImageSizes from '../../utils/useImageSizes';
 
 interface ScrollImageProps {
   image: NostrImage;
@@ -24,21 +25,7 @@ const ScrollImage = ({ image, currentImage, setCurrentImage, index }: ScrollImag
   const isVisible = useOnScreen(containerRef);
   const nearCurrentImage = useMemo(() => Math.abs((currentImage || 0) - index) < 3, [currentImage, index]);
   const mediaIsVideo = useMemo(() => isVideo(image.url), [image.url]);
-
-  const imageProxyUrl320 = useMemo(() => createImgProxyUrl(image.url, 320, -1), [image.url]);
-
-  const currentImageProxyUrl = useMemo(() => {
-    const imageProxyUrl800 = createImgProxyUrl(image.url, 800, -1);
-    const imageProxyUrl1920 = createImgProxyUrl(image.url, 1920, -1);
-
-    return width == undefined
-      ? imageProxyUrl320
-      : width < 800
-        ? imageProxyUrl320
-        : width < 1920
-          ? imageProxyUrl800
-          : imageProxyUrl1920;
-  }, [image.url, imageProxyUrl320, width]);
+  const { optimalImageUrl, imageUrl320w } = useImageSizes(image.url);
 
   const blurBgUrl = useMemo(() => {
     if (mediaIsVideo) return '';
@@ -48,9 +35,9 @@ const ScrollImage = ({ image, currentImage, setCurrentImage, index }: ScrollImag
       return createImgProxyUrl(image.url, 200, 200);
     } else {
       // on Desktop use the 320x masonry image
-      return imageProxyUrl320;
+      return imageUrl320w;
     }
-  }, [image.url, imageProxyUrl320, isMobile, mediaIsVideo]);
+  }, [image.url, imageUrl320w, isMobile, mediaIsVideo]);
 
   /*
   const toggleVideoPause = (video: HTMLVideoElement | null) => {
@@ -126,7 +113,7 @@ const ScrollImage = ({ image, currentImage, setCurrentImage, index }: ScrollImag
             className={`image`}
             loading="lazy"
             key={image.url}
-            src={currentImageProxyUrl}
+            src={optimalImageUrl}
           ></img>
         ))}
       {isVisible && mediaIsVideo && (

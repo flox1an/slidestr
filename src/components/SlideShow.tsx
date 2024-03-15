@@ -17,7 +17,7 @@ import SlideView from './SlideView';
 import { nip19 } from 'nostr-tools';
 import uniqBy from 'lodash/uniqBy';
 import AdultContentInfo from './AdultContentInfo';
-import useNav from '../utils/useNav';
+import useNav, { ContentType } from '../utils/useNav';
 import { useGlobalState } from '../utils/globalState';
 import ScrollView from './ScrollView/ScrollView';
 import IconPlay from './Icons/IconPlay';
@@ -238,25 +238,27 @@ const SlideShow = () => {
 
   useEffect(() => {
     images.current = uniqBy(
-      posts.flatMap(p => {
-        return extractImageUrls(p.event.content)
-          .filter(url => isImage(url) || isVideo(url))
-          .filter(url => !url.startsWith('https://creatr.nostr.wine/')) // Filter our creatr.nostr.wine content, since we don't have NIP-98 auth yet.
-          .map(url => ({
-            post: p,
-            url,
-            author: nip19.npubEncode(p.event.pubkey),
-            authorId: p.event.pubkey,
-            content: prepareContent(p.event.content),
-            type: isVideo(url) ? 'video' : 'image',
-            timestamp: p.event.created_at,
-            noteId: p.event.id || '',
-            tags: p.event.tags?.filter((t: string[]) => t[0] === 't').map((t: string[]) => t[1].toLowerCase()) || [],
-          }));
-      }),
+      posts
+        .flatMap(p => {
+          return extractImageUrls(p.event.content)
+            .filter(url => isImage(url) || isVideo(url))
+            .filter(url => !url.startsWith('https://creatr.nostr.wine/')) // Filter our creatr.nostr.wine content, since we don't have NIP-98 auth yet.
+            .map(url => ({
+              post: p,
+              url,
+              author: nip19.npubEncode(p.event.pubkey),
+              authorId: p.event.pubkey,
+              content: prepareContent(p.event.content),
+              type: (isVideo(url) ? 'video' : 'image') as ContentType,
+              timestamp: p.event.created_at,
+              noteId: p.event.id || '',
+              tags: p.event.tags?.filter((t: string[]) => t[0] === 't').map((t: string[]) => t[1].toLowerCase()) || [],
+            }));
+        })
+        .filter(i => settings.type == 'all' || settings.type == i.type),
       'url'
     );
-  }, [posts]);
+  }, [posts, settings.type]);
 
   const onKeyDown = (event: KeyboardEvent) => {
     if (showSettings) return;
@@ -322,7 +324,9 @@ const SlideShow = () => {
           onClick={() => {
             if (viewMode == 'scroll' || viewMode == 'slideshow') {
               setViewMode('grid');
-            } else navigate('/');
+            } else {
+              navigate(`/${settings.type !== 'all' ? `?type=${settings.type}` : ''}`);
+            }
           }}
         >
           ✕

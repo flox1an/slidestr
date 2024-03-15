@@ -48,6 +48,7 @@ const Home = () => {
             className="topic"
             onClick={() =>
               nav({
+                ...currentSettings,
                 tags: [],
                 npubs: [],
                 showReplies: false,

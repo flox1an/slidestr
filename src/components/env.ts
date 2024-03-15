@@ -1,6 +1,6 @@
 import { nip19 } from 'nostr-tools';
 
-export const imageProxy = import.meta.env.VITE_IMAGE_PROXY || 'https://imgproxy.slidestr.net';
+export const imageProxy = import.meta.env.VITE_IMAGE_PROXY || 'https://images.slidestr.net';
 
 export const appName = import.meta.env.VITE_APP_NAME || 'slidestr.net';
 
@@ -90,7 +90,7 @@ export const topics: { [key: string]: Topic } = {
       'stablediffusion',
     ],
   },
-  bitcoin: { name: '₿itcoin', tags: ['bitcoin', 'plebchain'] },
+  bitcoin: { name: '₿itcoin', tags: ['bitcoin', 'plebchain', 'hfsp', 'btfd', 'buythedip'] },
   nostr: { name: 'Nostr', tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom', 'purple'] },
   animals: { name: 'Animals', tags: ['catstr', 'dogstr', 'animal', 'animals', 'bird', 'birds', 'pets'] },
   photography: {

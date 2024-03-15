@@ -76,7 +76,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
                 loading="lazy"
                 key={image.url}
                 onClick={onClick}
-                src={createImgProxyUrl(image.url, 320, -1)} // TODO make width dynamic, also with column sizes, and full screen image size
+                src={createImgProxyUrl(image.url, 320, -1)}
               ></img>
               {
                 !loaded && <div style={{ height: 200 }}></div> // Spacer when image is not loaded yet

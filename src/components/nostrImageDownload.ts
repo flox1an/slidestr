@@ -2,6 +2,7 @@ import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
 import { adultContentTags, adultPublicKeys, imageProxy, mixedAdultNPubs } from './env';
 import uniq from 'lodash/uniq';
 import { unixNow } from '../ngine/time';
+import { ContentType } from '../utils/useNav';
 
 export type Post = {
   event: NDKEvent;
@@ -17,7 +18,7 @@ export type NostrImage = {
   content?: string;
   timestamp?: number;
   noteId: string;
-  type: 'image' | 'video';
+  type: ContentType;
   post: Post;
 };
 
@@ -71,7 +72,9 @@ export const extractImageUrls = (text: string): string[] => {
   if (text == undefined) return [];
 
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  const matchedUrls = (text.match(urlRegex) || []).map(u => urlFix(u));
+  const matchedUrls = (text.match(urlRegex) || [])
+    .map(u => urlFix(u))
+    .filter(u => !u.startsWith('https://commons.wikimedia.org/wiki/')); // the url ends with .jpg but these are wiki media web pages, not image urls
   return uniq(matchedUrls);
 };
 
