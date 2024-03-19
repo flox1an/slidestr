@@ -39,7 +39,11 @@ const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) =>
         <div className="info-panel-author">
           {profile}
           {image.post.event.id && (
-            <a className="link" target="_blank" href={`https://nostrapp.link/#${nip19.noteEncode(image.post.event.id)}`}>
+            <a
+              className="link"
+              target="_blank"
+              href={`https://nostrapp.link/#${nip19.noteEncode(image.post.event.id)}`}
+            >
               <IconLink></IconLink>
             </a>
           )}

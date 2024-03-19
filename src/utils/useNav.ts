@@ -24,7 +24,7 @@ const useNav = () => {
     const adult = searchParams.get('adult') === 'true' || searchParams.get('nsfw') === 'true';
     const replies = searchParams.get('replies') === 'true';
     const reposts = searchParams.get('reposts') === 'true';
-    const type = searchParams.get('type') as ContentType || 'all';
+    const type = (searchParams.get('type') as ContentType) || 'all';
 
     const follows = window.location.pathname.startsWith('/follows');
     const useTags = tags?.split(',') || [];
