@@ -41,6 +41,8 @@ export const adultContentTags = [
   'nude',
   'nudeart',
   'nudes',
+  'cumshot',
+  'doggysex',
   'onlyfans',
   'orgasm',
   'porn',
@@ -293,6 +295,7 @@ export const adultNPubs = [
   'npub1jjtzhxzu8dlf7yn480sz67tesnfl7gpzfpkgpez05d2z9y3lya5sxvky0y', // Selfie Girls
   'npub1jp9v034z3a26cp5hajwyuzl0hety5akdpwdnjaqgfd7pm2ts4dwsc29va8', // curatedbliss
   'npub1jvp6kfs2d3m98lyw5wcyr4fnctr83s0rc3mj5p0f75ach6vcd8rst6wqnu', // VelectBlue Art
+  'npub12a3my5mywqnlule3a7f6uuq76435j7j00h0tvy0phpet8xg2j3nq3nlntw', // Get SCORE Cash RSS Feed (RSS Feed)
   'npub1kade5vf37snr4hv5hgstav6j5ygry6z09kkq0flp47p8cmeuz5zs7zz2an', // Aeontropy
   'npub1klxseqx4et3grzgvajtlm47tz7tqmxygwj49kx3frsuls9cf8lhqhhhr5q', // Riley_R_Fan
   'npub1kq67ngznkldmecycjfmjt4deuvyxgpn4zcpq8cvfmdl2hufzzccs6nc9q8', // Sargas
