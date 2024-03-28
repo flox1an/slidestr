@@ -290,6 +290,8 @@ export const adultNPubs = [
   'npub1j0xvl8l2s4w25vcavf3jv6fgyakyc0hplxc9we8hc8mja0ct7epss0qlkj', // Thicc Pics (NSFW)
   'npub1j0y6f9gl9w39ggarr9x76lyh2swv7mpgddguv49mhmzqlz8tm69qcwpl55', // NeoMobius
   'npub1j2u3lfkhl95e6qwswr32hx6h36arlw8p2cl6hy0wgnmxmekrhx8qx93uvh', // Ay Papi
+  'npub10l8k2vx4f6mxjwf9ds2tufyl4xr9q7sj535pf3wpthyhl2rs9pdqh2vrsg', //
+  'npub1vqj24qfy8c5n23m28jj89v6lcrfwx3l0c4vsk6h590c38t79fccsqx3q8g', // Get SCORE Cash RSS Feed (RSS Feed)
   'npub1j70jp36nshq4zknnwgeamux8hdgzhf0yw50rpll0egw6cvnglalsuldjwe', // cy₿erleolao
   'npub1jge7z2kpmpdra6g58vg95uznve8ctcenmlyp9ntr3kjymscyuqpqty2cdh', // Storm
   'npub1jjtzhxzu8dlf7yn480sz67tesnfl7gpzfpkgpez05d2z9y3lya5sxvky0y', // Selfie Girls
