@@ -247,7 +247,9 @@ export const adultNPubs = [
   'npub10m75ad8pc6wtlt67f6wjeug4hpqurc68842ve5ne47u9lkjqa0lq8ja88s', // 313Chris:hellokitty_headbang:
   'npub10y6rhnutt52wwt5f7544tq4as6jt03aq7j8mle7wcymjjudanm4q4hvzaw', // NSFW
   'npub13806pd9p833wkgyemeqddjzdksunlq9gszq4yjnhw4l57sjjhwlq6m79nj', // Orvalho
+  'npub13m4q96y3yzzev25npv5tamfxsw5csc2dax3njag2uzesv83vdkcs9973fv', // 🔞鸟巢🔞
   'npub13n6ednsew67xk7hgse670z7849q5h8su5rgydxtl4lq3r5cx4ecqsd9af4', // Everybody, Every Body
+  'npub13teffx3nkty8c85dg06ewwue3hqm0kg7lxv6hkv0mp2jtkfypyas4luudc', // S
   'npub14agvvpaqjc922sn7vrkg769xujxh2wp2xdcd7xgrzec4ykyam6yshjepay',
   'npub15asxgmzhextsxd8545rldcqgauq3ycxjta6a9m4x70p927jvltpq983udd', // Big Wanker
   'npub15xnjasjznk2tqude45pd7epjztgl9a550kn3pvztuarv9agfecrq7sv2ww', // Steel Seraphim
@@ -330,7 +332,6 @@ export const adultNPubs = [
   'npub1ylq5s3xsdmzgzvgzll6ghcs3qa8a9ajl955hj4tcpmyruvjsl8nq5wqhd8', // Dnera
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
-  'npub13teffx3nkty8c85dg06ewwue3hqm0kg7lxv6hkv0mp2jtkfypyas4luudc', // S
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());

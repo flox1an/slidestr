@@ -15,8 +15,7 @@ const ndk = new NDK({
   explicitRelayUrls: defaultRelays,
   outboxRelayUrls: ['wss://purplepag.es'],
   enableOutboxModel: true,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  cacheAdapter: cacheAdapterDexie as any, // types don't match in the current version
+  cacheAdapter: cacheAdapterDexie,
 });
 
 const App = () => {
