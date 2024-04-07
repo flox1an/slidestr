@@ -273,7 +273,6 @@ export const adultNPubs = [
   'npub1apr6dy5z4f0qs4cnswxj0gf37g46jxvh7xgwgs4wvzm6stu8f0asd4996r', // Anime Girl
   'npub1ccs7rlmctzzv6sj5qcjd3fdlys8zr3q6mnj30l4r4n6xp999yx7qg5qwtg', // gynoiddolls
   'npub1csk2wg33ee9kutyps4nmevyv3putfegj7yd0emsp44ph32wvmamqs7uyan', // Lilura
-  'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // NOT NSFW but spammy ai pictures
   'npub1d5ygkef6r0l7w29ek9l9c7hulsvdshms2qh74jp5qpfyad4g6h5s4ap6lz', // 莫谈国事
   'npub1dn42tzy8v8m2xu4y38djf28dfugf5vkg2uucueeldvmucdlcwgjsk49856', // Mila
   'npub1e4n8nah09he25slv00dz3kav3jsu5jvp83aya234ejumcmu2xseqwrp6pl', // Svenno(NSFW)
@@ -337,6 +336,7 @@ export const adultNPubs = [
   'npub1ylq5s3xsdmzgzvgzll6ghcs3qa8a9ajl955hj4tcpmyruvjsl8nq5wqhd8', // Dnera
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
+  'npub1ydss4m4s93zvzmjhv4dp69vj48wc6t8ufx8rzttv2vq330yr9geq73mv2m', 
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
@@ -351,6 +351,7 @@ export const blockedNPubs = [
   'npub1kf8sau5dejmcmfmzzj256rv728p5w7s0wytdyz8ypa0ne0y6k0vswhgu9w', // noname
   'npub1nshq4pcyzdmnewg4h8yu6tsuh5t72whzkz5x4wj7t0c0cy7yyrfqq2cgnl',
   'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
+  'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // Love AI 
 ];
 
 export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());

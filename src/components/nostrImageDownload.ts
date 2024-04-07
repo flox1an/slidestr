@@ -127,7 +127,7 @@ export const createImgProxyUrl = (url: string, width = 200, height = 200) => {
   // Imggur does not allow localhost as a referrer. Apparently the
   // imgproxy sets the Referrer header, that is why we disable the
   // imgproxy for imgur.com here.
-  if (url.includes('imgur.com')) {
+  if (url.includes('imgur.com/') || url.includes('//cdn.midjourney.com/')) {
     return url;
   }
 
