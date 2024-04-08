@@ -241,6 +241,18 @@
   animation-iteration-count: infinite;
 }
 
+.bottom-controls .bookmark svg {
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+}
+
+.bottom-controls .bookmark.bookmarked svg {
+  fill: white;
+  animation: bump 1s ease-in-out;
+}
+
+
 @media screen and (max-width: 768px) {
   .controls {
     top: 2em;

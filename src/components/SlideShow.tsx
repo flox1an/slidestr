@@ -37,6 +37,8 @@ import { useAtom } from 'jotai';
 import { followsAtom, useSession } from '../ngine/state';
 import IconRepost from './Icons/IconRepost';
 import useProfile from '../ngine/hooks/useProfile';
+import IconBookmark from './Icons/IconBookmark';
+import useBookMarks from '../utils/useBookMarks';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -91,6 +93,7 @@ const SlideShow = () => {
   const session = useSession();
   const profile = useProfile(session?.pubkey || ' ');
   const userNPub = session ? (nip19.npubEncode(session?.pubkey) as string) : undefined;
+  const { bookmarkClick, bookmarkState } = useBookMarks(session?.pubkey, state.activeImage);
 
   const { zapClick, heartClick, zapState, heartState, repostClick, repostState } = useZapsAndReations(
     state.activeImage,
@@ -337,6 +340,9 @@ const SlideShow = () => {
         <div className="bottom-controls">
           {session?.pubkey && state.activeImage && (
             <>
+              <button className={`bookmark ${bookmarkState ? 'bookmarked' : ''}`} onClick={() => bookmarkClick()}>
+                <IconBookmark></IconBookmark>
+              </button>
               <button
                 className={`repost ${repostState ? 'reposted' : ''}`}
                 onClick={() => !repostState && repostClick()}
