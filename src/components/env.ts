@@ -336,7 +336,10 @@ export const adultNPubs = [
   'npub1ylq5s3xsdmzgzvgzll6ghcs3qa8a9ajl955hj4tcpmyruvjsl8nq5wqhd8', // Dnera
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
-  'npub1ydss4m4s93zvzmjhv4dp69vj48wc6t8ufx8rzttv2vq330yr9geq73mv2m', 
+  'npub1ydss4m4s93zvzmjhv4dp69vj48wc6t8ufx8rzttv2vq330yr9geq73mv2m',
+  'npub1mlvajfc90xjujssqzsq8q8vyjq7wt5unckvfutznm5tgej4lnh5qka7uvx', // Monica
+  'npub1dr79j9x35m54fpyha6dtg0c93ax57shuf4e442ls8lps3ykyjsyszvs2l3',
+  'npub1ksfas092cnlnpem5nn4y20yqdgc80ctqvk47vrw9l5nsd84nrewqlxhfjd',
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
@@ -351,7 +354,8 @@ export const blockedNPubs = [
   'npub1kf8sau5dejmcmfmzzj256rv728p5w7s0wytdyz8ypa0ne0y6k0vswhgu9w', // noname
   'npub1nshq4pcyzdmnewg4h8yu6tsuh5t72whzkz5x4wj7t0c0cy7yyrfqq2cgnl',
   'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
-  'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // Love AI 
+  'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // Love AI
+  'npub10xrnm6sy804cakmeew4g7kd4fl3dfvvsqfk6m3v4c6j4smrh9mlsdwpz7a', // CISAM
 ];
 
 export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
