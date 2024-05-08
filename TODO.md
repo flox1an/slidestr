@@ -1,4 +1,8 @@
 # TODO 
+
+// TODO check saving of bookmarks, for removal
+- Replace home categories with interest sets from https://github.com/nostr-protocol/nips/blob/master/51.md
+- Bookmark ICon to add posts to the global "Bookmark" list 10003
 - use noteID as URL?
 - add load more, to load older events
 - Fix Zaps, when not using a alby

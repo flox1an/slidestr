@@ -356,6 +356,7 @@ export const blockedNPubs = [
   'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // Love AI
   'npub10xrnm6sy804cakmeew4g7kd4fl3dfvvsqfk6m3v4c6j4smrh9mlsdwpz7a', // CISAM
+  'npub15rt2a6cuapmzc595k0hrup4zjehy8tprshdrlvqkjzxteq47lmlspq5zwu', 
 ];
 
 export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());

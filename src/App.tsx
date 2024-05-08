@@ -9,7 +9,7 @@ import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
 import Layout from './components/Layout/Layout';
 import SlideShow from './components/SlideShow';
 
-const cacheAdapterDexie = new NDKCacheAdapterDexie({ dbName: 'slidestr' });
+const cacheAdapterDexie = new NDKCacheAdapterDexie({ dbName: 'slidestr2' });
 
 const ndk = new NDK({
   explicitRelayUrls: defaultRelays,
