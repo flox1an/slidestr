@@ -9,6 +9,7 @@ export const publicUrl = import.meta.env.VITE_PUBLIC_URL || 'https://slidestr.ne
 type Topic = {
   name?: string;
   tags: string[];
+  description?: string;
   nsfw?: boolean;
 };
 
@@ -61,6 +62,11 @@ export const adultContentTags = [
 ];
 
 export const topics: { [key: string]: Topic } = {
+  btcprague: {
+    name: 'BTC Prague',
+    tags: ['btcprague', 'BTCPrague','devhackday', 'prague', 'praha'],
+    description: 'All images/videos with related hashtags #btcprague #prague #praha'
+  },
   art: {
     name: 'Art',
     tags: [
@@ -246,8 +252,10 @@ export const mixedAdultNPubs = [
    in the UI or through a URL parameter. 
 */
 export const adultNPubs = [
+  'npub10l8k2vx4f6mxjwf9ds2tufyl4xr9q7sj535pf3wpthyhl2rs9pdqh2vrsg', //
   'npub10m75ad8pc6wtlt67f6wjeug4hpqurc68842ve5ne47u9lkjqa0lq8ja88s', // 313Chris:hellokitty_headbang:
   'npub10y6rhnutt52wwt5f7544tq4as6jt03aq7j8mle7wcymjjudanm4q4hvzaw', // NSFW
+  'npub12a3my5mywqnlule3a7f6uuq76435j7j00h0tvy0phpet8xg2j3nq3nlntw', // Get SCORE Cash RSS Feed (RSS Feed)
   'npub13806pd9p833wkgyemeqddjzdksunlq9gszq4yjnhw4l57sjjhwlq6m79nj', // Orvalho
   'npub13m4q96y3yzzev25npv5tamfxsw5csc2dax3njag2uzesv83vdkcs9973fv', // 🔞鸟巢🔞
   'npub13n6ednsew67xk7hgse670z7849q5h8su5rgydxtl4lq3r5cx4ecqsd9af4', // Everybody, Every Body
@@ -275,6 +283,7 @@ export const adultNPubs = [
   'npub1csk2wg33ee9kutyps4nmevyv3putfegj7yd0emsp44ph32wvmamqs7uyan', // Lilura
   'npub1d5ygkef6r0l7w29ek9l9c7hulsvdshms2qh74jp5qpfyad4g6h5s4ap6lz', // 莫谈国事
   'npub1dn42tzy8v8m2xu4y38djf28dfugf5vkg2uucueeldvmucdlcwgjsk49856', // Mila
+  'npub1dr79j9x35m54fpyha6dtg0c93ax57shuf4e442ls8lps3ykyjsyszvs2l3',
   'npub1e4n8nah09he25slv00dz3kav3jsu5jvp83aya234ejumcmu2xseqwrp6pl', // Svenno(NSFW)
   'npub1f3n7hq0a6vyfsjrv9vfdwtasa0g98ve96he68rxsvq9x6cl8tvxqmv6ca4', // Lady Sex (nude anime)
   'npub1femd0mrawr0jmtjr2jwa2nm90haxrpglzdt6tt0djrsav39e53asf74aer', // FemDom Raw
@@ -289,22 +298,22 @@ export const adultNPubs = [
   'npub1j0xvl8l2s4w25vcavf3jv6fgyakyc0hplxc9we8hc8mja0ct7epss0qlkj', // Thicc Pics (NSFW)
   'npub1j0y6f9gl9w39ggarr9x76lyh2swv7mpgddguv49mhmzqlz8tm69qcwpl55', // NeoMobius
   'npub1j2u3lfkhl95e6qwswr32hx6h36arlw8p2cl6hy0wgnmxmekrhx8qx93uvh', // Ay Papi
-  'npub10l8k2vx4f6mxjwf9ds2tufyl4xr9q7sj535pf3wpthyhl2rs9pdqh2vrsg', //
-  'npub1vqj24qfy8c5n23m28jj89v6lcrfwx3l0c4vsk6h590c38t79fccsqx3q8g', // Get SCORE Cash RSS Feed (RSS Feed)
   'npub1j70jp36nshq4zknnwgeamux8hdgzhf0yw50rpll0egw6cvnglalsuldjwe', // cy₿erleolao
   'npub1jge7z2kpmpdra6g58vg95uznve8ctcenmlyp9ntr3kjymscyuqpqty2cdh', // Storm
+  'npub1jhx97uhuagcux3zqc6yfvrvlkv0jfrtlywrp7du08gl9dw3439rsj3zcka',
   'npub1jjtzhxzu8dlf7yn480sz67tesnfl7gpzfpkgpez05d2z9y3lya5sxvky0y', // Selfie Girls
   'npub1jp9v034z3a26cp5hajwyuzl0hety5akdpwdnjaqgfd7pm2ts4dwsc29va8', // curatedbliss
   'npub1jvp6kfs2d3m98lyw5wcyr4fnctr83s0rc3mj5p0f75ach6vcd8rst6wqnu', // VelectBlue Art
-  'npub12a3my5mywqnlule3a7f6uuq76435j7j00h0tvy0phpet8xg2j3nq3nlntw', // Get SCORE Cash RSS Feed (RSS Feed)
   'npub1kade5vf37snr4hv5hgstav6j5ygry6z09kkq0flp47p8cmeuz5zs7zz2an', // Aeontropy
   'npub1klxseqx4et3grzgvajtlm47tz7tqmxygwj49kx3frsuls9cf8lhqhhhr5q', // Riley_R_Fan
   'npub1kq67ngznkldmecycjfmjt4deuvyxgpn4zcpq8cvfmdl2hufzzccs6nc9q8', // Sargas
+  'npub1ksfas092cnlnpem5nn4y20yqdgc80ctqvk47vrw9l5nsd84nrewqlxhfjd',
   'npub1kul999wnt8gwa6l2vyuewhnmmp25gq7dly9zmgsw52x8csmqjgts7278rx', // 𝓟𝓮𝓽𝓲𝓽𝓮 𝓟𝓻𝓲𝓷𝓬𝓮𝓼𝓼
   'npub1kvjspwal4kqnvhkraursdhe9elhdsddtuhtj22ql3dvckzlazngqh4d68q', // Girlection
   'npub1lua7422kkuksdww4x794z4pp0vwkv463g4j3s4kzurjnn9w2zcsqu3glte', // Awake
   'npub1m5fdz9gqa2qeudpy47zllmv9gqe3zzj44dkt9lh2kes3mlex7e6se348vy', // Marble Sculture
   'npub1mgusda7ujnyuhhudwkyrp763k4dd9xspktekl0tg5v0j76yph8ssyrfdpm', // anisyia
+  'npub1mlvajfc90xjujssqzsq8q8vyjq7wt5unckvfutznm5tgej4lnh5qka7uvx', // Monica
   'npub1nkw853ncf4nmsctujc3hdahwtm03hssrskc2t33qjqedxtpwupfqeukt53', // bpufa
   'npub1nllxsheh5hpy55rkmkt46lee4m8tk05g8fmp7nf0mu7hhcz3qc4s7m2vsn', // Aria Hikari
   'npub1nme4074q6yrqexdn5z625vhvv9j9e2qwwfcgdyg2utffhvdgrxfqn5ztgm', // Ay Papi
@@ -329,17 +338,16 @@ export const adultNPubs = [
   'npub1v3rnmlms82wgxejxwn7rr6kjruy3ty0l4084dx2zp3tn8dlxv28sjnp6pf', // High Elf Archer
   'npub1ve4ztpqvlgu3v6hgrvc4lrdl2ernue7lq2h8tcgaksrkxlm7gnsqkjmz4e', // bluntkaraoke
   'npub1vmd8l5h60wqzp5yyjdutleyntqlq86yqxhwxwayek488rngtaras2z99sh', // ANDREIITA
+  'npub1vqj24qfy8c5n23m28jj89v6lcrfwx3l0c4vsk6h590c38t79fccsqx3q8g', // Get SCORE Cash RSS Feed (RSS Feed)
   'npub1vyxmz6xgf84f8x73ww7vts6apag3ngs957eterw5lgay2z7f55tskahsja', // Homer
   'npub1wmsn8fch7kwt987jcdx06uuapn6pwzau59pvy0ql5d3xlmnxa2csj3c5p4', // StefsPicks
   'npub1y77j6jm5hw34xl5m85aumltv88arh2s7q383allkpfe4muarzc5qzfgru0', // sexy-models
+  'npub1ydss4m4s93zvzmjhv4dp69vj48wc6t8ufx8rzttv2vq330yr9geq73mv2m',
   'npub1yk6fz5gx6m79g3xvxk3ca9u87mh8t73w2u2tzvdmrqwauvsqtsnsq6rcqm', // bloodywing
   'npub1ylq5s3xsdmzgzvgzll6ghcs3qa8a9ajl955hj4tcpmyruvjsl8nq5wqhd8', // Dnera
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
-  'npub1ydss4m4s93zvzmjhv4dp69vj48wc6t8ufx8rzttv2vq330yr9geq73mv2m',
-  'npub1mlvajfc90xjujssqzsq8q8vyjq7wt5unckvfutznm5tgej4lnh5qka7uvx', // Monica
-  'npub1dr79j9x35m54fpyha6dtg0c93ax57shuf4e442ls8lps3ykyjsyszvs2l3',
-  'npub1ksfas092cnlnpem5nn4y20yqdgc80ctqvk47vrw9l5nsd84nrewqlxhfjd',
+  'npub1zfm8u0rkgng5uflv9a0nl2gr76cuj7mzsltrur6z9zc8jcykyefskxrvhz', // mikee
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
@@ -348,15 +356,26 @@ export const mixedAdultPublicKeys = mixedAdultNPubs.map(npub => (nip19.decode(np
 
 /* The following profiles have questionable content and are blocked completely on slidestr.net */
 export const blockedNPubs = [
+  'npub10m6d9ynzzx0w07spu2n5cx36z77smmyn7rs9gsvta57etrcyh68swace67',
+  'npub10xrnm6sy804cakmeew4g7kd4fl3dfvvsqfk6m3v4c6j4smrh9mlsdwpz7a', // CISAM
   'npub125wcpwdn0zmt3accu3jlkv349jgw9d8htk4cjx2spc9qfvusl7hs6np5pt',
+  'npub15rt2a6cuapmzc595k0hrup4zjehy8tprshdrlvqkjzxteq47lmlspq5zwu',
   'npub16dx8unvqnweeauxsaw479qhy2j5z8s2krvzaq4rsull57e9klldspdqvpm', // Pascub
   'npub1awxh85c5wasj60d42uvmzuza2uvjazff9m7skg2vf7x2f8gykwkqykxktf', // AIイラスト',
-  'npub1kf8sau5dejmcmfmzzj256rv728p5w7s0wytdyz8ypa0ne0y6k0vswhgu9w', // noname
-  'npub1nshq4pcyzdmnewg4h8yu6tsuh5t72whzkz5x4wj7t0c0cy7yyrfqq2cgnl',
-  'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
   'npub1curnt7jtq8mhl9fcswnwvuvc9ccm6lvsdv4kzydx75v92kldrvdqh7sq09', // Love AI
-  'npub10xrnm6sy804cakmeew4g7kd4fl3dfvvsqfk6m3v4c6j4smrh9mlsdwpz7a', // CISAM
-  'npub15rt2a6cuapmzc595k0hrup4zjehy8tprshdrlvqkjzxteq47lmlspq5zwu', 
+  'npub1dka3gtykxm8rfhysdm5mfxejfdee5natdemzqh44vhje2l4tyslq3sv0fm',
+  'npub1dnrxwmpe7c3zh28th6quca308a5x0587anc93wjnmt0p50x8jtysc8v6wx',
+  'npub1exd5jsen3gmup2uu5j464jv9lr3z57etkhm6xw0dqnct6tzntvss4jxjhf',
+  'npub1f3fzedmk3x8nmq0vkefnt3esrgg3vmynh096uj62wganf442p6wqg4hxft',
+  'npub1hgxsvwfmmzmhkew0hada7yknl6wvlkfm5cj47g85hlxvfxvd0l8sj960ex',
+  'npub1kf8sau5dejmcmfmzzj256rv728p5w7s0wytdyz8ypa0ne0y6k0vswhgu9w', // noname
+  'npub1l3uyqsaq029zrdjnnl73lzaew39dspherxmkngr9hrt2spv782tsjqe50x',
+  'npub1nshq4pcyzdmnewg4h8yu6tsuh5t72whzkz5x4wj7t0c0cy7yyrfqq2cgnl',
+  'npub1r6tch2hyznhwnyxm4xfgw92f449qnxuadal8rjq9nvj5agpymhwqmghzty',
+  'npub1sd8lf7fxt7psc0f8u9mf945nah78tzdp4kx4z5jfgz3sntm3pcls80vx3c',
+  'npub1srs9l2pex6fmex52ka7ypk8ms2gk47aphgtqrl6yu5ly8hzgg2qqusgkdt',
+  'npub1ss2z5jpj2sd8cl3dxps7av9kmgtm5epej2yj2vxkx8ckw0gzxwws7l5wea',
+  'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
 ];
 
 export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());

@@ -42,6 +42,7 @@ const Home = () => {
               }
             >
               <div className="topic-title">{topics[tk].name || tk}</div>
+              {topics[tk].description && <div>{topics[tk].description}</div>}
             </div>
           ))}
           <div
