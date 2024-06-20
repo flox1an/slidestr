@@ -155,7 +155,7 @@ const Home = () => {
             Florian
           </a>
           <br />
-          Source: <a href="https://git.v0l.io/florian/nostr-slideshow">https://git.v0l.io/florian/nostr-slideshow</a>
+          Source: <a href="https://git.v0l.io/florian/slidestr">https://git.v0l.io/florian/slidestr</a>
         </div>
       </div>
     </div>
