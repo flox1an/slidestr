@@ -62,11 +62,6 @@ export const adultContentTags = [
 ];
 
 export const topics: { [key: string]: Topic } = {
-  btcprague: {
-    name: 'BTC Prague',
-    tags: ['btcprague', 'BTCPrague','devhackday', 'prague', 'praha'],
-    description: 'All images/videos with related hashtags #btcprague #prague #praha'
-  },
   art: {
     name: 'Art',
     tags: [
@@ -98,9 +93,6 @@ export const topics: { [key: string]: Topic } = {
       'stablediffusion',
     ],
   },
-  bitcoin: { name: '₿itcoin', tags: ['bitcoin', 'plebchain', 'hfsp', 'btfd', 'buythedip'] },
-  nostr: { name: 'Nostr', tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom', 'purple'] },
-  animals: { name: 'Animals', tags: ['catstr', 'dogstr', 'animal', 'animals', 'bird', 'birds', 'pets'] },
   photography: {
     name: 'Photography',
     tags: [
@@ -118,6 +110,7 @@ export const topics: { [key: string]: Topic } = {
       'streetphotography',
     ],
   },
+  animals: { name: 'Animals', tags: ['catstr', 'dogstr', 'animal', 'animals', 'bird', 'birds', 'pets'] },
   lifestyle: {
     name: 'Lifestyle',
     tags: ['fashion', 'flowerstr', 'style', 'weedstr', 'happy', 'life', 'love', 'tattoo', 'tattoowomen'],
@@ -174,9 +167,16 @@ export const topics: { [key: string]: Topic } = {
     ],
   },
   gardenandfarm: { name: 'Gardening und Farming', tags: ['gardening', 'gardenstr', 'nature', 'farming', 'farmstr'] },
+  bitcoin: { name: '₿itcoin', tags: ['bitcoin', 'plebchain', 'hfsp', 'btfd', 'buythedip'] },
+  nostr: { name: 'Nostr', tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom', 'purple'] },
   bitcoinatlantis: {
     name: 'Bitcoin Atlantis / Madeira',
     tags: ['atlantis', 'bitcoinatlantis', 'madeira', 'btcatlantis', 'soveng', 'funchal', 'freemadeira', 'ba24'],
+  },
+  btcprague: {
+    name: 'BTC Prague',
+    tags: ['btcprague', 'BTCPrague', 'devhackday', 'prague', 'praha'],
+    description: 'All images/videos with related hashtags #btcprague #prague #praha',
   },
   nsfw: {
     name: 'NSFW / Adult Content',
