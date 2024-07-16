@@ -110,10 +110,22 @@ export const topics: { [key: string]: Topic } = {
       'streetphotography',
     ],
   },
+  memes: { name: 'Memes', tags: ['meme', 'memes', 'memestr', 'nostrmemes'] },
   animals: { name: 'Animals', tags: ['catstr', 'dogstr', 'animal', 'animals', 'bird', 'birds', 'pets'] },
   lifestyle: {
     name: 'Lifestyle',
-    tags: ['fashion', 'flowerstr', 'style', 'weedstr', 'happy', 'life', 'love', 'tattoo', 'tattoowomen'],
+    tags: [
+      'fashion',
+      'flowerstr',
+      'bloomscrolling',
+      'style',
+      'weedstr',
+      'happy',
+      'life',
+      'love',
+      'tattoo',
+      'tattoowomen',
+    ],
   },
   travel: {
     name: 'Travel',
@@ -166,7 +178,10 @@ export const topics: { [key: string]: Topic } = {
       'yumstr',
     ],
   },
-  gardenandfarm: { name: 'Gardening und Farming', tags: ['gardening', 'gardenstr', 'nature', 'farming', 'farmstr'] },
+  gardenandfarm: {
+    name: 'Gardening und Farming',
+    tags: ['gardening', 'gardenstr', 'nature', 'farming', 'farmstr', 'flowerstr', 'bloomscrolling'],
+  },
   bitcoin: { name: '₿itcoin', tags: ['bitcoin', 'plebchain', 'hfsp', 'btfd', 'buythedip'] },
   nostr: { name: 'Nostr', tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom', 'purple'] },
   bitcoinatlantis: {
@@ -314,6 +329,7 @@ export const adultNPubs = [
   'npub1m5fdz9gqa2qeudpy47zllmv9gqe3zzj44dkt9lh2kes3mlex7e6se348vy', // Marble Sculture
   'npub1mgusda7ujnyuhhudwkyrp763k4dd9xspktekl0tg5v0j76yph8ssyrfdpm', // anisyia
   'npub1mlvajfc90xjujssqzsq8q8vyjq7wt5unckvfutznm5tgej4lnh5qka7uvx', // Monica
+  'npub1nhh58qjd0yxmmpqqjkf3mu2lzm3scv7jtjjyv3ejenk3xgxewslspew0uf', // Blone AI (nudity)
   'npub1nkw853ncf4nmsctujc3hdahwtm03hssrskc2t33qjqedxtpwupfqeukt53', // bpufa
   'npub1nllxsheh5hpy55rkmkt46lee4m8tk05g8fmp7nf0mu7hhcz3qc4s7m2vsn', // Aria Hikari
   'npub1nme4074q6yrqexdn5z625vhvv9j9e2qwwfcgdyg2utffhvdgrxfqn5ztgm', // Ay Papi
@@ -348,6 +364,7 @@ export const adultNPubs = [
   'npub1ylrnf0xfp9wsmqthxlqjqyqj9yy27pnchjwjq93v3mq66ts7ftjs6x7dcq', // Welcome To The Jungle
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
   'npub1zfm8u0rkgng5uflv9a0nl2gr76cuj7mzsltrur6z9zc8jcykyefskxrvhz', // mikee
+  'npub1q3znd3tumjlpwn8z8uq4f9tvjh2xryc6z5d8vy2kku69a7xgperqfv38ez',
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
@@ -376,6 +393,9 @@ export const blockedNPubs = [
   'npub1srs9l2pex6fmex52ka7ypk8ms2gk47aphgtqrl6yu5ly8hzgg2qqusgkdt',
   'npub1ss2z5jpj2sd8cl3dxps7av9kmgtm5epej2yj2vxkx8ckw0gzxwws7l5wea',
   'npub1xfu7047thly6aghl79z97kckkvwfvtcx88n6wq7c2tlng484d8xqv0kuvv', // Erandis Vol
+  'npub1r668uwlt7vslu306q0saxt656zl45j8n2ztacal40r90dfl3lv3s6eq8wn',
+  'npub1cw626vmllzzeej5k8zehpnhjevc8stqctstdswmlnqa85xx0gf0scr4qfu',
+  'npub1krldgpd3tkz4565s69evjk7gee9arkgyz3ts0aekrhc7ru37am8qx43ncv',
 ];
 
 export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
@@ -383,7 +403,7 @@ export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).da
 export const spamAccounts = [];
 
 export const defaultRelays = [
-  //'ws://localhost:4869',
+  // 'ws://localhost:4869',
   'wss://relay.damus.io',
   'wss://relay.nostr.band',
   'wss://relay.snort.social',

@@ -374,7 +374,6 @@ export const useLink = (type: LinkType, value: string): string | null => {
     throw new Error('Ngine context not found');
   }
   if (context.links && context.links[type]) {
-    // @ts-expect-error maybe not defined
     return context.links[type](value);
   }
   return null;
