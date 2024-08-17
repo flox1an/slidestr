@@ -252,7 +252,6 @@
   animation: bump 1s ease-in-out;
 }
 
-
 @media screen and (max-width: 768px) {
   .controls {
     top: 2em;

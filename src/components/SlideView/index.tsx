@@ -169,14 +169,13 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
           <div className="caption">{activeContent}</div>
         </div>
       )}
-      {activeProfile && (
-        <AuthorProfile
-          setViewMode={setViewMode}
-          src={urlFix(activeProfile.image || '')}
-          author={activeProfile.displayName || activeProfile.name}
-          npub={activeNpub}
-        ></AuthorProfile>
-      )}
+
+      <AuthorProfile
+        setViewMode={setViewMode}
+        src={urlFix(activeProfile?.image || '')}
+        author={activeProfile?.displayName || activeProfile?.name || 'Unknown'}
+        npub={activeNpub}
+      ></AuthorProfile>
 
       {activeImages.map(image => (
         <Slide key={image.url} noteId={image.post.event.id} url={image.url} paused={paused} type={image.type} />

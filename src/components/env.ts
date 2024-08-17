@@ -59,6 +59,8 @@ export const adultContentTags = [
   'titstr',
   'xxx',
   'nostrqueen',
+  'cum',
+  'masturbation',
 ];
 
 export const topics: { [key: string]: Topic } = {
@@ -365,6 +367,12 @@ export const adultNPubs = [
   'npub1z0xv9t5w6evrcg860kmgqq5tfj55mz84ta40uszjnfp9uhw2clkq63yrak', // ???
   'npub1zfm8u0rkgng5uflv9a0nl2gr76cuj7mzsltrur6z9zc8jcykyefskxrvhz', // mikee
   'npub1q3znd3tumjlpwn8z8uq4f9tvjh2xryc6z5d8vy2kku69a7xgperqfv38ez',
+  'npub1rwh4musdpv9xryua2tucsgfmqhua70ct36gxqrr84ddty30un7xsmpmjcy',
+  'npub18puyr2ltlzfqutj3pl6dm50zu7p5ar2t38wdcj9qhsplfl04easqudrc67',
+  'npub1zzgzsp0czctjwe6cmnsn0vyjtskyajghsl9rc22y5uqc0ym5qcrqrrwr02',
+  'npub1cgchvzcsemalc0tm4e0z6k6quthpw98ljr9h3l8lgzagyy3d62lq5sf0qk',
+  'npub1rxsxj8egpr3emylfdld0wgh63w048tjh5zaua84h2qjscswn68ysdlt68s',
+  'npub13lpdphw06d5hy5h7n0xsun9sfpwqsna9gsg0y0d4ukktks048nrseedtx9',
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
@@ -396,6 +404,9 @@ export const blockedNPubs = [
   'npub1r668uwlt7vslu306q0saxt656zl45j8n2ztacal40r90dfl3lv3s6eq8wn',
   'npub1cw626vmllzzeej5k8zehpnhjevc8stqctstdswmlnqa85xx0gf0scr4qfu',
   'npub1krldgpd3tkz4565s69evjk7gee9arkgyz3ts0aekrhc7ru37am8qx43ncv',
+  'npub1tt3n7nm548jf4jsgy9vwt25khz2n47d8um0lam0nmpk034zzlp2sfpc7tq',
+  'npub1yrqtnr4qxvjqj4zs45sw3xlrflzks86dhy0y4hzj9jweujflksfszhsp06',
+  'npub13mnfsm49p8hka246khma4gdzd9w8ygyt3udrcxmgmmhd5cyt5y3q879pvy',
 ];
 
 export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());

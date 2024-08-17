@@ -12,7 +12,7 @@ const useAuthorsFromList = (listAddr?: string): string[] => {
 
   const listEvent = useEvent(
     { kinds: [30000], authors: authorFilter, '#d': identFilter },
-    { disable: !validListAttr || !addrIsDefined || authorFilter.length == 0 || identFilter.length == 0}
+    { disable: !validListAttr || !addrIsDefined || authorFilter.length == 0 || identFilter.length == 0 }
   );
 
   const authors: string[] = useMemo(() => {

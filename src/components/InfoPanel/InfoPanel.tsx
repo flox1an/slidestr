@@ -23,10 +23,10 @@ const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) =>
   const [state] = useGlobalState();
   const { activeProfile, activeNpub } = useActiveProfile(settings, state.activeImage);
 
-  const profile = activeProfile && (
+  const profile = (
     <AuthorProfile
-      src={urlFix(activeProfile.image || '')}
-      author={activeProfile.displayName || activeProfile.name}
+      src={urlFix(activeProfile?.image || '')}
+      author={activeProfile?.displayName || activeProfile?.name || 'Unkown'}
       npub={activeNpub}
       setViewMode={setViewMode}
       followButton
@@ -35,20 +35,14 @@ const InfoPanel = ({ image, onClose, setViewMode, settings }: InfoPanelProps) =>
 
   return (
     <div className="info-panel">
-      {profile && (
-        <div className="info-panel-author">
-          {profile}
-          {image.post.event.id && (
-            <a
-              className="link"
-              target="_blank"
-              href={`https://nostrapp.link/#${nip19.noteEncode(image.post.event.id)}`}
-            >
-              <IconLink></IconLink>
-            </a>
-          )}
-        </div>
-      )}
+      <div className="info-panel-author">
+        {profile}
+        {image.post.event.id && (
+          <a className="link" target="_blank" href={`https://nostrapp.link/#${nip19.noteEncode(image.post.event.id)}`}>
+            <IconLink></IconLink>
+          </a>
+        )}
+      </div>
 
       <div className="info-panel-content">{image?.content} </div>
 

@@ -10,7 +10,13 @@ const useImageSizes = (imageUrl: string) => {
   const imageUrl1920w = useMemo(() => createImgProxyUrl(imageUrl, 1920, -1), [imageUrl]);
 
   const optimalImageUrl = useMemo(() => {
-    return width == undefined ? imageUrl320w : width <= 640 ? imageUrl320w : width < 1500 ? imageUrl800w : imageUrl1920w;
+    return width == undefined
+      ? imageUrl320w
+      : width <= 640
+        ? imageUrl320w
+        : width < 1500
+          ? imageUrl800w
+          : imageUrl1920w;
   }, [width, imageUrl320w, imageUrl800w, imageUrl1920w]);
 
   return {

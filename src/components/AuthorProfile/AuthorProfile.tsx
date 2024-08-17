@@ -44,6 +44,7 @@ const AuthorProfile = ({
           }}
           style={{
             backgroundImage: avatarLoaded && src ? `url(${createImgProxyUrl(src, 80, 80)})` : 'none',
+            backgroundColor: '#222',
           }}
         ></div>
         <span
