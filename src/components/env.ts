@@ -64,6 +64,10 @@ export const adultContentTags = [
 ];
 
 export const topics: { [key: string]: Topic } = {
+  nostriga: {
+    name: 'Baltic Honey Badger 2024 / NOSTRIGA',
+    tags: ['nostriga', 'balticbadger', 'honeybadger', 'riga', 'bh2024', 'hb2024'],
+  },
   art: {
     name: 'Art',
     tags: [
@@ -376,6 +380,7 @@ export const adultNPubs = [
   'npub1cgchvzcsemalc0tm4e0z6k6quthpw98ljr9h3l8lgzagyy3d62lq5sf0qk',
   'npub1rxsxj8egpr3emylfdld0wgh63w048tjh5zaua84h2qjscswn68ysdlt68s',
   'npub13lpdphw06d5hy5h7n0xsun9sfpwqsna9gsg0y0d4ukktks048nrseedtx9',
+  'npub1lrxxjtq7zyp2d4n44tllwqj4q20kk7dslh2xrq0qkwng5lldxqesmvvgyt',
 ];
 
 export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
