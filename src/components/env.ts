@@ -184,7 +184,10 @@ export const topics: { [key: string]: Topic } = {
     name: 'Gardening und Farming',
     tags: ['gardening', 'gardenstr', 'nature', 'farming', 'farmstr', 'flowerstr', 'bloomscrolling'],
   },
-  bitcoin: { name: '₿itcoin', tags: ['bitcoin', 'plebchain', 'hfsp', 'btfd', 'buythedip'] },
+  bitcoin: {
+    name: '₿itcoin',
+    tags: ['bitcoin', 'plebchain', 'hfsp', 'btfd', 'buythedip', 'strike', 'bitaxe', 'bitaxegobrrr'],
+  },
   nostr: { name: 'Nostr', tags: ['coffeechain', 'nostr', 'zapathon', 'grownostr', 'freedom', 'purple'] },
   bitcoinatlantis: {
     name: 'Bitcoin Atlantis / Madeira',
