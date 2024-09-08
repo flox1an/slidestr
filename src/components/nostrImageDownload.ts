@@ -1,5 +1,5 @@
 import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
-import { adultContentTags, adultPublicKeys, imageProxy, mixedAdultNPubs } from './env';
+import { adultContentTagsMap, adultPublicKeysMap, blockedHashtags, imageProxy, mixedAdultPublicMaps } from './env';
 import uniq from 'lodash/uniq';
 import { unixNow } from '../ngine/time';
 import { ContentType } from '../utils/useNav';
@@ -94,21 +94,26 @@ export const hasContentWarning = ({ tags }: { tags?: NDKTag[] }) => {
 export const hasAdultTag = ({ tags }: { tags?: NDKTag[] }) => {
   if (!tags) return false;
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
-  return tags.filter((t: string[]) => t[0] === 't' && adultContentTags.includes(t[1])).length > 0;
+  return tags.some((t: string[]) => t[0] === 't' && adultContentTagsMap[t[1]]);
+};
+
+export const hasBlockedTag = ({ tags }: { tags?: NDKTag[] }) => {
+  if (!tags) return false;
+  return tags.filter((t: string[]) => t[0] === 't' && blockedHashtags.includes(t[1])).length > 0;
 };
 
 export const isAdultRelated = ({ tags, pubkey }: { tags?: NDKTag[]; pubkey: string }, isTagSearch: boolean) => {
   // if we search for a specific non adult tag and the user in the mixed category
   // allow as non adult
-  if (isTagSearch && mixedAdultNPubs.includes(pubkey.toLowerCase()) && !hasAdultTag({ tags })) {
+  if (isTagSearch && mixedAdultPublicMaps[pubkey.toLowerCase()] && !hasAdultTag({ tags })) {
     return false;
   }
 
   return (
     hasContentWarning({ tags }) || // block content warning
     hasAdultTag({ tags }) || // block adult tags
-    mixedAdultNPubs.includes(pubkey.toLowerCase()) || // block mixed adult authors
-    adultPublicKeys.includes(pubkey.toLowerCase()) // block adult authors
+    mixedAdultPublicMaps[pubkey.toLowerCase()] || // block mixed adult authors
+    adultPublicKeysMap[pubkey.toLowerCase()] // block adult authors
   );
 };
 

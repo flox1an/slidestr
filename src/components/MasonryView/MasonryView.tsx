@@ -80,11 +80,9 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
     if (event.key === 'ArrowLeft') {
       showPreviousImage();
     }
-    /*
     if (event.key === 'Escape') {
       setCurrentImage(undefined);
     }
-    */
   };
 
   const swipeHandlers = useSwipeable({

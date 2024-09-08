@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import './GridView.css';
 import GridImage from './GridImage';
-import { Settings } from '../../utils/useNav';
+import useNav, { Settings } from '../../utils/useNav';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { useSwipeable } from 'react-swipeable';
 import { Helmet } from 'react-helmet';
@@ -26,6 +26,7 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
   const showNextImage = () => {
     setCurrentImage(idx => (idx !== undefined ? idx + 1 : 0));
   };
+  const { nav, currentSettings } = useNav();
 
   const showPreviousImage = () => {
     setCurrentImage(idx => (idx !== undefined && idx > 0 ? idx - 1 : idx));
@@ -38,11 +39,15 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
     if (event.key === 'ArrowLeft') {
       showPreviousImage();
     }
-    /*
     if (event.key === 'Escape') {
-      setCurrentImage(undefined);
+      nav({
+        ...currentSettings,
+        topic: undefined,
+        npubs: [],
+        tags: [],
+        list: undefined,
+      });
     }
-    */
   };
 
   const swipeHandlers = useSwipeable({

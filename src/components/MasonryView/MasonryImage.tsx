@@ -40,7 +40,12 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
 
   const showAuthor = currentSettings.npubs == undefined || currentSettings.npubs.length != 1; // if we are looking at a single profile, don't show the author
 
-  const description = image.content && image.content?.substring(0, 60) + (image.content.length > 60 ? ' ... ' : ' ');
+  const description = useMemo(
+    () =>
+      image.content &&
+      image.content.replace(/nostr:[a-z0-9]+/, '').substring(0, 60) + (image.content.length > 60 ? ' ... ' : ' '),
+    [image.content]
+  );
   const showTags = useMemo(() => uniq(image.tags).slice(0, 5), [image.tags]);
   const now = unixNow();
   const showInfo = true;

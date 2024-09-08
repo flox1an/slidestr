@@ -10,8 +10,9 @@ import {
   Post,
   isReply,
   isAdultRelated,
+  hasBlockedTag,
 } from './nostrImageDownload';
-import { adultContentTags, adultNPubs, blockedPublicKeys, mixedAdultNPubs, topics } from './env';
+import { adultContentTagsMap, adultNPubs, blockedPublicKeysMap, mixedAdultNPubs, topics } from './env';
 import Settings from './Settings';
 import SlideView from './SlideView';
 import { nip19 } from 'nostr-tools';
@@ -135,7 +136,8 @@ const SlideShow = () => {
       events
         .filter(
           event =>
-            !blockedPublicKeys.includes(event.pubkey.toLowerCase()) && // remove blocked authors
+            !blockedPublicKeysMap[event.pubkey.toLowerCase()] && // remove blocked authors
+            !hasBlockedTag(event) &&
             (settings.showReplies || !isReply(event)) &&
             (settings.showAdult || !isAdultRelated(event, settings.tags.length > 0))
         )
@@ -309,10 +311,9 @@ const SlideShow = () => {
   const fullScreen = document.fullscreenElement !== null;
 
   const showAdultContentWarning =
-    !settings.showAdult &&
-    (adultContentTags.some(t => settings.tags.includes(t)) ||
-      adultNPubs.some(p => settings.npubs.includes(p)) ||
-      mixedAdultNPubs.some(p => settings.npubs.includes(p)));
+    !settings.showAdult && (settings.tags.some(t => adultContentTagsMap[t]) ||
+    adultNPubs.some(p => settings.npubs.includes(p)) ||
+    mixedAdultNPubs.some(p => settings.npubs.includes(p)));
 
   if (showAdultContentWarning) {
     return <AdultContentInfo></AdultContentInfo>;

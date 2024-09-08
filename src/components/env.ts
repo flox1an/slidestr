@@ -17,7 +17,7 @@ type Topic = {
    by default. Users can enable this content through the adult content flag
    in the UI or through a URL parameter. 
 */
-export const adultContentTags = [
+const adultContentTags = [
   'adult',
   'ass',
   'blowjob',
@@ -63,11 +63,15 @@ export const adultContentTags = [
   'masturbation',
 ];
 
-export const topics: { [key: string]: Topic } = {
-  nostriga: {
-    name: 'Baltic Honey Badger 2024 / NOSTRIGA',
-    tags: ['nostriga', 'balticbadger', 'honeybadger', 'riga', 'bh2024', 'hb2024'],
+export const adultContentTagsMap = adultContentTags.reduce(
+  (acc, tag) => {
+    acc[tag.toLocaleLowerCase()] = true;
+    return acc;
   },
+  {} as Record<string, boolean>
+);
+
+export const topics: { [key: string]: Topic } = {
   art: {
     name: 'Art',
     tags: [
@@ -199,8 +203,12 @@ export const topics: { [key: string]: Topic } = {
   },
   btcprague: {
     name: 'BTC Prague',
-    tags: ['btcprague', 'BTCPrague', 'devhackday', 'prague', 'praha'],
+    tags: ['btcprague', 'BTCPrague', 'devhackday'],
     description: 'All images/videos with related hashtags #btcprague #prague #praha',
+  },
+  bh2024nostriga: {
+    name: 'Baltic Honey Badger 2024 / NOSTRIGA',
+    tags: ['nostriga', 'balticbadger', 'honeybadger', 'riga', 'bh2024', 'hb2024'],
   },
   nsfw: {
     name: 'NSFW / Adult Content',
@@ -381,14 +389,32 @@ export const adultNPubs = [
   'npub1rxsxj8egpr3emylfdld0wgh63w048tjh5zaua84h2qjscswn68ysdlt68s',
   'npub13lpdphw06d5hy5h7n0xsun9sfpwqsna9gsg0y0d4ukktks048nrseedtx9',
   'npub1lrxxjtq7zyp2d4n44tllwqj4q20kk7dslh2xrq0qkwng5lldxqesmvvgyt',
+  'npub163nprvuh3y36l7we66hs6jhl92xymlnyq29mh3p86upe2828x7mqt8xdwf',
+  'npub16fsxfvylsvlmv9fz3k7rga3wxl50plm8q708wgkwdr555lczlc5qu7xw8z',
 ];
 
-export const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
+const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
 
-export const mixedAdultPublicKeys = mixedAdultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
+export const adultPublicKeysMap = adultPublicKeys.reduce(
+  (acc, key) => {
+    acc[key.toLocaleLowerCase()] = true;
+    return acc;
+  },
+  {} as Record<string, boolean>
+);
+
+const mixedAdultPublicKeys = mixedAdultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
+
+export const mixedAdultPublicMaps = mixedAdultPublicKeys.reduce(
+  (acc, key) => {
+    acc[key.toLocaleLowerCase()] = true;
+    return acc;
+  },
+  {} as Record<string, boolean>
+);
 
 /* The following profiles have questionable content and are blocked completely on slidestr.net */
-export const blockedNPubs = [
+const blockedNPubs = [
   'npub10m6d9ynzzx0w07spu2n5cx36z77smmyn7rs9gsvta57etrcyh68swace67',
   'npub10xrnm6sy804cakmeew4g7kd4fl3dfvvsqfk6m3v4c6j4smrh9mlsdwpz7a', // CISAM
   'npub125wcpwdn0zmt3accu3jlkv349jgw9d8htk4cjx2spc9qfvusl7hs6np5pt',
@@ -415,9 +441,20 @@ export const blockedNPubs = [
   'npub1tt3n7nm548jf4jsgy9vwt25khz2n47d8um0lam0nmpk034zzlp2sfpc7tq',
   'npub1yrqtnr4qxvjqj4zs45sw3xlrflzks86dhy0y4hzj9jweujflksfszhsp06',
   'npub13mnfsm49p8hka246khma4gdzd9w8ygyt3udrcxmgmmhd5cyt5y3q879pvy',
+  'npub13yn69pulpr6clwpzfj06rshu7kzj7zqvhf7d3mkyppynzrlnjjzqgsma3m',
 ];
 
-export const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
+const blockedPublicKeys = blockedNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
+
+export const blockedPublicKeysMap = blockedPublicKeys.reduce(
+  (acc, key) => {
+    acc[key] = true;
+    return acc;
+  },
+  {} as Record<string, boolean>
+);
+
+export const blockedHashtags = ['loli'];
 
 export const spamAccounts = [];
 
