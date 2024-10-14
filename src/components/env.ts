@@ -101,6 +101,9 @@ export const topics: { [key: string]: Topic } = {
       'midjourney',
       'midjourneyart',
       'stablediffusion',
+      'comfyui',
+      'dalle3',
+      'aipictors',
     ],
   },
   photography: {
@@ -121,7 +124,10 @@ export const topics: { [key: string]: Topic } = {
     ],
   },
   memes: { name: 'Memes', tags: ['meme', 'memes', 'memestr', 'nostrmemes'] },
-  animals: { name: 'Animals', tags: ['catstr', 'dogstr', 'animal', 'animals', 'bird', 'birds', 'pets'] },
+  animals: {
+    name: 'Animals',
+    tags: ['catstr', 'dogstr', 'animal', 'animals', 'bird', 'birds', 'pets', 'australianwildlife', 'wildlife'],
+  },
   lifestyle: {
     name: 'Lifestyle',
     tags: [
