@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MouseEventHandler, SyntheticEvent, useMemo, useState } from 'react';
 import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
 import useProfile from '../../ngine/hooks/useProfile';
@@ -18,6 +18,21 @@ interface MasonryImageProps {
 const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const [loaded, setLoaded] = useState(false);
   const { nav, currentSettings } = useNav();
+  const [showInfo, setShowInfo] = useState(false);
+  const [shouldShowInfo, setShouldShowInfo] = useState(false);
+
+  useEffect(() => {
+    let timeoutId: number;
+
+    if (showInfo) {
+      setShouldShowInfo(true);
+    } else {
+      // Wait for fade-out transition to complete before hiding
+      timeoutId = setTimeout(() => setShouldShowInfo(false), 200); // 200ms fade-out duration
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [showInfo]);
 
   const tagClick = (tag: string) => {
     nav({ ...currentSettings, tags: [tag], npubs: [], list: undefined, topic: undefined, follows: false });
@@ -48,12 +63,11 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   );
   const showTags = useMemo(() => uniq(image.tags).slice(0, 5), [image.tags]);
   const now = unixNow();
-  const showInfo = true;
 
   return (
-    <LazyLoad>
-      <>
-        <a id={'g' + index}>
+    <LazyLoad className="is-relative">
+      <div id={'g' + index} onMouseEnter={() => setShowInfo(true)} onMouseLeave={() => setShowInfo(false)}>
+        <a>
           {mediaIsVideo ? (
             <video
               className={`mason-image ${loaded ? 'show' : ''}`}
@@ -89,24 +103,27 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
             </>
           )}
         </a>
-        {showInfo && (showAuthor || description || showTags.length > 0) && (
-          <div className="info-section">
-            <div className="time">{image.timestamp && timeDifference(now, image.timestamp)}</div>
-            {showAuthor && (
-              <div style={{ paddingBottom: '.25em' }}>
-                <a onClick={() => profileClick(image.author)}>{profile?.displayName || profile?.name}</a>
-              </div>
-            )}
-            {description}
 
-            {showTags.map(t => (
-              <>
-                <a onClick={() => tagClick(t)}>#{t}</a>{' '}
-              </>
-            ))}
-          </div>
-        )}
-      </>
+        <div className={`info-section ${shouldShowInfo ? 'visible' : ''}`}>
+          {shouldShowInfo && (showAuthor || description || showTags.length > 0) && (
+            <>
+              {showAuthor && (
+                <div className="title">
+                  <a onClick={() => profileClick(image.author)}>{profile?.displayName || profile?.name}</a>
+                  {image.timestamp && <div className="time">{timeDifference(now, image.timestamp)}</div>}
+                </div>
+              )}
+              {description}
+
+              {showTags.map(t => (
+                <React.Fragment key={t}>
+                  <a onClick={() => tagClick(t)}>#{t}</a>{' '}
+                </React.Fragment>
+              ))}
+            </>
+          )}
+        </div>
+      </div>
     </LazyLoad>
   );
 };

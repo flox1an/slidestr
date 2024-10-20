@@ -31,7 +31,6 @@ import useEvents from '../ngine/hooks/useEvents';
 import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
 import MasonryView from './MasonryView/MasonryView';
 import useAuthorsFromList from '../utils/useAuthorsFromList';
-import GridView from './GridView';
 import useWindowSize from '../utils/useWindowSize';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
@@ -311,9 +310,10 @@ const SlideShow = () => {
   const fullScreen = document.fullscreenElement !== null;
 
   const showAdultContentWarning =
-    !settings.showAdult && (settings.tags.some(t => adultContentTagsMap[t]) ||
-    adultNPubs.some(p => settings.npubs.includes(p)) ||
-    mixedAdultNPubs.some(p => settings.npubs.includes(p)));
+    !settings.showAdult &&
+    (settings.tags.some(t => adultContentTagsMap[t]) ||
+      adultNPubs.some(p => settings.npubs.includes(p)) ||
+      mixedAdultNPubs.some(p => settings.npubs.includes(p)));
 
   if (showAdultContentWarning) {
     return <AdultContentInfo></AdultContentInfo>;
@@ -391,24 +391,15 @@ const SlideShow = () => {
         </div>
       )}
 
-      {viewMode == 'grid' &&
-        (isMobile ? (
-          <GridView
-            images={images.current}
-            settings={settings}
-            setCurrentImage={setImageIdx}
-            currentImage={imageIdx}
-            setViewMode={setViewMode}
-          ></GridView>
-        ) : (
-          <MasonryView
-            images={images.current}
-            settings={settings}
-            setCurrentImage={setImageIdx}
-            currentImage={imageIdx}
-            setViewMode={setViewMode}
-          ></MasonryView>
-        ))}
+      {viewMode == 'grid' && (
+        <MasonryView
+          images={images.current}
+          settings={settings}
+          setCurrentImage={setImageIdx}
+          currentImage={imageIdx}
+          setViewMode={setViewMode}
+        ></MasonryView>
+      )}
       {viewMode == 'scroll' && (
         <ScrollView
           images={images.current}

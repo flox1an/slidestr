@@ -31,7 +31,7 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
   const [_, setState] = useGlobalState();
   const { width } = useWindowSize();
 
-  const columnCount = Math.min(7, Math.floor((width || 800) / 230));
+  const columnCount = Math.max(2, Math.min(7, Math.floor((width || 800) / 230)));
   const sortedImages = useMemo(
     () => {
       // console.log('Updating sortedImages');
@@ -134,7 +134,9 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
       {
         <div
           className="mason-imagegrid"
-          style={{ gridTemplateColumns: `repeat(${columnCount}, calc(100%/${columnCount} - 12px))` }}
+          style={{
+            gridTemplateColumns: `repeat(${columnCount}, calc((100% - 24px - (${columnCount} - 1) * 12px ) / ${columnCount})`,
+          }}
         >
           {sortedImages.map((columnImages, colIdx) => (
             <div className="column" key={colIdx}>
