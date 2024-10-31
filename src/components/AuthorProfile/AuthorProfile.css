@@ -21,6 +21,13 @@
   line-height: 1em;
 }
 
+.author-info .fediverse {
+  background-color: #006bb6;
+  padding: 4px 6px;
+  border-radius: 8px;
+  display: inline;
+}
+
 .author-name {
   padding-right: 1em;
 }

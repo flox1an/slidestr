@@ -247,7 +247,21 @@
   cursor: pointer;
 }
 
+
+
 .bottom-controls .bookmark.bookmarked svg {
+  fill: white;
+  animation: bump 1s ease-in-out;
+}
+
+.bottom-controls .savecollection svg {
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+}
+
+
+.bottom-controls .savecollection.saved svg {
   fill: white;
   animation: bump 1s ease-in-out;
 }

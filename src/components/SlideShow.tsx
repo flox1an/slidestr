@@ -13,7 +13,6 @@ import {
   hasBlockedTag,
 } from './nostrImageDownload';
 import { adultContentTagsMap, adultNPubs, blockedPublicKeysMap, mixedAdultNPubs, topics } from './env';
-import Settings from './Settings';
 import SlideView from './SlideView';
 import { nip19 } from 'nostr-tools';
 import uniqBy from 'lodash/uniqBy';
@@ -26,7 +25,6 @@ import IconFullScreen from './Icons/IconFullScreen';
 import useZapsAndReations from '../utils/useZapAndReaction';
 import IconHeart from './Icons/IconHeart';
 import IconBolt from './Icons/IconBolt';
-import IconSearch from './Icons/IconSearch';
 import useEvents from '../ngine/hooks/useEvents';
 import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
 import MasonryView from './MasonryView/MasonryView';
@@ -39,10 +37,17 @@ import IconRepost from './Icons/IconRepost';
 import useProfile from '../ngine/hooks/useProfile';
 import IconBookmark from './Icons/IconBookmark';
 import useBookMarks from '../utils/useBookMarks';
+import IconFolderPlus from './Icons/IconFolderPlus';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
 /*
+NEW TODOS...
+
+
+404 Bilder ausblenden
+nsfw warnung fixen
+
 FEATURES:
 - When one relay is not available the whole app stops working
 - Login automatically / Save log in user
@@ -102,6 +107,8 @@ const SlideShow = () => {
   const navigate = useNavigate();
   const listAuthors = useAuthorsFromList(settings.list);
   const [contacts] = useAtom(followsAtom);
+
+  function saveCollectionClick() {}
 
   const filter = useMemo(() => {
     const authorsToQuery = settings.follows
@@ -265,6 +272,11 @@ const SlideShow = () => {
   }, [posts, settings.type]);
 
   const onKeyDown = (event: KeyboardEvent) => {
+    // Check if the focused element is an input or textarea
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return; // Do not handle key events if focused on an input or textarea
+    }
     if (showSettings) return;
     if (event.key === 'Escape') {
       setViewMode('grid');
@@ -321,7 +333,9 @@ const SlideShow = () => {
 
   return (
     <>
+      {/*
       {showSettings && <Settings onClose={() => setShowSettings(false)} setViewMode={setViewMode}></Settings>}
+       */}
       <div className="top-left-controls">
         <a
           className="back-button"
@@ -341,6 +355,14 @@ const SlideShow = () => {
         <div className="bottom-controls">
           {session?.pubkey && state.activeImage && (
             <>
+              {/* 
+              <button
+                className={`savecollection ${bookmarkState ? 'saved' : ''}`}
+                onClick={() => saveCollectionClick()}
+              >
+                <IconFolderPlus />
+              </button>
+*/}
               <button className={`bookmark ${bookmarkState ? 'bookmarked' : ''}`} onClick={() => bookmarkClick()}>
                 <IconBookmark></IconBookmark>
               </button>
@@ -374,12 +396,6 @@ const SlideShow = () => {
               title={'play slideshow (G)'}
             >
               <IconPlay />
-            </button>
-          )}
-
-          {viewMode != 'slideshow' && (
-            <button onClick={() => setShowSettings(s => !s)}>
-              <IconSearch />
             </button>
           )}
 

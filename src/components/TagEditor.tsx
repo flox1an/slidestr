@@ -45,6 +45,11 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
   };
 
   const onEditKeyDown = (e: any) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return; // Do not handle key events if focused on an input or textarea
+    }
+
     e.stopPropagation();
     if (e.key === 'Enter') {
       const newTag = (e.target.value as string).toLowerCase();

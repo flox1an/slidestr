@@ -104,6 +104,10 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
   }, [images.current.length]);
 
   const onKeyDown = (event: KeyboardEvent) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return; // Do not handle key events if focused on an input or textarea
+    }
     // console.log(event);
     if (event.key === 'ArrowRight') {
       nextImage();

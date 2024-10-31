@@ -62,28 +62,3 @@
   filter: brightness(1.1);
   outline: 1px solid #fff;
 }
-
-.profile-header {
-  padding: 1.2em;
-  padding-bottom: 0.6em;
-  padding-left: 5em;
-  padding-right: 6em;
-  width: 100vw;
-  box-sizing: border-box;
-}
-
-.profile-header h2 {
-  margin: 0px;
-}
-
-.profile-header .author-info {
-  position: relative;
-  bottom: initial;
-  left: initial;
-}
-
-@media screen and (max-width: 768px) {
-  .profile-header .author-info .author-name {
-    display: block;
-  }
-}

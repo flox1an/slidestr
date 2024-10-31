@@ -13,9 +13,11 @@ type AvatarImageProps = {
   src?: string;
   author?: string;
   npub?: string;
+  nip5?: string;
   setViewMode: (viewMode: ViewMode) => void;
   followButton?: boolean;
   externalLink?: boolean;
+  onBeforeNavigate?: () => void;
 };
 
 const AuthorProfile = ({
@@ -25,6 +27,8 @@ const AuthorProfile = ({
   setViewMode,
   followButton = false,
   externalLink = false,
+  onBeforeNavigate,
+  nip5,
 }: AvatarImageProps) => {
   const avatarLoaded = useImageLoaded(src);
   const { nav, currentSettings } = useNav();
@@ -39,8 +43,10 @@ const AuthorProfile = ({
           className="author-image"
           onClick={() => {
             setViewMode && setViewMode('grid');
-            npub &&
+            if (npub) {
+              onBeforeNavigate && onBeforeNavigate();
               nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined, topic: undefined, follows: false });
+            }
           }}
           style={{
             backgroundImage: avatarLoaded && src ? `url(${createImgProxyUrl(src, 80, 80)})` : 'none',
@@ -51,12 +57,21 @@ const AuthorProfile = ({
           className="author-name"
           onClick={() => {
             setViewMode && setViewMode('grid');
-            npub &&
+            if (npub) {
+              onBeforeNavigate && onBeforeNavigate();
               nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined, topic: undefined, follows: false });
+            }
           }}
         >
           {author}
         </span>
+        {nip5 && nip5.endsWith('@mostr.pub') && (
+          <div>
+            <div className="fediverse" title={nip5}>
+              fediverse
+            </div>
+          </div>
+        )}
       </div>
       <div className="author-actions">
         {followButtonAvailable && npub && (

@@ -8,6 +8,7 @@ import uniq from 'lodash/uniq';
 import { timeDifference } from '../../utils/time';
 import { unixNow } from '../../ngine/time';
 import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
+import { useGlobalState } from '../../utils/globalState';
 
 interface MasonryImageProps {
   image: NostrImage;
@@ -20,6 +21,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const { nav, currentSettings } = useNav();
   const [showInfo, setShowInfo] = useState(false);
   const [shouldShowInfo, setShouldShowInfo] = useState(false);
+  const [state, setState] = useGlobalState();
 
   useEffect(() => {
     let timeoutId: number;
@@ -64,6 +66,9 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const showTags = useMemo(() => uniq(image.tags).slice(0, 5), [image.tags]);
   const now = unixNow();
 
+  const isMissing = useMemo(()=> state.notfoundCache[image.url], [state.notfoundCache, image.url]);
+  if (isMissing) return;
+
   return (
     <LazyLoad className="is-relative">
       <div id={'g' + index} onMouseEnter={() => setShowInfo(true)} onMouseLeave={() => setShowInfo(false)}>
@@ -86,8 +91,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
                 referrerPolicy="no-referrer"
                 data-node-id={image.post.event.id}
                 onError={(e: SyntheticEvent<HTMLImageElement>) => {
-                  console.log('not found: ', e.currentTarget.src);
-                  e.currentTarget.src = '/notfound.png';
+                  setState({ ...state, notfoundCache: { ...state.notfoundCache, [image.url]: true } });
                 }}
                 style={{ visibility: loaded ? 'visible' : 'hidden' }}
                 className={`mason-image ${loaded ? 'show' : ''}`}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import './MasonryView.css';
 import { Settings } from '../../utils/useNav';
@@ -12,6 +12,8 @@ import MasonryImage from './MasonryImage';
 import useWindowSize from '../../utils/useWindowSize';
 import { topics } from '../env';
 import useTitle from '../../utils/useTitle';
+import PageHeader from '../PageHeader/PageHeader';
+import SearchResults from '../SearchResults/SearchResults';
 
 type MasonryViewProps = {
   settings: Settings;
@@ -30,8 +32,9 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
   const title = useTitle(settings, activeProfile);
   const [_, setState] = useGlobalState();
   const { width } = useWindowSize();
+  const [searchText, setSearchText] = useState<string | undefined>(undefined);
 
-  const columnCount = Math.max(2, Math.min(7, Math.floor((width || 800) / 230)));
+  const columnCount = Math.max(2, Math.min(6, Math.floor((width || 800) / 230)));
   const sortedImages = useMemo(
     () => {
       // console.log('Updating sortedImages');
@@ -73,6 +76,11 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
 
   const onKeyDown = (event: KeyboardEvent) => {
     //console.log(event);
+    // Check if the focused element is an input or textarea
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return; // Do not handle key events if focused on an input or textarea
+    }
 
     if (event.key === 'ArrowRight') {
       showNextImage();
@@ -113,25 +121,15 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      {(activeProfile || settings.topic || settings.tags.length == 1) && (
-        <div className="profile-header">
-          {activeProfile ? (
-            <AuthorProfile
-              src={urlFix(activeProfile.image || '')}
-              author={activeProfile.displayName || activeProfile.name}
-              npub={activeNpub}
-              setViewMode={setViewMode}
-              followButton
-              externalLink
-            ></AuthorProfile>
-          ) : settings.topic ? (
-            <h2>Topic: {topics[settings.topic].name || settings.topic}</h2>
-          ) : (
-            settings.tags.map(t => <h2>#{t}</h2>)
-          )}
-        </div>
-      )}
-      {
+      <PageHeader
+        settings={settings}
+        setViewMode={setViewMode}
+        setSearchText={setSearchText}
+        searchText={searchText}
+      ></PageHeader>
+      {searchText !== undefined ? (
+        <SearchResults searchText={searchText} setSearchText={setSearchText} setViewMode={setViewMode}></SearchResults>
+      ) : (
         <div
           className="mason-imagegrid"
           style={{
@@ -155,7 +153,7 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
             </div>
           ))}
         </div>
-      }
+      )}
     </div>
   );
 };

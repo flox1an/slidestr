@@ -1,6 +1,6 @@
 import './App.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { defaultRelays } from './components/env';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { defaultHashTags, defaultRelays } from './components/env';
 import Home from './components/Home';
 import { NgineProvider } from './ngine/context';
 import NDK from '@nostr-dev-kit/ndk';
@@ -25,7 +25,7 @@ const App = () => {
       children: [
         {
           path: '/',
-          element: <Home />,
+          element: <Navigate to={'/tags/' + defaultHashTags.join(',')} replace />,
         },
         {
           path: 'global',

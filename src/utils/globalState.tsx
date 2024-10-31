@@ -5,9 +5,12 @@ import React, { createContext, useContext, useReducer } from 'react';
 interface GlobalState {
   showNavButtons: boolean; // can be removed when the settings dialog is refactored.
   activeImage?: NostrImage;
+  notfoundCache:Record<string, boolean>;
+
 }
 const initialState: GlobalState = {
   showNavButtons: true,
+  notfoundCache: {}
 };
 
 type GlobalStateType = [GlobalState, React.Dispatch<Partial<GlobalState>>];

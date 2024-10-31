@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import './GridView.css';
 import GridImage from './GridImage';
@@ -10,6 +10,7 @@ import useActiveProfile from '../../utils/useActiveProfile';
 import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
 import useTitle from '../../utils/useTitle';
+import PageHeader from '../PageHeader/PageHeader';
 
 type GridViewProps = {
   settings: Settings;
@@ -27,12 +28,18 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
     setCurrentImage(idx => (idx !== undefined ? idx + 1 : 0));
   };
   const { nav, currentSettings } = useNav();
+  const [searchText, setSearchText] = useState<string | undefined>(undefined);
 
   const showPreviousImage = () => {
     setCurrentImage(idx => (idx !== undefined && idx > 0 ? idx - 1 : idx));
   };
 
   const onKeyDown = (event: KeyboardEvent) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return; // Do not handle key events if focused on an input or textarea
+    }
+
     if (event.key === 'ArrowRight') {
       showNextImage();
     }
@@ -79,22 +86,12 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
         <title>{title}</title>
       </Helmet>
 
-      {(activeProfile || settings.tags.length == 1) && (
-        <div className="profile-header">
-          {activeProfile ? (
-            <AuthorProfile
-              src={urlFix(activeProfile.image || '')}
-              author={activeProfile.displayName || activeProfile.name}
-              npub={activeNpub}
-              setViewMode={setViewMode}
-              followButton
-              externalLink
-            ></AuthorProfile>
-          ) : (
-            settings.tags.map(t => <h2>#{t}</h2>)
-          )}
-        </div>
-      )}
+      <PageHeader
+        setViewMode={setViewMode}
+        searchText={searchText}
+        setSearchText={setSearchText}
+        settings={settings}
+      ></PageHeader>
 
       <div className="imagegrid">
         {images.map((image, idx) => (

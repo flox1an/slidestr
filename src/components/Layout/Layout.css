@@ -1,7 +1,7 @@
 .top-right-controls {
   position: absolute;
-  top: 2em;
-  right: 2em;
+  top: 28px;
+  right: 28px;
   z-index: 200;
 }
 

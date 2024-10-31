@@ -73,12 +73,14 @@
   position: absolute;
   bottom: 0px;
   left: 0;
-  background: linear-gradient(0deg, rgba(0,0,0,.8), transparent);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.8), transparent);
   width: 100%;
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
-  transition: opacity 200ms ease-in-out, visibility 0s linear 200ms;
+  transition:
+    opacity 200ms ease-in-out,
+    visibility 0s linear 200ms;
 }
 
 .mason-imagegrid .info-section.visible {
@@ -86,45 +88,18 @@
   visibility: visible;
   transition-delay: 100ms; /* Delay before starting fade-in */
   /* Remove delay for visibility when showing */
-  transition: opacity 200ms ease-in-out, visibility 0s;
+  transition:
+    opacity 200ms ease-in-out,
+    visibility 0s;
 }
 
 .mason-imagegrid .info-section a {
   pointer-events: visible;
-
-}
-
-.profile-header {
-  padding: 1.2em;
-  padding-bottom: 0.6em;
-  padding-left: 5em;
-  display: flex;
-  flex-direction: row;
-  line-height: 64px;
-  padding-right: 6em;
-  width: 100vw;
-  box-sizing: border-box;
-}
-
-.profile-header h2 {
-  margin: 0px;
-}
-
-.profile-header .author-info {
-  position: relative;
-  bottom: initial;
-  left: initial;
-}
-
-@media screen and (max-width: 768px) {
-  .profile-header .author-info .author-name {
-    display: block;
-  }
 }
 
 .mason-imagegrid .title {
   display: flex;
-  padding-bottom: .2em;
+  padding-bottom: 0.2em;
   pointer-events: visible;
 }
 
@@ -135,5 +110,5 @@
 }
 
 .mason-imagegrid .is-relative {
-  position: relative; 
+  position: relative;
 }
