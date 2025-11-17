@@ -24,7 +24,7 @@ export type NostrImage = {
 
 export const buildFilter = (tags: string[], authors: string[], withReposts = false) => {
   const filter: NDKFilter = {
-    kinds: [1, 1063] as number[],
+    kinds: [1, 20, 1063] as number[],
     limit: 300, //  authors.length > 0 ? 1000 : tags.length > 0 ? 500 : 500,
   };
 

@@ -137,7 +137,6 @@ const SlideShow = () => {
   });
 
   useEffect(() => {
-    // console.log('set posts');
     setPosts(
       events
         .filter(
@@ -153,6 +152,18 @@ const SlideShow = () => {
             const urlTag = event?.tags?.find(t => t[0] == 'url');
             if (urlTag) {
               event.content = urlTag[1];
+            }
+          }
+
+          if (event.kind == 20) {
+            
+            const urls = event?.tags?.filter(t => t[0] == 'imeta').map(imeta => {
+              const urlTag = imeta.find(s => s.startsWith('url '))?.substring(4);
+              return urlTag;
+            });
+            if (urls) {
+              // TODO if content contains a blossom url without extension, appen one????
+              event.content = event.content  + urls.join(' ');
             }
           }
 
