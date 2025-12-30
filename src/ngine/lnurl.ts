@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { NostrEvent } from 'nostr-tools';
-import { useQuery, useQueries } from '@tanstack/react-query';
 import { bech32 } from 'bech32';
 import { ProfileContent } from './hooks/useProfile';
 
@@ -16,19 +15,37 @@ interface LNURLService {
 }
 
 export function useLnurl(profile: ProfileContent | undefined) {
-  const key = profile?.lud16 ?? 'none';
-  const query = useQuery({
-    queryKey: ['lnurl', key],
-    queryFn: async () => {
-      if (key === 'none') {
-        return null;
-      }
-      return loadService(key);
-    },
-    retry: false,
-    refetchOnMount: false,
-  });
-  return query;
+  const [data, setData] = useState<LNURLService | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const lastKey = useRef<string | undefined>();
+
+  const key = profile?.lud16;
+
+  useEffect(() => {
+    if (key === lastKey.current) return;
+    lastKey.current = key;
+
+    if (!key) {
+      setData(null);
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    loadService(key)
+      .then(result => {
+        setData(result);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setIsLoading(false);
+      });
+  }, [key]);
+
+  return { data, isLoading, error };
 }
 
 export function useLnurlVerify(lnurlVerifyUrl?: string) {
@@ -66,17 +83,25 @@ export function useLnurlVerify(lnurlVerifyUrl?: string) {
 }
 
 export function useLnurls(profiles: ProfileContent[]) {
-  const queries = profiles.map(profile => {
-    return {
-      queryKey: ['lnurl', profile.lud16],
-      queryFn: async () => {
+  const [results, setResults] = useState<(LNURLService | null)[]>([]);
+  const lastKeys = useRef<string>('');
+
+  useEffect(() => {
+    const keys = profiles.map(p => p.lud16 ?? '').join(',');
+    if (keys === lastKeys.current) return;
+    lastKeys.current = keys;
+
+    Promise.all(
+      profiles.map(async profile => {
         if (profile.lud16) {
           return loadService(profile.lud16);
         }
-      },
-    };
-  });
-  return useQueries({ queries });
+        return null;
+      })
+    ).then(setResults);
+  }, [profiles]);
+
+  return results.map(data => ({ data }));
 }
 
 function bech32ToText(str: string) {
