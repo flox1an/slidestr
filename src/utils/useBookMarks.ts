@@ -1,38 +1,45 @@
 import { NostrImage } from '@/components/nostrImageDownload';
-import { useNDK } from '../ngine/context';
+import { useSign } from '../ngine/context';
+import { useSession } from '../ngine/state';
+import { relayPool, eventStore } from '../nostr/core';
+import { getWriteRelays } from '../nostr/relays';
 import useLatestEvent from '../ngine/hooks/useLatestEvent';
 import { unixNow } from '../ngine/time';
-import { NDKEvent, NDKSubscriptionCacheUsage, NDKTag, NostrEvent } from '@nostr-dev-kit/ndk';
+import type { NostrEvent } from 'nostr-tools';
 import { useEffect, useMemo, useState } from 'react';
 
 const useBookMarks = (pubkey?: string, activeImage?: NostrImage) => {
-  const ndk = useNDK();
+  const sign = useSign();
+  const session = useSession();
 
   const bookMarkFilter = useMemo(() => ({ kinds: [10003], authors: (pubkey && [pubkey]) || [] }), [pubkey]);
   const [bookMarkList, setBookMarkList] = useState<NostrEvent | undefined>();
 
   const bookMarkListEvent = useLatestEvent(bookMarkFilter, {
-    cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
     closeOnEose: false,
   });
 
   useEffect(() => {
-    bookMarkListEvent != undefined && setBookMarkList(bookMarkListEvent.rawEvent());
+    bookMarkListEvent != undefined && setBookMarkList(bookMarkListEvent);
   }, [bookMarkListEvent]);
 
-  const publishBookMarks = async (pubkey: string, tags: NDKTag[]) => {
-    const ev = {
-      pubkey: pubkey,
+  const publishBookMarks = async (pubkey: string, tags: string[][]) => {
+    if (!session?.pubkey) return;
+
+    const unsigned = {
       kind: 10003,
       tags,
       created_at: unixNow(),
       content: '',
     };
+
     try {
-      const signed = new NDKEvent(ndk, ev);
-      await signed.sign();
-      await signed.publish();
-      setBookMarkList(signed.rawEvent());
+      const signed = await sign(unsigned);
+      if (!signed) return;
+
+      await relayPool.publish(getWriteRelays(session.pubkey), signed);
+      eventStore.add(signed);
+      setBookMarkList(signed);
     } catch (error) {
       console.error(error);
     }

@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react';
 import { useAtom } from 'jotai';
-import { NDKEvent, NDKKind } from '@nostr-dev-kit/ndk';
 
-import { useNDK, useSigner } from '../../ngine/context';
+import { useSign } from '../../ngine/context';
 import { followsAtom, useSession } from '../../ngine/state';
+import { relayPool, eventStore } from '../../nostr/core';
+import { getWriteRelays } from '../../nostr/relays';
 
 interface FollowButtonProps {
   pubkey: string;
@@ -17,12 +18,13 @@ function unixNow() {
 }
 
 export default function FollowButton({ pubkey, className, ...rest }: FollowButtonProps) {
-  const ndk = useNDK();
-  const canSign = useSigner();
-  const [isBusy, setIsBusy] = useState(false);
+  const sign = useSign();
   const session = useSession();
+  const [isBusy, setIsBusy] = useState(false);
   const [contacts, setContacts] = useAtom(followsAtom);
   const loggedInUser = session?.pubkey;
+  const canSign = !!session && session.method !== 'npub';
+
   const isFollowed = useMemo(() => {
     console.log(contacts, pubkey);
     return contacts?.tags.some(t => t[0] === 'p' && t[1] === pubkey);
@@ -30,20 +32,27 @@ export default function FollowButton({ pubkey, className, ...rest }: FollowButto
 
   async function follow(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
+    if (!session?.pubkey) return;
+
     setIsBusy(true);
     const tags = (contacts?.tags || []).concat([['p', pubkey]]);
-    const ev = {
-      pubkey: loggedInUser as string,
-      kind: NDKKind.Contacts,
+    const unsigned = {
+      kind: 3, // Contacts
       tags,
       created_at: unixNow(),
       content: '',
     };
+
     try {
-      const signed = new NDKEvent(ndk, ev);
-      await signed.sign();
-      await signed.publish();
-      setContacts(signed.rawEvent());
+      const signed = await sign(unsigned);
+      if (!signed) {
+        setIsBusy(false);
+        return;
+      }
+
+      await relayPool.publish(getWriteRelays(session.pubkey), signed);
+      eventStore.add(signed);
+      setContacts(signed);
     } catch (error) {
       console.error(error);
     } finally {
@@ -53,20 +62,27 @@ export default function FollowButton({ pubkey, className, ...rest }: FollowButto
 
   async function unfollow(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
+    if (!session?.pubkey) return;
+
     setIsBusy(true);
     const tags = (contacts?.tags || []).filter(t => t[1] !== pubkey);
-    const ev = {
-      pubkey: loggedInUser as string,
-      kind: NDKKind.Contacts,
+    const unsigned = {
+      kind: 3, // Contacts
       tags,
       created_at: unixNow(),
       content: '',
     };
+
     try {
-      const signed = new NDKEvent(ndk, ev);
-      await signed.sign();
-      await signed.publish();
-      setContacts(signed.rawEvent());
+      const signed = await sign(unsigned);
+      if (!signed) {
+        setIsBusy(false);
+        return;
+      }
+
+      await relayPool.publish(getWriteRelays(session.pubkey), signed);
+      eventStore.add(signed);
+      setContacts(signed);
     } catch (error) {
       console.error(error);
     } finally {
