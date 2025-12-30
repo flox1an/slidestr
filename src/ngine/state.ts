@@ -1,6 +1,6 @@
 import { atom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import type { NostrEvent } from '@nostr-dev-kit/ndk';
+import type { NostrEvent } from 'nostr-tools';
 
 import type { Relay, Rates, Session, Currency } from './types';
 

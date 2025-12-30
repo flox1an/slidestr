@@ -1,18 +1,18 @@
 import type { ReactNode } from 'react';
-import type { NDKKind, NDKEvent } from '@nostr-dev-kit/ndk';
+import type { NostrEvent } from 'nostr-tools';
+import { kinds } from 'nostr-tools';
 
-// Reactions
+// Reactions - using nostr-tools kinds instead of NDKKind
 
 export type ReactionKind =
-  | NDKKind.Zap
-  | NDKKind.Text
-  | NDKKind.Reaction
-  | NDKKind.Repost
-  | NDKKind.GenericRepost
-  | NDKKind.BookmarkList
-  | NDKKind.CategorizedBookmarkList
-  | NDKKind.RelayList
-  | NDKKind.EmojiList;
+  | typeof kinds.Zap
+  | typeof kinds.ShortTextNote
+  | typeof kinds.Reaction
+  | typeof kinds.Repost
+  | typeof kinds.GenericRepost
+  | typeof kinds.Bookmarksets
+  | typeof kinds.RelayList
+  | typeof kinds.Emojisets;
 
 // Relays
 
@@ -56,7 +56,7 @@ export type EventComponent = (props: EventProps) => ReactNode;
 export type Components = Record<number, EventComponent>;
 
 export interface EventProps {
-  event: NDKEvent;
+  event: NostrEvent;
   components?: Components;
   reactionKinds?: ReactionKind[];
 }

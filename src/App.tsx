@@ -1,22 +1,10 @@
 import './App.css';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import { defaultHashTags, defaultRelays } from './components/env';
+import { defaultHashTags } from './components/env';
 import Home from './components/Home';
 import { NgineProvider } from './ngine/context';
-import NDK from '@nostr-dev-kit/ndk';
-import { useEffect } from 'react';
-import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
 import Layout from './components/Layout/Layout';
 import SlideShow from './components/SlideShow';
-
-const cacheAdapterDexie = new NDKCacheAdapterDexie({ dbName: 'slidestr2' });
-
-const ndk = new NDK({
-  explicitRelayUrls: defaultRelays,
-  outboxRelayUrls: ['wss://purplepag.es'],
-  enableOutboxModel: true,
-  cacheAdapter: cacheAdapterDexie,
-});
 
 const App = () => {
   const router = createBrowserRouter([
@@ -63,12 +51,8 @@ const App = () => {
     },
   ]);
 
-  useEffect(() => {
-    ndk.connect();
-  }, []);
-
   return (
-    <NgineProvider ndk={ndk}>
+    <NgineProvider>
       <RouterProvider router={router} />
     </NgineProvider>
   );
