@@ -1,45 +1,76 @@
-import { useState, useEffect, useMemo } from 'react';
-
-import { NDKEvent, NDKFilter, NDKRelaySet, NDKSubscriptionOptions } from '@nostr-dev-kit/ndk';
-import uniqBy from 'lodash/uniqBy';
-
-import { useNDK } from '../context';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { useObservable, useSubscription } from 'observable-hooks';
+import { createTimelineLoader } from 'applesauce-loaders/loaders';
+import type { Filter, NostrEvent } from 'nostr-tools';
+import { eventStore, relayPool, cacheRequest, DEFAULT_RELAYS } from '../../nostr/core';
 import { hashSha256 } from '../utils';
 
-export interface SubscriptionOptions extends NDKSubscriptionOptions {
+export interface SubscriptionOptions {
   disable?: boolean;
+  closeOnEose?: boolean;
 }
 
-export default function useEvents(filter: NDKFilter | NDKFilter[], opts?: SubscriptionOptions, relays?: string[]) {
-  const ndk = useNDK();
+export default function useEvents(
+  filter: Filter | Filter[],
+  opts?: SubscriptionOptions,
+  relays?: string[]
+) {
   const [eose, setEose] = useState(false);
-  const [events, setEvents] = useState<NDKEvent[]>([]);
-  const id = useMemo(() => {
-    // console.warn('new ID!!!');
-    return hashSha256(filter);
-  }, [filter]);
+  const [events, setEvents] = useState<NostrEvent[]>([]);
+  const subscriptionRef = useRef<{ unsubscribe: () => void } | null>(null);
 
+  const effectiveRelays = relays?.length ? relays : DEFAULT_RELAYS;
+  const normalizedFilter = Array.isArray(filter) ? filter[0] : filter;
+
+  const id = useMemo(() => hashSha256(filter), [filter]);
+
+  // Create and manage loader subscription
   useEffect(() => {
-    if (filter && !opts?.disable) {
-      // console.log('useEvents: new Subscription', filter, opts);
+    if (opts?.disable || !normalizedFilter) {
       setEvents([]);
-      const relaySet = relays?.length ?? 0 > 0 ? NDKRelaySet.fromRelayUrls(relays as string[], ndk) : undefined;
-      const sub = ndk.subscribe(filter, opts, relaySet);
-      sub.on('event', (ev: NDKEvent) => {
-        // console.log('new event ');
-        setEvents(evs => {
-          const newEvents = evs.concat([ev]).sort((a, b) => (b.created_at ?? 0) - (a.created_at ?? 0));
-          return uniqBy(newEvents, (e: NDKEvent) => e.tagId());
-        });
-      });
-      sub.on('eose', () => {
-        setEose(true);
-      });
-      return () => {
-        sub.stop();
-      };
+      setEose(false);
+      return;
     }
+
+    // Reset state for new subscription
+    setEose(false);
+
+    // Clean up previous subscription
+    subscriptionRef.current?.unsubscribe();
+
+    const loader = createTimelineLoader(relayPool, effectiveRelays, normalizedFilter, {
+      eventStore,
+      cache: cacheRequest,
+      limit: 100,
+    });
+
+    const sub = loader().subscribe({
+      complete: () => setEose(true),
+      error: err => console.error('Timeline loader error:', err),
+    });
+
+    subscriptionRef.current = sub;
+
+    return () => {
+      sub.unsubscribe();
+      subscriptionRef.current = null;
+    };
   }, [id, opts?.disable]);
+
+  // Create observable for timeline from event store
+  const timeline$ = useObservable(
+    () => eventStore.timeline(normalizedFilter),
+    [normalizedFilter]
+  );
+
+  // Subscribe to timeline updates
+  useSubscription(timeline$, {
+    next: (timelineEvents: NostrEvent[]) => {
+      if (!opts?.disable) {
+        setEvents(timelineEvents);
+      }
+    },
+  });
 
   return { id, eose, events };
 }
