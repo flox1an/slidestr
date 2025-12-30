@@ -1,11 +1,11 @@
-import { NDKEvent, NDKFilter, NDKTag } from '@nostr-dev-kit/ndk';
+import type { NostrEvent, Filter } from 'nostr-tools';
 import { adultContentTagsMap, adultPublicKeysMap, blockedHashtags, imageProxy, mixedAdultPublicMaps } from './env';
 import uniq from 'lodash/uniq';
 import { unixNow } from '../ngine/time';
 import { ContentType } from '../utils/useNav';
 
 export type Post = {
-  event: NDKEvent;
+  event: NostrEvent;
   wasZapped?: boolean;
   wasLiked?: boolean;
 };
@@ -23,8 +23,8 @@ export type NostrImage = {
 };
 
 export const buildFilter = (tags: string[], authors: string[], withReposts = false) => {
-  const filter: NDKFilter = {
-    kinds: [1, 20, 1063] as number[],
+  const filter: Filter = {
+    kinds: [1, 20, 1063],
     limit: 300, //  authors.length > 0 ? 1000 : tags.length > 0 ? 500 : 500,
   };
 
@@ -78,31 +78,31 @@ export const extractImageUrls = (text: string): string[] => {
   return uniq(matchedUrls);
 };
 
-export const isReply = ({ tags }: { tags?: NDKTag[] }) => {
+export const isReply = ({ tags }: { tags?: string[][] }) => {
   if (!tags) return false;
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
   // [ "e", "0c77a63189d2d9f7d5c28c589e7784600b31c8ebc33050946a70436e02a442e2", "", "root" ],
   return tags.filter((t: string[]) => t[0] === 'e' && (t[3] === 'reply' || t[3] === 'root')).length > 0;
 };
 
-export const hasContentWarning = ({ tags }: { tags?: NDKTag[] }) => {
+export const hasContentWarning = ({ tags }: { tags?: string[][] }) => {
   if (!tags) return false;
   // ["content-warning", "NSFW: implied nudity"]
   return tags.filter((t: string[]) => t[0] === 'content-warning').length > 0;
 };
 
-export const hasAdultTag = ({ tags }: { tags?: NDKTag[] }) => {
+export const hasAdultTag = ({ tags }: { tags?: string[][] }) => {
   if (!tags) return false;
   // ["e", "aab5a68f29d76a04ad79fe7e489087b802ee0f946689d73b0e15931dd40a7af3", "", "reply"]
   return tags.some((t: string[]) => t[0] === 't' && adultContentTagsMap[t[1]]);
 };
 
-export const hasBlockedTag = ({ tags }: { tags?: NDKTag[] }) => {
+export const hasBlockedTag = ({ tags }: { tags?: string[][] }) => {
   if (!tags) return false;
   return tags.filter((t: string[]) => t[0] === 't' && blockedHashtags.includes(t[1])).length > 0;
 };
 
-export const isAdultRelated = ({ tags, pubkey }: { tags?: NDKTag[]; pubkey: string }, isTagSearch: boolean) => {
+export const isAdultRelated = ({ tags, pubkey }: { tags?: string[][]; pubkey: string }, isTagSearch: boolean) => {
   // if we search for a specific non adult tag and the user in the mixed category
   // allow as non adult
   if (isTagSearch && mixedAdultPublicMaps[pubkey.toLowerCase()] && !hasAdultTag({ tags })) {

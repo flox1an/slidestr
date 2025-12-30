@@ -1,5 +1,5 @@
-import { NDKKind } from '@nostr-dev-kit/ndk';
+import { kinds } from 'nostr-tools';
 
-export const REPOSTS = [NDKKind.Repost, NDKKind.GenericRepost];
+export const REPOSTS = [kinds.Repost, kinds.GenericRepost];
 
-export const BOOKMARKS = [NDKKind.BookmarkList, NDKKind.CategorizedBookmarkList, NDKKind.RelayList, NDKKind.EmojiList];
+export const BOOKMARKS = [kinds.Bookmarksets, kinds.RelayList, kinds.Emojisets];

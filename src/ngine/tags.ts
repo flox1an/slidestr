@@ -1,5 +1,5 @@
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import type { NostrEvent } from 'nostr-tools';
 
-export function tagValues(ev: NDKEvent, tag: string): string[] {
+export function tagValues(ev: NostrEvent, tag: string): string[] {
   return ev.tags.filter(t => t[0] === tag).map(t => t[1]);
 }

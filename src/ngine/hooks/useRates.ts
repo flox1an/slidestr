@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { NDKKind, NDKEvent } from '@nostr-dev-kit/ndk';
+import type { NostrEvent } from 'nostr-tools';
 
 import useLatestEvent from './useLatestEvent';
 import { FiatCurrency, RateSymbol, Rates } from '../types';
@@ -9,18 +9,18 @@ const SNORT_PUBKEY = '84de35e2584d2b144aae823c9ed0b0f3deda09648530b93d1a2a146d1d
 export default function useRates(isDisabled = false): Rates[] {
   const event = useLatestEvent(
     {
-      kinds: [1009 as NDKKind],
+      kinds: [1009],
       authors: [SNORT_PUBKEY],
     },
     {
       disable: isDisabled,
-      groupable: false,
       closeOnEose: false,
     },
     ['wss://relay.snort.social']
   );
-  function eventToRates(ev: NDKEvent): Rates[] {
-    const tags = ev.getMatchingTags('d');
+
+  function eventToRates(ev: NostrEvent): Rates[] {
+    const tags = ev.tags.filter(t => t[0] === 'd');
     return tags.map(tag => {
       const symbol = tag[1];
       return {
@@ -34,11 +34,13 @@ export default function useRates(isDisabled = false): Rates[] {
       };
     });
   }
+
   const rates = useMemo(() => {
     if (event) {
       return eventToRates(event);
     }
     return [];
   }, [event]);
+
   return rates;
 }

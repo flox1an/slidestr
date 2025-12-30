@@ -8,7 +8,6 @@ import React from 'react';
 import { useLogOut } from '../../ngine/context';
 import { useSession } from '../../ngine/state';
 import useProfile from '../../ngine/hooks/useProfile';
-import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
 
 const Layout = () => {
   //const { disclaimerAccepted, setDisclaimerAccepted } = useDisclaimerState();
@@ -16,7 +15,7 @@ const Layout = () => {
   const logOut = useLogOut();
   const session = useSession();
 
-  const profile = useProfile(session?.pubkey || '', NDKSubscriptionCacheUsage.CACHE_FIRST);
+  const profile = useProfile(session?.pubkey || '');
 
   //   useEffect(() => {
   //     if (currentSettings.npubs.length == 0 && currentSettings.tags.length == 0) {

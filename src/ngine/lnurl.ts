@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { NostrEvent } from '@nostr-dev-kit/ndk';
+import type { NostrEvent } from 'nostr-tools';
 import { useQuery, useQueries } from '@tanstack/react-query';
 import { bech32 } from 'bech32';
-import { NDKUserProfile } from '@nostr-dev-kit/ndk';
+import { ProfileContent } from './hooks/useProfile';
 
 const BECH32_MAX_BYTES = 42000;
 
@@ -15,7 +15,7 @@ interface LNURLService {
   commentAllowed?: number;
 }
 
-export function useLnurl(profile: NDKUserProfile | undefined) {
+export function useLnurl(profile: ProfileContent | undefined) {
   const key = profile?.lud16 ?? 'none';
   const query = useQuery({
     queryKey: ['lnurl', key],
@@ -65,7 +65,7 @@ export function useLnurlVerify(lnurlVerifyUrl?: string) {
   return isPaid;
 }
 
-export function useLnurls(profiles: NDKUserProfile[]) {
+export function useLnurls(profiles: ProfileContent[]) {
   const queries = profiles.map(profile => {
     return {
       queryKey: ['lnurl', profile.lud16],

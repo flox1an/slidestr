@@ -1,53 +1,57 @@
 import { useMemo } from 'react';
-import { NDKEvent, NDKFilter, NDKKind, NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
+import type { NostrEvent, Filter } from 'nostr-tools';
+import { kinds } from 'nostr-tools';
 
 import useEvents from './useEvents';
 import { zapsSummary, ZapRequest } from '../nostr/nip57';
 import { ReactionKind } from '../types';
 
 export type ReactionEvents = {
-  events: NDKEvent[];
+  events: NostrEvent[];
   zaps: {
     zapRequests: ZapRequest[];
     total: number;
   };
-  reactions: NDKEvent[];
-  replies: NDKEvent[];
-  reposts: NDKEvent[];
-  bookmarks: NDKEvent[];
+  reactions: NostrEvent[];
+  replies: NostrEvent[];
+  reposts: NostrEvent[];
+  bookmarks: NostrEvent[];
 };
 
-export default function useReactions(event: NDKEvent, kinds: ReactionKind[], live = true): ReactionEvents {
+export default function useReactions(event: NostrEvent, reactionKinds: ReactionKind[], live = true): ReactionEvents {
   const filter = useMemo(() => {
-    return {
-      kinds,
-      ...event.filter(),
-    } as NDKFilter;
-  }, [event, kinds]);
+    // Build filter to find reactions to this event
+    const f: Filter = {
+      kinds: reactionKinds,
+      '#e': [event.id],
+    };
+    return f;
+  }, [event, reactionKinds]);
+
   const { events } = useEvents(filter, {
     disable: !live,
     closeOnEose: false,
-    cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
   });
-  const zaps = useMemo(() => events.filter(e => e.kind === NDKKind.Zap), [events]);
+
+  const zaps = useMemo(() => events.filter(e => e.kind === kinds.Zap), [events]);
   const { zapRequests, total } = useMemo(() => zapsSummary(zaps), [zaps]);
-  const reactions = useMemo(() => events.filter(e => e.kind === NDKKind.Reaction), [events]);
-  const replies = useMemo(() => events.filter(e => e.kind === NDKKind.Text), [events]);
+  const reactions = useMemo(() => events.filter(e => e.kind === kinds.Reaction), [events]);
+  const replies = useMemo(() => events.filter(e => e.kind === kinds.ShortTextNote), [events]);
   const reposts = useMemo(
-    () => events.filter(e => e.kind === NDKKind.Repost || e.kind === NDKKind.GenericRepost),
+    () => events.filter(e => e.kind === kinds.Repost || e.kind === kinds.GenericRepost),
     [events]
   );
   const bookmarks = useMemo(
     () =>
       events.filter(
         e =>
-          e.kind === NDKKind.BookmarkList ||
-          e.kind === NDKKind.CategorizedBookmarkList ||
-          e.kind === NDKKind.RelayList ||
-          e.kind === NDKKind.EmojiList
+          e.kind === kinds.Bookmarksets ||
+          e.kind === kinds.RelayList ||
+          e.kind === kinds.Emojisets
       ),
     [events]
   );
+
   return {
     events,
     zaps: {

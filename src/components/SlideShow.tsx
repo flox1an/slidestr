@@ -26,7 +26,6 @@ import useZapsAndReations from '../utils/useZapAndReaction';
 import IconHeart from './Icons/IconHeart';
 import IconBolt from './Icons/IconBolt';
 import useEvents from '../ngine/hooks/useEvents';
-import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
 import MasonryView from './MasonryView/MasonryView';
 import useAuthorsFromList from '../utils/useAuthorsFromList';
 import useWindowSize from '../utils/useWindowSize';
@@ -131,7 +130,6 @@ const SlideShow = () => {
   ]);
 
   const { events } = useEvents(filter, {
-    cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
     // when seeing global, close stream because of too many updates.
     closeOnEose: settings.npubs.length == 0 && settings.tags.length == 0,
   });

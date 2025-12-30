@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { useNDK } from '../../ngine/context';
 import useEvents from '../../ngine/hooks/useEvents';
-import { NDKKind, profileFromEvent } from '@nostr-dev-kit/ndk';
+import { kinds } from 'nostr-tools';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { createImgProxyUrl, urlFix } from '../nostrImageDownload';
 import { nip19 } from 'nostr-tools';
+import { ProfileContent } from '../../ngine/hooks/useProfile';
 import { ViewMode } from '../SlideShow';
 import './SearchResults.css';
 import { defaultHashTags, hashtags, publicUrl, topics, visibleHashTags } from '../env';
@@ -28,14 +29,22 @@ function SearchResults({ searchText, setSearchText, setViewMode }: SearchResults
   const lowerSearchText = searchText?.toLowerCase();
 
   const profileResult = useEvents(
-    { kinds: [NDKKind.Metadata], search: lowerSearchText, limit: 20 },
+    { kinds: [kinds.Metadata], search: lowerSearchText, limit: 20 },
     { closeOnEose: true, disable: searchText == undefined || searchText?.length < 3 },
     ['wss://relay.nostr.band']
   );
   const showAdult = currentSettings.showAdult || false;
 
   const profiles = useMemo(() => {
-    return profileResult.events.map(e => ({ npub: nip19.npubEncode(e.pubkey), profile: profileFromEvent(e) }));
+    return profileResult.events.map(e => {
+      let profile: ProfileContent = {};
+      try {
+        profile = JSON.parse(e.content) as ProfileContent;
+      } catch {
+        // ignore parse errors
+      }
+      return { npub: nip19.npubEncode(e.pubkey), profile };
+    });
   }, [profileResult.events]);
 
   const allTopics = useMemo(

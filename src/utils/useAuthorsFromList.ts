@@ -18,9 +18,9 @@ const useAuthorsFromList = (listAddr?: string): string[] => {
   const authors: string[] = useMemo(() => {
     return (
       (validListAttr &&
-        listEvent
-          ?.getMatchingTags('p')
-          .map(t => t[1])
+        listEvent?.tags
+          .filter((t: string[]) => t[0] === 'p')
+          .map((t: string[]) => t[1])
           .flat()) ||
       []
     );

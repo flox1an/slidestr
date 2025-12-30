@@ -7,7 +7,6 @@ import LazyLoad from 'react-lazy-load';
 import uniq from 'lodash/uniq';
 import { timeDifference } from '../../utils/time';
 import { unixNow } from '../../ngine/time';
-import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
 import { useGlobalState } from '../../utils/globalState';
 
 interface MasonryImageProps {
@@ -53,7 +52,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   };
 
   const mediaIsVideo = isVideo(image.url);
-  const profile = useProfile(image.authorId, NDKSubscriptionCacheUsage.CACHE_FIRST);
+  const profile = useProfile(image.authorId);
 
   const showAuthor = currentSettings.npubs == undefined || currentSettings.npubs.length != 1; // if we are looking at a single profile, don't show the author
 

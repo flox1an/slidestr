@@ -8,7 +8,6 @@ import { createImgProxyUrl } from './nostrImageDownload';
 import { useGlobalState } from '../utils/globalState';
 import { ViewMode } from './SlideShow';
 import useProfile from '../ngine/hooks/useProfile';
-import { NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
 
 type SettingsProps = {
   onClose: () => void;
@@ -106,7 +105,7 @@ const SettingsDialog = ({ onClose, setViewMode }: SettingsProps) => {
     onClose();
   };
 
-  const activeProfile = useProfile(npubs[0], NDKSubscriptionCacheUsage.CACHE_FIRST);
+  const activeProfile = useProfile(npubs[0] || '');
 
   return (
     <>

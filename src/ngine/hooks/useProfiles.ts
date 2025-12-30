@@ -1,27 +1,35 @@
-import { useState, useEffect } from 'react';
-import { NDKUserProfile, NDKSubscriptionCacheUsage, NDKKind } from '@nostr-dev-kit/ndk';
+import { useMemo } from 'react';
+import { useObservableState } from 'observable-hooks';
+import { kinds } from 'nostr-tools';
+import { combineLatest, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { useNDK } from '../context';
+import { eventStore } from '../../nostr/core';
+import { ProfileContent } from './useProfile';
 
-export default function useProfiles(pubkeys: string[]) {
-  const ndk = useNDK();
-  const [profiles, setProfiles] = useState<NDKUserProfile[]>([]);
+export default function useProfiles(pubkeys: string[]): ProfileContent[] {
+  const profiles$ = useMemo(() => {
+    if (pubkeys.length === 0) {
+      return of([]);
+    }
 
-  useEffect(() => {
-    ndk
-      .fetchEvents(
-        {
-          kinds: [NDKKind.Metadata],
-          authors: pubkeys,
-        },
-        {
-          cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
-        }
+    const profileObservables = pubkeys.map(pubkey =>
+      eventStore.replaceable(kinds.Metadata, pubkey).pipe(
+        map(event => {
+          if (!event) return undefined;
+          try {
+            return JSON.parse(event.content) as ProfileContent;
+          } catch {
+            return undefined;
+          }
+        })
       )
-      .then(profileSet => {
-        return setProfiles([...profileSet].map(ev => JSON.parse(ev.content)));
-      });
-  }, [pubkeys]);
+    );
 
-  return profiles;
+    return combineLatest(profileObservables).pipe(
+      map(profiles => profiles.filter((p): p is ProfileContent => p !== undefined))
+    );
+  }, [pubkeys.join(',')]);
+
+  return useObservableState(profiles$, []);
 }

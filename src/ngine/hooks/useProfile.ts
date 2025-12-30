@@ -10,6 +10,7 @@ export interface ProfileContent {
   displayName?: string;
   about?: string;
   picture?: string;
+  image?: string; // alias for picture, used by some clients
   banner?: string;
   nip05?: string;
   lud06?: string;

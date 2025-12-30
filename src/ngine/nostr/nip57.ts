@@ -1,9 +1,20 @@
 import { useMemo } from 'react';
 import { decode } from 'light-bolt11-decoder';
-import { NDKKind } from '@nostr-dev-kit/ndk';
-import type { NDKEvent, NostrEvent } from '@nostr-dev-kit/ndk';
+import { kinds } from 'nostr-tools';
+import type { NostrEvent } from 'nostr-tools';
 
 import { unixNow } from '../time';
+
+// Helper to get tag value from event
+function getTagValue(event: NostrEvent, tagName: string): string | undefined {
+  const tag = event.tags.find(t => t[0] === tagName);
+  return tag ? tag[1] : undefined;
+}
+
+// Helper to create event tag reference
+function createTagReference(event: NostrEvent): string[] {
+  return ['e', event.id];
+}
 
 export function makeZapRequest({
   p,
@@ -17,21 +28,21 @@ export function makeZapRequest({
   pubkey: string;
   amount: number;
   relays: string[];
-  event?: NDKEvent;
+  event?: NostrEvent;
   comment?: string;
 }): NostrEvent {
   const msats = amount * 1000;
   return {
     pubkey,
-    kind: NDKKind.ZapRequest,
+    kind: kinds.ZapRequest,
     created_at: unixNow(),
     content: comment || '',
-    tags: [['p', p], ...[event ? event.tagReference() : []], ['amount', String(msats)], ['relays', ...relays]],
-  };
+    tags: [['p', p], ...(event ? [createTagReference(event)] : []), ['amount', String(msats)], ['relays', ...relays]],
+  } as NostrEvent;
 }
 
-export function getZapRequest(zap: NDKEvent): NostrEvent | undefined {
-  let zapRequest = zap.tagValue('description');
+export function getZapRequest(zap: NostrEvent): NostrEvent | undefined {
+  let zapRequest = getTagValue(zap, 'description');
   if (zapRequest) {
     try {
       if (zapRequest.startsWith('%')) {
@@ -44,9 +55,9 @@ export function getZapRequest(zap: NDKEvent): NostrEvent | undefined {
   }
 }
 
-export function getZapAmount(zap: NDKEvent): number {
+export function getZapAmount(zap: NostrEvent): number {
   try {
-    const invoice = zap.tagValue('bolt11');
+    const invoice = getTagValue(zap, 'bolt11');
     if (invoice) {
       const decoded = decode(invoice) as { sections: { name: string; value: string }[] };
       const amount = decoded.sections.find(({ name }) => name === 'amount');
@@ -73,7 +84,7 @@ export interface ZapsSummary {
   total: number;
 }
 
-export function parseZap(z: NDKEvent): ZapRequest | null {
+export function parseZap(z: NostrEvent): ZapRequest | null {
   const zr = getZapRequest(z);
   if (!zr) {
     return null;
@@ -95,7 +106,7 @@ export function parseZap(z: NDKEvent): ZapRequest | null {
   } as ZapRequest;
 }
 
-export function zapsSummary(zaps: NDKEvent[]): ZapsSummary {
+export function zapsSummary(zaps: NostrEvent[]): ZapsSummary {
   const zapRequests = zaps
     .map(parseZap)
     .filter(z => z !== null)
@@ -112,8 +123,8 @@ export interface ZapSplit {
   percentage: number;
 }
 
-export function getZapSplits(ev: NDKEvent): ZapSplit[] {
-  const zapTags = ev.getMatchingTags('zap');
+export function getZapSplits(ev: NostrEvent): ZapSplit[] {
+  const zapTags = ev.tags.filter(t => t[0] === 'zap');
   return zapTagsToSplits(zapTags);
 }
 
@@ -133,7 +144,7 @@ interface Rank {
   amount: number;
 }
 
-export function useRanking(zaps: NDKEvent[]): Rank[] {
+export function useRanking(zaps: NostrEvent[]): Rank[] {
   const { zapRequests } = useMemo(() => zapsSummary(zaps), [zaps]);
 
   const byAmount = useMemo(() => {

@@ -14,9 +14,9 @@ const useReposts = (npub?: string) => {
   const reposts = useMemo(
     () =>
       events.flatMap(e =>
-        e
-          .getMatchingTags('e')
-          .map(t => t[1])
+        e.tags
+          .filter((t: string[]) => t[0] === 'e')
+          .map((t: string[]) => t[1])
           .flat()
       ),
     [events]

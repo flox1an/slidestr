@@ -2,9 +2,9 @@ import { appName, topics } from '../components/env';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { Settings } from './useNav';
-import { NDKUserProfile } from '@nostr-dev-kit/ndk';
+import { ProfileContent } from '../ngine/hooks/useProfile';
 
-const useTitle = (settings: Settings, activeProfile?: NDKUserProfile) => {
+const useTitle = (settings: Settings, activeProfile?: ProfileContent) => {
   const [title, setTitle] = useState(appName);
   const location = useLocation();
   const { topic } = useParams();

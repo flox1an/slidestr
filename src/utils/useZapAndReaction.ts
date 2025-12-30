@@ -122,21 +122,18 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     if (!session?.pubkey) return;
 
     const orgEvent = currentImageData?.post.event;
-    if (!orgEvent) return;
+    if (!orgEvent || !orgEvent.id) return;
 
-    const relayUrl = orgEvent.relay?.url;
-    if (!relayUrl) {
-      console.error('no relay url found for original event.');
-      return;
-    }
+    // Use a default relay URL since nostr-tools events don't track relay origin
+    const relayUrl = 'wss://relay.damus.io';
 
     const unsigned = {
       kind: 6, // Repost
       created_at: Math.floor(Date.now() / 1000),
-      content: JSON.stringify(orgEvent.rawEvent),
+      content: JSON.stringify(orgEvent),
       tags: [
         ['e', orgEvent.id, relayUrl],
-        ['p', orgEvent.author.pubkey],
+        ['p', orgEvent.pubkey],
       ],
     };
 
