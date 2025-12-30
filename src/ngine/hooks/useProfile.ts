@@ -1,20 +1,38 @@
-import { NDKUserProfile, NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useMemo } from 'react';
+import { useObservableState } from 'observable-hooks';
+import { kinds } from 'nostr-tools';
+import { map } from 'rxjs/operators';
+import { eventStore } from '../../nostr/core';
 
-import { useNDK } from '../context';
+export interface ProfileContent {
+  name?: string;
+  display_name?: string;
+  displayName?: string;
+  about?: string;
+  picture?: string;
+  banner?: string;
+  nip05?: string;
+  lud06?: string;
+  lud16?: string;
+  website?: string;
+  [key: string]: unknown;
+}
 
-export default function useProfile(pubkey: string, cacheUsage = NDKSubscriptionCacheUsage.CACHE_FIRST) {
-  const ndk = useNDK();
-  const query: UseQueryResult<NDKUserProfile, Error> = useQuery({
-    queryKey: ['profile', pubkey],
-    queryFn: () => {
-      const user = ndk.getUser({ hexpubkey: pubkey });
-      return user.fetchProfile({
-        cacheUsage,
-        groupable: true,
-      });
-    },
-  });
+export default function useProfile(pubkey: string): ProfileContent | undefined {
+  const profile$ = useMemo(
+    () =>
+      eventStore.replaceable(kinds.Metadata, pubkey).pipe(
+        map(event => {
+          if (!event) return undefined;
+          try {
+            return JSON.parse(event.content) as ProfileContent;
+          } catch {
+            return undefined;
+          }
+        })
+      ),
+    [pubkey]
+  );
 
-  return query.data;
+  return useObservableState(profile$, undefined);
 }
