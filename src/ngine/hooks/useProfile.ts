@@ -26,7 +26,16 @@ export default function useProfile(pubkey: string): ProfileContent | undefined {
         map(event => {
           if (!event) return undefined;
           try {
-            return JSON.parse(event.content) as ProfileContent;
+            const content = JSON.parse(event.content) as ProfileContent;
+            // Normalize: nostr profiles use 'picture', map to 'image' for compatibility
+            if (content.picture && !content.image) {
+              content.image = content.picture;
+            }
+            // Normalize: some clients use 'display_name', map to 'displayName'
+            if (content.display_name && !content.displayName) {
+              content.displayName = content.display_name;
+            }
+            return content;
           } catch {
             return undefined;
           }
