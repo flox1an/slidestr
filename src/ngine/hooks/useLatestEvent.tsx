@@ -1,30 +1,61 @@
-import { useState, useEffect } from 'react';
-
-import { NDKEvent, NDKFilter, NDKRelaySet } from '@nostr-dev-kit/ndk';
-
-import { useNDK } from '../context';
+import { useEffect, useMemo, useRef } from 'react';
+import { useObservableState } from 'observable-hooks';
+import { createTimelineLoader } from 'applesauce-loaders/loaders';
+import type { Filter, NostrEvent } from 'nostr-tools';
+import { map } from 'rxjs/operators';
+import { eventStore, relayPool, cacheRequest, DEFAULT_RELAYS } from '../../nostr/core';
+import { hashSha256 } from '../utils';
 import { SubscriptionOptions } from './useEvents';
 
-export default function useLatestEvent(filter: NDKFilter | NDKFilter[], opts?: SubscriptionOptions, relays?: string[]) {
-  const ndk = useNDK();
-  const [event, setEvent] = useState<NDKEvent | undefined>();
+export default function useLatestEvent(
+  filter: Filter | Filter[],
+  opts?: SubscriptionOptions,
+  relays?: string[]
+): NostrEvent | undefined {
+  const subscriptionRef = useRef<{ unsubscribe: () => void } | null>(null);
 
+  const effectiveRelays = relays?.length ? relays : DEFAULT_RELAYS;
+
+  // Normalize array filter to single filter (take first if array)
+  const normalizedFilter = Array.isArray(filter) ? filter[0] : filter;
+
+  const id = useMemo(() => hashSha256(filter), [filter]);
+
+  // Create and manage loader subscription
   useEffect(() => {
-    if (!opts?.disable) {
-      const relaySet = relays?.length ?? 0 > 0 ? NDKRelaySet.fromRelayUrls(relays as string[], ndk) : undefined;
-      const sub = ndk.subscribe(filter, opts, relaySet);
-      sub.on('event', (ev: NDKEvent) => {
-        const lastSeen = event?.created_at ?? 0;
-        const createdAt = ev?.created_at ?? 0;
-        if (createdAt > lastSeen) {
-          setEvent(ev);
-        }
-      });
-      return () => {
-        sub.stop();
-      };
+    if (opts?.disable || !normalizedFilter) {
+      return;
     }
-  }, [opts?.disable]);
 
-  return event;
+    // Clean up previous subscription
+    subscriptionRef.current?.unsubscribe();
+
+    const loader = createTimelineLoader(relayPool, effectiveRelays, normalizedFilter, {
+      eventStore,
+      cache: cacheRequest,
+      limit: 1,
+    });
+
+    const sub = loader().subscribe({
+      error: err => console.error('Latest event loader error:', err),
+    });
+
+    subscriptionRef.current = sub;
+
+    return () => {
+      sub.unsubscribe();
+      subscriptionRef.current = null;
+    };
+  }, [id, opts?.disable]);
+
+  // Create observable for timeline from event store and return first (latest) event
+  const event$ = useMemo(
+    () =>
+      eventStore.timeline(normalizedFilter).pipe(
+        map((events: NostrEvent[]) => (events.length > 0 ? events[0] : undefined))
+      ),
+    [normalizedFilter]
+  );
+
+  return useObservableState(event$, undefined);
 }
