@@ -1,0 +1,24 @@
+{
+  "privateKey": "6190f7d95328b91baa8c72911421f99b8b33f20b180aa717dc866d4309ef1a5c",
+  "relays": [
+    "wss://nos.lol",
+    "wss://relay.primal.net",
+    "wss://relay.nostr.band",
+    "wss://relay.damus.io"
+  ],
+  "servers": [
+    "https://blossom.band/",
+    "https://24242.io/",
+    "https://nosto.re/",
+    "https://nostr.download/"
+  ],
+  "profile": {
+    "name": "Slidestr",
+    "about": "A visual experience of all images and videos on NOSTR.",
+    "nip05": "slidestr@slidestr.net",
+    "picture": "https://cdn.satellite.earth/f6f748ac94361bc7454464d651c4caae28a540642f103712ade281da07c4ae7d.svg"
+  },
+  "publishProfile": true,
+  "publishServerList": true,
+  "publishRelayList": true
+}
