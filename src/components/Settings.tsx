@@ -8,6 +8,9 @@ import { createImgProxyUrl } from './nostrImageDownload';
 import { useGlobalState } from '../utils/globalState';
 import { ViewMode } from './SlideShow';
 import useProfile from '../ngine/hooks/useProfile';
+import { useAtom } from 'jotai';
+import { nwcAtom } from '../ngine/state';
+import { parseNWCUri } from '../ngine/nwc';
 
 type SettingsProps = {
   onClose: () => void;
@@ -29,6 +32,24 @@ const SettingsDialog = ({ onClose, setViewMode }: SettingsProps) => {
   const [mode, setMode] = useState<Mode>(
     currentSettings.npubs.length == 1 ? 'user' : currentSettings.tags.length > 0 ? 'tags' : 'all'
   );
+  const [nwc, setNwc] = useAtom(nwcAtom);
+  const [nwcInput, setNwcInput] = useState('');
+  const [nwcError, setNwcError] = useState<string | null>(null);
+
+  const handleConnectWallet = () => {
+    const parsed = parseNWCUri(nwcInput);
+    if (parsed) {
+      setNwc(parsed);
+      setNwcInput('');
+      setNwcError(null);
+    } else {
+      setNwcError('Invalid NWC connection string');
+    }
+  };
+
+  const handleDisconnectWallet = () => {
+    setNwc(null);
+  };
 
   useEffect(() => {
     setState({ ...state, showNavButtons: false });
@@ -190,6 +211,32 @@ const SettingsDialog = ({ onClose, setViewMode }: SettingsProps) => {
               <div className="warning">NSFW / adult content</div>
               Allow adult content to be shown and ignore content warnings.
             </label>
+          </div>
+          <div className="wallet-section">
+            <h4>Lightning Wallet</h4>
+            {nwc ? (
+              <div className="wallet-connected">
+                <span className="status">Connected</span>
+                <button className="wallet-btn wallet-btn-disconnect" onClick={handleDisconnectWallet}>
+                  Disconnect
+                </button>
+              </div>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  className="wallet-input"
+                  placeholder="Paste nostr+walletconnect:// URI"
+                  value={nwcInput}
+                  onChange={e => setNwcInput(e.target.value)}
+                  onKeyDown={e => e.stopPropagation()}
+                />
+                {nwcError && <div style={{ color: '#ff6b6b', marginBottom: 12 }}>{nwcError}</div>}
+                <button className="wallet-btn wallet-btn-connect" onClick={handleConnectWallet}>
+                  Connect Wallet
+                </button>
+              </>
+            )}
           </div>
         </div>
         <div className="settings-footer">
