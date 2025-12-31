@@ -8,6 +8,11 @@ import uniq from 'lodash/uniq';
 import { timeDifference } from '../../utils/time';
 import { unixNow } from '../../ngine/time';
 import { useGlobalState } from '../../utils/globalState';
+import ZapButton from '../ZapButton/ZapButton';
+import ZapModal from '../ZapModal/ZapModal';
+import { useZapCount } from '../../hooks/useZapCount';
+import useZapsAndReations from '../../utils/useZapAndReaction';
+import { useSession } from '../../ngine/state';
 
 interface MasonryImageProps {
   image: NostrImage;
@@ -21,6 +26,22 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const [showInfo, setShowInfo] = useState(false);
   const [shouldShowInfo, setShouldShowInfo] = useState(false);
   const [state, setState] = useGlobalState();
+  const session = useSession();
+  const [showZapModal, setShowZapModal] = useState(false);
+  const { zapState, zapClick, hasLnurl, hasNwc } = useZapsAndReations(
+    image,
+    session?.pubkey ? `npub${session.pubkey}` : undefined
+  );
+  const totalSats = useZapCount(image.post.event.id);
+
+  const handleQuickZap = () => {
+    if (!session?.pubkey || !hasLnurl || !hasNwc) return;
+    zapClick(image, 21);
+  };
+
+  const handleModalZap = async (amount: number, comment?: string) => {
+    await zapClick(image, amount, comment);
+  };
 
   useEffect(() => {
     let timeoutId: number;
@@ -123,10 +144,30 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
                   <a onClick={() => tagClick(t)}>#{t}</a>{' '}
                 </React.Fragment>
               ))}
+              {session?.pubkey && hasLnurl && (
+                <div className="zap-action" onClick={e => e.stopPropagation()}>
+                  <ZapButton
+                    zapState={zapState}
+                    totalSats={totalSats}
+                    onQuickZap={handleQuickZap}
+                    onOpenModal={() => setShowZapModal(true)}
+                    disabled={!hasNwc}
+                  />
+                </div>
+              )}
             </>
           )}
         </div>
       </div>
+      {showZapModal && (
+        <ZapModal
+          onClose={() => setShowZapModal(false)}
+          onZap={handleModalZap}
+          onOpenSettings={() => {
+            setShowZapModal(false);
+          }}
+        />
+      )}
     </LazyLoad>
   );
 };
