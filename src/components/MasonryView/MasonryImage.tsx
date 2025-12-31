@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { MouseEventHandler, SyntheticEvent, useMemo, useState } from 'react';
+import { nip19 } from 'nostr-tools';
 import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
 import useProfile from '../../ngine/hooks/useProfile';
 import useNav from '../../utils/useNav';
@@ -30,7 +31,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const [showZapModal, setShowZapModal] = useState(false);
   const { zapState, zapClick, hasLnurl, hasNwc } = useZapsAndReations(
     image,
-    session?.pubkey ? `npub${session.pubkey}` : undefined
+    session?.pubkey ? nip19.npubEncode(session.pubkey) : undefined
   );
   const totalSats = useZapCount(image.post.event.id);
 
@@ -145,7 +146,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
                 </React.Fragment>
               ))}
               {session?.pubkey && hasLnurl && (
-                <div className="zap-action" onClick={e => e.stopPropagation()}>
+                <div style={{ marginTop: 8 }} onClick={e => e.stopPropagation()}>
                   <ZapButton
                     zapState={zapState}
                     totalSats={totalSats}
