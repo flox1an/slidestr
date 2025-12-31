@@ -193,3 +193,8 @@
   background: #333;
   color: #fff;
 }
+
+.wallet-error {
+  color: #ff6b6b;
+  margin-bottom: 12px;
+}

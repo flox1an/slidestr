@@ -224,14 +224,15 @@ const SettingsDialog = ({ onClose, setViewMode }: SettingsProps) => {
             ) : (
               <>
                 <input
-                  type="text"
+                  type="password"
                   className="wallet-input"
                   placeholder="Paste nostr+walletconnect:// URI"
                   value={nwcInput}
                   onChange={e => setNwcInput(e.target.value)}
                   onKeyDown={e => e.stopPropagation()}
+                  onKeyUp={e => e.stopPropagation()}
                 />
-                {nwcError && <div style={{ color: '#ff6b6b', marginBottom: 12 }}>{nwcError}</div>}
+                {nwcError && <div className="wallet-error">{nwcError}</div>}
                 <button className="wallet-btn wallet-btn-connect" onClick={handleConnectWallet}>
                   Connect Wallet
                 </button>
