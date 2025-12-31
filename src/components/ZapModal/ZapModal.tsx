@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './ZapModal.css';
 import { useNWC } from '../../ngine/state';
+import CloseButton from '../CloseButton/CloseButton';
 
 interface ZapModalProps {
   onClose: () => void;
@@ -17,6 +18,14 @@ const ZapModal = ({ onClose, onZap, onOpenSettings }: ZapModalProps) => {
   const [error, setError] = useState<string | null>(null);
   const nwc = useNWC();
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const handleZap = async () => {
     setIsZapping(true);
     setError(null);
@@ -32,8 +41,9 @@ const ZapModal = ({ onClose, onZap, onOpenSettings }: ZapModalProps) => {
 
   return (
     <div className="zap-modal-overlay" onClick={onClose}>
-      <div className="zap-modal" onClick={e => e.stopPropagation()}>
+      <div className="zap-modal" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
         <h3>Zap</h3>
+        <CloseButton onClick={onClose} />
 
         <div className="zap-amounts">
           {PRESET_AMOUNTS.map(amount => (
@@ -57,9 +67,9 @@ const ZapModal = ({ onClose, onZap, onOpenSettings }: ZapModalProps) => {
         />
 
         {!nwc ? (
-          <a className="zap-setup-link" onClick={onOpenSettings}>
+          <button className="zap-setup-link" onClick={onOpenSettings}>
             Set up wallet to zap
-          </a>
+          </button>
         ) : (
           <button
             className="zap-submit-btn"

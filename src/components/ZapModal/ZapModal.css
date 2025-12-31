@@ -89,6 +89,12 @@
   margin-top: 8px;
 }
 
+button.zap-setup-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 .zap-error {
   color: #ff6b6b;
   text-align: center;
