@@ -172,3 +172,29 @@ export async function loadInvoice(payService: LNURLService, amount: number, comm
     console.error(e);
   }
 }
+
+export function createZapRequestEvent(
+  senderPubkey: string,
+  recipientPubkey: string,
+  eventId: string,
+  amountMsats: number,
+  relays: string[],
+  lnurl: string,
+  comment?: string
+): Omit<NostrEvent, 'id' | 'sig'> {
+  const tags: string[][] = [
+    ['p', recipientPubkey],
+    ['e', eventId],
+    ['amount', amountMsats.toString()],
+    ['relays', ...relays],
+    ['lnurl', lnurl],
+  ];
+
+  return {
+    kind: 9734,
+    created_at: Math.floor(Date.now() / 1000),
+    pubkey: senderPubkey,
+    tags,
+    content: comment || '',
+  };
+}
