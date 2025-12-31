@@ -60,11 +60,10 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
       currentImageData.post.wasLiked = likes.selfLiked;
       setHeartState(likes.selfLiked ? 'liked' : 'none');
     });
-  }, [currentImageData, currentImageData?.noteId, userNPub]);
+  }, [currentImageData, userNPub]);
 
   const heartClick = async (currentImage: NostrImage) => {
     setHeartState('liking');
-    console.log('heartClick');
     if (!session?.pubkey) return;
 
     const unsigned = {
@@ -83,7 +82,6 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
       return;
     }
 
-    console.log(signed);
     await relayPool.publish(getWriteRelays(session.pubkey), signed);
     eventStore.add(signed);
     setHeartState('liked');
@@ -99,17 +97,17 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
 
     if (!session?.pubkey) {
       setZapState('error');
-      throw new Error('Not logged in');
+      return;
     }
 
     if (!lnurlService) {
       setZapState('error');
-      throw new Error('Author has no Lightning address');
+      return;
     }
 
     if (!nwc) {
       setZapState('error');
-      throw new Error('No wallet connected');
+      return;
     }
 
     try {
@@ -129,7 +127,7 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
       const signedZapRequest = await sign(zapRequest);
       if (!signedZapRequest) {
         setZapState('error');
-        throw new Error('Failed to sign zap request');
+        return;
       }
 
       // Get invoice from LNURL service
@@ -142,7 +140,7 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
 
       if (!invoiceResponse?.pr) {
         setZapState('error');
-        throw new Error('Failed to get invoice');
+        return;
       }
 
       // Pay via NWC
@@ -150,7 +148,7 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
 
       if ('error' in payResult) {
         setZapState('error');
-        throw new Error(payResult.error);
+        return;
       }
 
       setZapState('zapped');
@@ -158,8 +156,8 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
       // Reset after animation
       setTimeout(() => setZapState('none'), 2000);
     } catch (err) {
+      console.error('Zap failed:', err);
       setZapState('error');
-      throw err;
     }
   }, [session, nwc, lnurlService, authorProfile, sign]);
 
@@ -185,7 +183,6 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     const signed = await sign(unsigned);
     if (!signed) return;
 
-    console.log(signed);
     await relayPool.publish(getWriteRelays(session.pubkey), signed);
     eventStore.add(signed);
   };
