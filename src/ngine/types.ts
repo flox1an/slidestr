@@ -48,6 +48,13 @@ export interface Session {
   };
 }
 
+// NWC (Nostr Wallet Connect)
+export interface NWCConnection {
+  walletPubkey: string;
+  relayUrl: string;
+  secret: string;
+}
+
 // Components
 
 export type Fragment = string | ReactNode;

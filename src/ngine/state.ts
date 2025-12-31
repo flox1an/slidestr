@@ -2,7 +2,7 @@ import { atom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import type { NostrEvent } from 'nostr-tools';
 
-import type { Relay, Rates, Session, Currency } from './types';
+import type { Relay, Rates, Session, Currency, NWCConnection } from './types';
 
 export const sessionAtom = atomWithStorage<Session | null>('ngine.session', null);
 export const relayListAtom = atomWithStorage<NostrEvent | null>('ngine.10002', null);
@@ -26,6 +26,12 @@ export const contactsAtom = atom<string[]>(get => {
 });
 export const currencyAtom = atomWithStorage<Currency>('ngine.currency', 'BTC');
 export const ratesAtom = atomWithStorage<Rates[]>('ngine.rates', []);
+
+export const nwcAtom = atomWithStorage<NWCConnection | null>('ngine.nwc', null);
+
+export function useNWC() {
+  return useAtomValue(nwcAtom);
+}
 
 export function useExchangeRate(currency: Currency): Rates | undefined {
   const rates = useAtomValue(ratesAtom);
