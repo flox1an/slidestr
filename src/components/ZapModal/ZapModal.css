@@ -1,0 +1,96 @@
+.zap-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.zap-modal {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 24px;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.zap-modal h3 {
+  margin: 0 0 16px 0;
+  color: #fff;
+  text-align: center;
+}
+
+.zap-amounts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.zap-amount-btn {
+  padding: 12px 8px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #222;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.zap-amount-btn:hover,
+.zap-amount-btn.selected {
+  background: #f7931a;
+  border-color: #f7931a;
+}
+
+.zap-comment {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #222;
+  color: #fff;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.zap-comment::placeholder {
+  color: #666;
+}
+
+.zap-submit-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #f7931a;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.zap-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.zap-setup-link {
+  color: #f7931a;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  margin-top: 8px;
+}
+
+.zap-error {
+  color: #ff6b6b;
+  text-align: center;
+  margin-top: 8px;
+}
