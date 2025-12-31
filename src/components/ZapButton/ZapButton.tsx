@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import './ZapButton.css';
 import IconBolt from '../Icons/IconBolt';
 import { formatSats } from '../../hooks/useZapCount';
@@ -16,12 +16,20 @@ const LONG_PRESS_DURATION = 500;
 
 const ZapButton = ({ zapState, totalSats, onQuickZap, onOpenModal, disabled }: ZapButtonProps) => {
   const pressTimer = useRef<ReturnType<typeof setTimeout>>();
-  const [isLongPress, setIsLongPress] = useState(false);
+  const isLongPressRef = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      if (pressTimer.current) {
+        clearTimeout(pressTimer.current);
+      }
+    };
+  }, []);
 
   const handleMouseDown = useCallback(() => {
-    setIsLongPress(false);
+    isLongPressRef.current = false;
     pressTimer.current = setTimeout(() => {
-      setIsLongPress(true);
+      isLongPressRef.current = true;
       onOpenModal();
     }, LONG_PRESS_DURATION);
   }, [onOpenModal]);
@@ -30,10 +38,10 @@ const ZapButton = ({ zapState, totalSats, onQuickZap, onOpenModal, disabled }: Z
     if (pressTimer.current) {
       clearTimeout(pressTimer.current);
     }
-    if (!isLongPress) {
+    if (!isLongPressRef.current) {
       onQuickZap();
     }
-  }, [isLongPress, onQuickZap]);
+  }, [onQuickZap]);
 
   const handleMouseLeave = useCallback(() => {
     if (pressTimer.current) {
@@ -49,6 +57,7 @@ const ZapButton = ({ zapState, totalSats, onQuickZap, onOpenModal, disabled }: Z
   return (
     <button
       className={`zap-button ${zapState}`}
+      aria-label="Zap"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
