@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { useSign } from '../ngine/context';
 import { useSession, useNWC } from '../ngine/state';
 import { useLnurl, loadInvoice, createZapRequestEvent } from '../ngine/lnurl';
@@ -7,7 +7,6 @@ import useProfile from '../ngine/hooks/useProfile';
 import { relayPool, eventStore, DEFAULT_RELAYS } from '../nostr/core';
 import { getWriteRelays } from '../nostr/relays';
 import { NostrImage } from '../components/nostrImageDownload';
-import type { Filter } from 'nostr-tools';
 import { nip19 } from 'nostr-tools';
 import useReposts from './useReposts';
 
@@ -28,38 +27,48 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
 
   const [zapState, setZapState] = useState<ZapState>('none');
   const [heartState, setHeartState] = useState<HeartState>('none');
-
-  const fetchLikeAndZaps = async (noteIds: string[], selfNPub: string) => {
-    const filter: Filter = { kinds: [7], '#e': noteIds }; // Kind Reaction
-
-    filter.authors = [nip19.decode(selfNPub).data as string];
-
-    // Use eventStore to check for existing reactions
-    const events = eventStore.getEventsForFilters([filter]);
-
-    return { selfLiked: events && events.length > 0 };
-  };
+  const checkedRef = useRef<string | null>(null);
 
   const repostState = useMemo(
     () => reposts.some(r => r == currentImageData?.post.event.id),
     [currentImageData?.post.event.id, reposts]
   );
 
+  // Check if user has liked the current image
   useEffect(() => {
     setZapState('none');
     setHeartState('none');
 
     if (!currentImageData?.noteId || !userNPub) return;
 
+    // Already cached
     if (currentImageData.post.wasLiked !== undefined) {
       setHeartState(currentImageData.post.wasLiked ? 'liked' : 'none');
       return;
     }
 
-    fetchLikeAndZaps([currentImageData.noteId], userNPub).then(likes => {
-      currentImageData.post.wasLiked = likes.selfLiked;
-      setHeartState(likes.selfLiked ? 'liked' : 'none');
-    });
+    // Skip if we already checked this noteId
+    if (checkedRef.current === currentImageData.noteId) return;
+    checkedRef.current = currentImageData.noteId;
+
+    // Query relays for user's reactions to this note
+    const authorPubkey = nip19.decode(userNPub).data as string;
+    const sub = relayPool
+      .subscription(DEFAULT_RELAYS, [{ kinds: [7], '#e': [currentImageData.noteId], authors: [authorPubkey] }])
+      .subscribe({
+        next: (event) => {
+          if (typeof event === 'string') return;
+          currentImageData.post.wasLiked = true;
+          setHeartState('liked');
+        },
+        complete: () => {
+          if (currentImageData.post.wasLiked === undefined) {
+            currentImageData.post.wasLiked = false;
+          }
+        },
+      });
+
+    return () => sub.unsubscribe();
   }, [currentImageData, userNPub]);
 
   const heartClick = async (currentImage: NostrImage) => {
@@ -87,6 +96,44 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     setHeartState('liked');
     currentImage.post.wasLiked = true;
   };
+
+  // Generate invoice without paying (for QR code fallback)
+  const generateInvoice = useCallback(async (
+    currentImage: NostrImage,
+    amount: number = DEFAULT_ZAP_AMOUNT,
+    comment?: string
+  ): Promise<string | null> => {
+    if (!session?.pubkey) return null;
+    if (!lnurlService) return null;
+
+    try {
+      const lnurlEncoded = authorProfile?.lud16 || '';
+      const zapRequest = createZapRequestEvent(
+        session.pubkey,
+        currentImage.authorId,
+        currentImage.noteId,
+        amount * 1000,
+        DEFAULT_RELAYS,
+        lnurlEncoded,
+        comment
+      );
+
+      const signedZapRequest = await sign(zapRequest);
+      if (!signedZapRequest) return null;
+
+      const invoiceResponse = await loadInvoice(
+        lnurlService,
+        amount,
+        comment,
+        signedZapRequest
+      );
+
+      return invoiceResponse?.pr || null;
+    } catch (err) {
+      console.error('Failed to generate invoice:', err);
+      return null;
+    }
+  }, [session, lnurlService, authorProfile, sign]);
 
   const zapClick = useCallback(async (
     currentImage: NostrImage,
@@ -194,6 +241,7 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     heartClick,
     repostClick,
     repostState,
+    generateInvoice,
     hasLnurl: !!lnurlService,
     hasNwc: !!nwc,
   };

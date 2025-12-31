@@ -33,7 +33,6 @@ export default function useEvents(
     }
 
     // Reset state for new subscription
-    setEvents([]);
     setEose(false);
 
     // Clean up previous subscription
@@ -56,7 +55,7 @@ export default function useEvents(
       sub.unsubscribe();
       subscriptionRef.current = null;
     };
-  }, [id, normalizedFilter, effectiveRelays, opts?.disable]);
+  }, [id, opts?.disable]);
 
   // Create observable for timeline from event store
   const timeline$ = useObservable(

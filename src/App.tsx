@@ -1,5 +1,6 @@
 import './App.css';
 import { createBrowserRouter, Navigate, RouterProvider, useLocation } from 'react-router-dom';
+import { Provider } from 'jotai';
 import { defaultHashTags } from './components/env';
 import { NgineProvider } from './ngine/context';
 import Layout from './components/Layout/Layout';
@@ -58,9 +59,11 @@ const App = () => {
   ]);
 
   return (
-    <NgineProvider>
-      <RouterProvider router={router} />
-    </NgineProvider>
+    <Provider>
+      <NgineProvider>
+        <RouterProvider router={router} />
+      </NgineProvider>
+    </Provider>
   );
 };
 

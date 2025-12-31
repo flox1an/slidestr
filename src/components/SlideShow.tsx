@@ -25,6 +25,8 @@ import IconFullScreen from './Icons/IconFullScreen';
 import useZapsAndReations from '../utils/useZapAndReaction';
 import IconHeart from './Icons/IconHeart';
 import IconBolt from './Icons/IconBolt';
+import ZapModal from './ZapModal/ZapModal';
+import WalletSettings from './WalletSettings/WalletSettings';
 import useEvents from '../ngine/hooks/useEvents';
 import MasonryView from './MasonryView/MasonryView';
 import useAuthorsFromList from '../utils/useAuthorsFromList';
@@ -88,7 +90,6 @@ const SlideShow = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const images = useRef<NostrImage[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [showSettings, setShowSettings] = useState(false);
 
   const { nav, currentSettings: settings } = useNav();
   const [state] = useGlobalState();
@@ -99,10 +100,12 @@ const SlideShow = () => {
   const userNPub = session ? (nip19.npubEncode(session?.pubkey) as string) : undefined;
   const { bookmarkClick, bookmarkState } = useBookMarks(session?.pubkey, state.activeImage);
 
-  const { zapClick, heartClick, zapState, heartState, repostClick, repostState } = useZapsAndReations(
+  const { zapClick, heartClick, zapState, heartState, repostClick, repostState, generateInvoice, hasNwc, hasLnurl } = useZapsAndReations(
     state.activeImage,
     userNPub
   );
+  const [showZapModal, setShowZapModal] = useState(false);
+  const [showWalletSettings, setShowWalletSettings] = useState(false);
   const navigate = useNavigate();
   const listAuthors = useAuthorsFromList(settings.list);
   const [contacts] = useAtom(followsAtom);
@@ -117,6 +120,13 @@ const SlideShow = () => {
         : settings.npubs.map(p => nip19.decode(p).data as string);
 
     const filterTags = settings.topic ? topics[settings.topic].tags : settings.tags;
+
+    console.log('[SlideShow] Building filter:', {
+      topic: settings.topic,
+      tags: settings.tags,
+      filterTags: filterTags?.slice(0, 5),
+      authorsToQuery: authorsToQuery?.length,
+    });
 
     return buildFilter(filterTags, authorsToQuery, settings.showReposts);
   }, [
@@ -286,7 +296,6 @@ const SlideShow = () => {
     if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
       return; // Do not handle key events if focused on an input or textarea
     }
-    if (showSettings) return;
     if (event.key === 'Escape') {
       setViewMode('grid');
     }
@@ -299,17 +308,6 @@ const SlideShow = () => {
     if (event.key.toLowerCase() === 'x') {
       setViewMode('scroll');
     }
-    if (event.key.toLowerCase() === 's') {
-      setShowSettings(s => !s);
-    }
-    if (event.key === 'Escape') {
-      setShowSettings(false);
-    }
-    /*
-    if (event.key === "f" || event.key === "F") {
-      document?.getElementById("root")?.requestFullscreen();
-    }
-    */
   };
 
   useEffect(() => {
@@ -342,9 +340,28 @@ const SlideShow = () => {
 
   return (
     <>
-      {/*
-      {showSettings && <Settings onClose={() => setShowSettings(false)} setViewMode={setViewMode}></Settings>}
-       */}
+      {showZapModal && state.activeImage && (
+        <ZapModal
+          onClose={() => setShowZapModal(false)}
+          onZap={async (amount, comment) => {
+            if (state.activeImage) {
+              await zapClick(state.activeImage, amount, comment);
+            }
+          }}
+          onGenerateInvoice={async (amount, comment) => {
+            if (state.activeImage) {
+              return generateInvoice(state.activeImage, amount, comment);
+            }
+            return null;
+          }}
+          onOpenSettings={() => {
+            setShowZapModal(false);
+            setShowWalletSettings(true);
+          }}
+        />
+      )}
+      {showWalletSettings && <WalletSettings onClose={() => setShowWalletSettings(false)} />}
+
       <div className="top-left-controls">
         <a
           className="back-button"
@@ -387,8 +404,8 @@ const SlideShow = () => {
               >
                 <IconHeart></IconHeart>
               </button>
-              {(profile?.lud06 || profile?.lud16) && (
-                <button className={`zap ${zapState}`} onClick={() => state.activeImage && zapClick(state.activeImage)}>
+              {hasLnurl && (
+                <button className={`zap ${zapState}`} onClick={() => setShowZapModal(true)}>
                   <IconBolt></IconBolt>
                 </button>
               )}

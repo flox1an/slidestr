@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { MouseEventHandler, SyntheticEvent, useMemo, useState } from 'react';
-import { nip19 } from 'nostr-tools';
+import { MouseEventHandler, useMemo, useState } from 'react';
 import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
 import useProfile from '../../ngine/hooks/useProfile';
 import useNav from '../../utils/useNav';
@@ -9,11 +8,6 @@ import uniq from 'lodash/uniq';
 import { timeDifference } from '../../utils/time';
 import { unixNow } from '../../ngine/time';
 import { useGlobalState } from '../../utils/globalState';
-import ZapButton from '../ZapButton/ZapButton';
-import ZapModal from '../ZapModal/ZapModal';
-import { useZapCount } from '../../hooks/useZapCount';
-import useZapsAndReations from '../../utils/useZapAndReaction';
-import { useSession } from '../../ngine/state';
 
 interface MasonryImageProps {
   image: NostrImage;
@@ -27,22 +21,6 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const [showInfo, setShowInfo] = useState(false);
   const [shouldShowInfo, setShouldShowInfo] = useState(false);
   const [state, setState] = useGlobalState();
-  const session = useSession();
-  const [showZapModal, setShowZapModal] = useState(false);
-  const { zapState, zapClick, hasLnurl, hasNwc } = useZapsAndReations(
-    image,
-    session?.pubkey ? nip19.npubEncode(session.pubkey) : undefined
-  );
-  const totalSats = useZapCount(image.post.event.id);
-
-  const handleQuickZap = () => {
-    if (!session?.pubkey || !hasLnurl || !hasNwc) return;
-    zapClick(image, 21);
-  };
-
-  const handleModalZap = async (amount: number, comment?: string) => {
-    await zapClick(image, amount, comment);
-  };
 
   useEffect(() => {
     let timeoutId: number;
@@ -88,88 +66,70 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const now = unixNow();
 
   const isMissing = useMemo(()=> state.notfoundCache[image.url], [state.notfoundCache, image.url]);
-  if (isMissing) return;
+  if (isMissing) return null;
 
   return (
-    <LazyLoad className="is-relative">
-      <div id={'g' + index} onMouseEnter={() => setShowInfo(true)} onMouseLeave={() => setShowInfo(false)}>
-        <a>
-          {mediaIsVideo ? (
-            <video
-              className={`mason-image ${loaded ? 'show' : ''}`}
-              data-node-id={image.post.event.id}
-              key={image.url}
-              controls={false}
-              autoPlay={false}
-              onClick={onClick}
-              src={image.url + '#t=0.1'}
-              playsInline
-              onLoad={() => setLoaded(true)}
-            ></video>
-          ) : (
-            <>
-              <img
-                referrerPolicy="no-referrer"
-                data-node-id={image.post.event.id}
-                onError={() => {
-                  setState({ ...state, notfoundCache: { ...state.notfoundCache, [image.url]: true } });
-                }}
-                style={{ visibility: loaded ? 'visible' : 'hidden' }}
+    <>
+      <LazyLoad className="is-relative">
+        <div id={'g' + index} onMouseEnter={() => setShowInfo(true)} onMouseLeave={() => setShowInfo(false)}>
+          <a>
+            {mediaIsVideo ? (
+              <video
                 className={`mason-image ${loaded ? 'show' : ''}`}
-                onLoad={() => setLoaded(true)}
-                loading="lazy"
+                data-node-id={image.post.event.id}
                 key={image.url}
+                controls={false}
+                autoPlay={false}
                 onClick={onClick}
-                src={createImgProxyUrl(image.url, 320, -1)}
-              ></img>
-              {
-                !loaded && <div style={{ height: 200 }}></div> // Spacer when image is not loaded yet
-              }
-            </>
-          )}
-        </a>
+                src={image.url + '#t=0.1'}
+                playsInline
+                onLoad={() => setLoaded(true)}
+              ></video>
+            ) : (
+              <>
+                <img
+                  referrerPolicy="no-referrer"
+                  data-node-id={image.post.event.id}
+                  onError={() => {
+                    setState({ ...state, notfoundCache: { ...state.notfoundCache, [image.url]: true } });
+                  }}
+                  style={{ visibility: loaded ? 'visible' : 'hidden' }}
+                  className={`mason-image ${loaded ? 'show' : ''}`}
+                  onLoad={() => setLoaded(true)}
+                  loading="lazy"
+                  key={image.url}
+                  onClick={onClick}
+                  src={createImgProxyUrl(image.url, 320, -1)}
+                ></img>
+                {
+                  !loaded && <div style={{ height: 200 }}></div> // Spacer when image is not loaded yet
+                }
+              </>
+            )}
+          </a>
 
-        <div className={`info-section ${shouldShowInfo ? 'visible' : ''}`}>
-          {shouldShowInfo && (showAuthor || description || showTags.length > 0) && (
-            <>
-              {showAuthor && (
-                <div className="title">
-                  <a onClick={() => profileClick(image.author)}>{profile?.displayName || profile?.name}</a>
-                  {image.timestamp && <div className="time">{timeDifference(now, image.timestamp)}</div>}
-                </div>
-              )}
-              {description}
+          <div className={`info-section ${shouldShowInfo ? 'visible' : ''}`}>
+            {shouldShowInfo && (showAuthor || description || showTags.length > 0) && (
+              <>
+                {showAuthor && (
+                  <div className="title">
+                    <a onClick={() => profileClick(image.author)}>{profile?.displayName || profile?.name}</a>
+                    {image.timestamp && <div className="time">{timeDifference(now, image.timestamp)}</div>}
+                  </div>
+                )}
+                {description}
 
-              {showTags.map(t => (
-                <React.Fragment key={t}>
-                  <a onClick={() => tagClick(t)}>#{t}</a>{' '}
-                </React.Fragment>
-              ))}
-              {session?.pubkey && hasLnurl && (
-                <div style={{ marginTop: 8 }} onClick={e => e.stopPropagation()}>
-                  <ZapButton
-                    zapState={zapState}
-                    totalSats={totalSats}
-                    onQuickZap={handleQuickZap}
-                    onOpenModal={() => setShowZapModal(true)}
-                    disabled={!hasNwc}
-                  />
-                </div>
-              )}
-            </>
-          )}
+                {showTags.map(t => (
+                  <React.Fragment key={t}>
+                    <a onClick={() => tagClick(t)}>#{t}</a>{' '}
+                  </React.Fragment>
+                ))}
+              </>
+            )}
+          </div>
         </div>
-      </div>
-      {showZapModal && (
-        <ZapModal
-          onClose={() => setShowZapModal(false)}
-          onZap={handleModalZap}
-          onOpenSettings={() => {
-            setShowZapModal(false);
-          }}
-        />
-      )}
-    </LazyLoad>
+      </LazyLoad>
+    </>
   );
 };
 

@@ -6,6 +6,17 @@
   color: white;
   font-size: 1.5rem;
   z-index: 1000;
+  width: 2em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {

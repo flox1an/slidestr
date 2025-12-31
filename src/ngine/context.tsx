@@ -1,5 +1,5 @@
 import { useEffect, createContext, useContext, ReactNode, useState } from 'react';
-import { useAtom, Provider } from 'jotai';
+import { useAtom } from 'jotai';
 import { kinds, nip19 } from 'nostr-tools';
 import type { NostrEvent, EventTemplate } from 'nostr-tools';
 
@@ -401,14 +401,12 @@ export const NgineProvider = ({ links, children, enableFiatRates = false }: Ngin
               links,
             }}
           >
-            <Provider>
-              <AccountRestoreInit />
-              {session ? (
-                <SessionProvider pubkey={session.pubkey}>{children}</SessionProvider>
-              ) : (
-                children
-              )}
-            </Provider>
+            <AccountRestoreInit />
+            {session ? (
+              <SessionProvider pubkey={session.pubkey}>{children}</SessionProvider>
+            ) : (
+              children
+            )}
           </NgineContext.Provider>
         </FactoryProvider>
       </EventStoreProvider>

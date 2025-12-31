@@ -19,10 +19,18 @@
 }
 
 .top-right-controls button.login {
-  display: inline;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   width: 48px;
   height: 48px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.top-right-controls button.login:hover {
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .top-right-controls img.profile {
@@ -32,4 +40,35 @@
   margin-left: 0.5em;
   vertical-align: middle;
   cursor: pointer;
+}
+
+.top-right-controls .wallet-btn-header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.top-right-controls .wallet-btn-header:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.top-right-controls .wallet-btn-header svg {
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+.top-right-controls .wallet-balance {
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
 }

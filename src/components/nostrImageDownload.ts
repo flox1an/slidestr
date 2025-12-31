@@ -40,7 +40,7 @@ export const buildFilter = (tags: string[], authors: string[], withReposts = fal
     filter.since = unixNow() - 60 * 60 * 24; // 24h
   }
 
-  // console.log('filter', filter);
+  console.log('[buildFilter] Created filter:', filter);
   return filter;
 };
 

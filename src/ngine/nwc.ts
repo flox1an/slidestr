@@ -94,3 +94,67 @@ export async function payInvoiceViaNWC(
     return { error: 'NWC request timed out' };
   }
 }
+
+// Get wallet balance via NWC
+export async function getBalanceViaNWC(
+  connection: NWCConnection
+): Promise<{ balance: number } | { error: string }> {
+  const { walletPubkey, relayUrl, secret } = connection;
+
+  // Create get_balance request
+  const request = JSON.stringify({
+    method: 'get_balance',
+    params: {},
+  });
+
+  // Convert secret to bytes for signing
+  const secretBytes = hexToBytes(secret);
+
+  // Encrypt with NIP-04
+  const encryptedContent = nip04.encrypt(secretBytes, walletPubkey, request);
+
+  // Create kind 23194 event (NWC request)
+  const unsignedEvent = {
+    kind: 23194,
+    created_at: Math.floor(Date.now() / 1000),
+    tags: [['p', walletPubkey]],
+    content: encryptedContent,
+  };
+
+  // Simple signing with secret key (NWC uses the secret as private key)
+  const signedEvent = finalizeEvent(unsignedEvent, secretBytes);
+
+  // Subscribe to response before publishing
+  const response$ = relayPool
+    .subscription([relayUrl], [
+      {
+        kinds: [23195],
+        authors: [walletPubkey],
+        '#e': [signedEvent.id],
+      },
+    ])
+    .pipe(
+      filter((e): e is NostrEvent => typeof e !== 'string' && 'kind' in e),
+      timeout(10000) // 10 second timeout
+    );
+
+  // Publish request
+  await relayPool.publish([relayUrl], signedEvent);
+
+  // Wait for response
+  try {
+    const responseEvent = await firstValueFrom(response$);
+    const decrypted = nip04.decrypt(secretBytes, walletPubkey, responseEvent.content);
+    const result = JSON.parse(decrypted);
+
+    if (result.error) {
+      return { error: result.error.message || 'Failed to get balance' };
+    }
+
+    // Balance is returned in msats, convert to sats
+    const balanceMsats = result.result?.balance || 0;
+    return { balance: Math.floor(balanceMsats / 1000) };
+  } catch (err) {
+    return { error: 'NWC request timed out' };
+  }
+}
