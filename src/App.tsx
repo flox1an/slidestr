@@ -1,10 +1,16 @@
 import './App.css';
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider, useLocation } from 'react-router-dom';
 import { defaultHashTags } from './components/env';
-import Home from './components/Home';
 import { NgineProvider } from './ngine/context';
 import Layout from './components/Layout/Layout';
 import SlideShow from './components/SlideShow';
+
+// Wrapper that forces SlideShow to remount when route changes
+const SlideShowWithKey = () => {
+  const location = useLocation();
+  // Use pathname as key to force remount on route change
+  return <SlideShow key={location.pathname + location.search} />;
+};
 
 const App = () => {
   const router = createBrowserRouter([
@@ -17,35 +23,35 @@ const App = () => {
         },
         {
           path: 'global',
-          element: <SlideShow />,
+          element: <SlideShowWithKey />,
         },
         {
           path: 'list/:list',
-          element: <SlideShow />,
+          element: <SlideShowWithKey />,
         },
         {
           path: 'tags/:tags',
-          element: <SlideShow />,
+          element: <SlideShowWithKey />,
         },
         {
           path: 'topic/:topic',
-          element: <SlideShow />,
+          element: <SlideShowWithKey />,
         },
         {
           path: 'profile/:npub',
-          element: <SlideShow />,
+          element: <SlideShowWithKey />,
         },
         {
           path: 'p/:npub',
-          element: <SlideShow />,
+          element: <SlideShowWithKey />,
         },
         {
           path: '/follows',
-          element: <SlideShow />,
+          element: <SlideShowWithKey />,
         },
         {
           path: '/:npub',
-          element: <SlideShow />,
+          element: <SlideShowWithKey />,
         },
       ],
     },

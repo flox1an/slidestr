@@ -111,7 +111,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
               <img
                 referrerPolicy="no-referrer"
                 data-node-id={image.post.event.id}
-                onError={(e: SyntheticEvent<HTMLImageElement>) => {
+                onError={() => {
                   setState({ ...state, notfoundCache: { ...state.notfoundCache, [image.url]: true } });
                 }}
                 style={{ visibility: loaded ? 'visible' : 'hidden' }}

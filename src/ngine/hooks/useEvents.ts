@@ -19,10 +19,10 @@ export default function useEvents(
   const [events, setEvents] = useState<NostrEvent[]>([]);
   const subscriptionRef = useRef<{ unsubscribe: () => void } | null>(null);
 
-  const effectiveRelays = relays?.length ? relays : DEFAULT_RELAYS;
-  const normalizedFilter = Array.isArray(filter) ? filter[0] : filter;
+  const effectiveRelays = useMemo(() => relays?.length ? relays : DEFAULT_RELAYS, [relays]);
+  const normalizedFilter = useMemo(() => Array.isArray(filter) ? filter[0] : filter, [filter]);
 
-  const id = useMemo(() => hashSha256(filter), [filter]);
+  const id = useMemo(() => hashSha256(normalizedFilter), [normalizedFilter]);
 
   // Create and manage loader subscription
   useEffect(() => {
@@ -33,6 +33,7 @@ export default function useEvents(
     }
 
     // Reset state for new subscription
+    setEvents([]);
     setEose(false);
 
     // Clean up previous subscription
@@ -55,7 +56,7 @@ export default function useEvents(
       sub.unsubscribe();
       subscriptionRef.current = null;
     };
-  }, [id, opts?.disable]);
+  }, [id, normalizedFilter, effectiveRelays, opts?.disable]);
 
   // Create observable for timeline from event store
   const timeline$ = useObservable(
