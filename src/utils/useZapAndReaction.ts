@@ -1,20 +1,30 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSign } from '../ngine/context';
-import { useSession } from '../ngine/state';
-import { relayPool, eventStore } from '../nostr/core';
+import { useSession, useNWC } from '../ngine/state';
+import { useLnurl, loadInvoice, createZapRequestEvent } from '../ngine/lnurl';
+import { payInvoiceViaNWC } from '../ngine/nwc';
+import useProfile from '../ngine/hooks/useProfile';
+import { relayPool, eventStore, DEFAULT_RELAYS } from '../nostr/core';
 import { getWriteRelays } from '../nostr/relays';
 import { NostrImage } from '../components/nostrImageDownload';
 import type { Filter } from 'nostr-tools';
 import { nip19 } from 'nostr-tools';
-import { useEffect, useMemo, useState } from 'react';
 import useReposts from './useReposts';
 
 export type HeartState = 'none' | 'liked' | 'liking';
 export type ZapState = 'none' | 'zapped' | 'zapping' | 'error';
 
+const DEFAULT_ZAP_AMOUNT = 21;
+
 const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) => {
   const sign = useSign();
   const session = useSession();
   const reposts = useReposts(userNPub);
+  const nwc = useNWC();
+
+  // Get author profile for LNURL
+  const authorProfile = useProfile(currentImageData?.authorId || '');
+  const { data: lnurlService } = useLnurl(authorProfile);
 
   const [zapState, setZapState] = useState<ZapState>('none');
   const [heartState, setHeartState] = useState<HeartState>('none');
@@ -80,43 +90,78 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     currentImage.post.wasLiked = true;
   };
 
-  const zapClick = async (currentImage: NostrImage) => {
+  const zapClick = useCallback(async (
+    currentImage: NostrImage,
+    amount: number = DEFAULT_ZAP_AMOUNT,
+    comment?: string
+  ) => {
     setZapState('zapping');
-    console.log('zapClick');
-    if (!session?.pubkey) return;
 
-    if (!window.webln) {
-      console.error('No webln found');
+    if (!session?.pubkey) {
       setZapState('error');
-      return;
-    }
-    console.log('zapClick2');
-
-    // Get the event from event store
-    const ev = eventStore.getEvent(currentImage.noteId);
-
-    if (!ev) {
-      console.error('No event found for noteId: ' + currentImage.noteId);
-      setZapState('error');
-      return;
+      throw new Error('Not logged in');
     }
 
-    console.log(ev);
+    if (!lnurlService) {
+      setZapState('error');
+      throw new Error('Author has no Lightning address');
+    }
 
-    // For zaps, we need to use a zap service - this requires NIP-57 implementation
-    // For now, we'll keep the basic structure but note that full zap support
-    // would require integrating with a zap service like nostr-zap or similar
-    console.error('Zap functionality requires NIP-57 implementation');
-    setZapState('error');
-    return;
+    if (!nwc) {
+      setZapState('error');
+      throw new Error('No wallet connected');
+    }
 
-    // TODO: Implement proper NIP-57 zap flow
-    // This would involve:
-    // 1. Fetching the author's lnurl from their profile
-    // 2. Creating a zap request event
-    // 3. Getting an invoice from the lnurl service
-    // 4. Paying the invoice via webln
-  };
+    try {
+      // Create zap request
+      const lnurlEncoded = authorProfile?.lud16 || '';
+      const zapRequest = createZapRequestEvent(
+        session.pubkey,
+        currentImage.authorId,
+        currentImage.noteId,
+        amount * 1000, // Convert to msats
+        DEFAULT_RELAYS,
+        lnurlEncoded,
+        comment
+      );
+
+      // Sign zap request
+      const signedZapRequest = await sign(zapRequest);
+      if (!signedZapRequest) {
+        setZapState('error');
+        throw new Error('Failed to sign zap request');
+      }
+
+      // Get invoice from LNURL service
+      const invoiceResponse = await loadInvoice(
+        lnurlService,
+        amount,
+        comment,
+        signedZapRequest
+      );
+
+      if (!invoiceResponse?.pr) {
+        setZapState('error');
+        throw new Error('Failed to get invoice');
+      }
+
+      // Pay via NWC
+      const payResult = await payInvoiceViaNWC(nwc, invoiceResponse.pr);
+
+      if ('error' in payResult) {
+        setZapState('error');
+        throw new Error(payResult.error);
+      }
+
+      setZapState('zapped');
+
+      // Reset after animation
+      setTimeout(() => setZapState('none'), 2000);
+    } catch (err) {
+      setZapState('error');
+      throw err;
+    }
+  }, [session, nwc, lnurlService, authorProfile, sign]);
 
   const repostClick = async () => {
     if (!session?.pubkey) return;
@@ -152,6 +197,8 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     heartClick,
     repostClick,
     repostState,
+    hasLnurl: !!lnurlService,
+    hasNwc: !!nwc,
   };
 };
 
