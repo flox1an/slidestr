@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import type { NostrEvent } from 'nostr-tools';
+import { kinds, type NostrEvent } from 'nostr-tools';
 import { bech32 } from 'bech32';
 import { ProfileContent } from './hooks/useProfile';
+import { unixNow } from './time';
 
 const BECH32_MAX_BYTES = 42000;
 
@@ -191,8 +192,8 @@ export function createZapRequestEvent(
   ];
 
   return {
-    kind: 9734,
-    created_at: Math.floor(Date.now() / 1000),
+    kind: kinds.ZapRequest,
+    created_at: unixNow(),
     pubkey: senderPubkey,
     tags,
     content: comment || '',
