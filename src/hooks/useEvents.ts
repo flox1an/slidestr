@@ -1,9 +1,9 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useObservable, useSubscription } from 'observable-hooks';
-import { createTimelineLoader } from 'applesauce-loaders/loaders';
+import { createTimelineLoader, TimelineLoader } from 'applesauce-loaders/loaders';
 import type { Filter, NostrEvent } from 'nostr-tools';
-import { eventStore, relayPool, cacheRequest, DEFAULT_RELAYS } from '../../nostr/core';
-import { hashSha256 } from '../utils';
+import { eventStore, relayPool, cacheRequest, DEFAULT_RELAYS } from '../nostr/core';
+import { hashSha256 } from '../utils/hash';
 
 export interface SubscriptionOptions {
   disable?: boolean;
@@ -17,7 +17,11 @@ export default function useEvents(
 ) {
   const [eose, setEose] = useState(false);
   const [events, setEvents] = useState<NostrEvent[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const subscriptionRef = useRef<{ unsubscribe: () => void } | null>(null);
+  const loaderRef = useRef<TimelineLoader | null>(null);
+  const oldestTimestampRef = useRef<number | undefined>(undefined);
 
   const effectiveRelays = useMemo(() => relays?.length ? relays : DEFAULT_RELAYS, [relays]);
   const normalizedFilter = useMemo(() => Array.isArray(filter) ? filter[0] : filter, [filter]);
@@ -29,11 +33,15 @@ export default function useEvents(
     if (opts?.disable || !normalizedFilter) {
       setEvents([]);
       setEose(false);
+      setHasMore(true);
+      oldestTimestampRef.current = undefined;
       return;
     }
 
     // Reset state for new subscription
     setEose(false);
+    setHasMore(true);
+    oldestTimestampRef.current = undefined;
 
     // Clean up previous subscription
     subscriptionRef.current?.unsubscribe();
@@ -43,6 +51,7 @@ export default function useEvents(
       cache: cacheRequest,
       limit: 100,
     });
+    loaderRef.current = loader;
 
     const sub = loader().subscribe({
       complete: () => setEose(true),
@@ -54,6 +63,7 @@ export default function useEvents(
     return () => {
       sub.unsubscribe();
       subscriptionRef.current = null;
+      loaderRef.current = null;
     };
   }, [id, opts?.disable]);
 
@@ -68,9 +78,43 @@ export default function useEvents(
     next: (timelineEvents: NostrEvent[]) => {
       if (!opts?.disable) {
         setEvents(timelineEvents);
+        // Track the oldest timestamp for pagination
+        if (timelineEvents.length > 0) {
+          const oldest = Math.min(...timelineEvents.map(e => e.created_at));
+          oldestTimestampRef.current = oldest;
+        }
       }
     },
   });
 
-  return { id, eose, events };
+  // Load more (older) events
+  const loadMore = useCallback(() => {
+    if (!loaderRef.current || loading || !hasMore || !oldestTimestampRef.current) {
+      return;
+    }
+
+    setLoading(true);
+    const currentEventCount = events.length;
+
+    const sub = loaderRef.current({ until: oldestTimestampRef.current - 1 }).subscribe({
+      complete: () => {
+        setLoading(false);
+        // Check if we got new events - if not, we've reached the end
+        // The timeline$ subscription will update events, so we check after a short delay
+        setTimeout(() => {
+          if (events.length === currentEventCount) {
+            setHasMore(false);
+          }
+        }, 500);
+      },
+      error: err => {
+        console.error('Load more error:', err);
+        setLoading(false);
+      },
+    });
+
+    return () => sub.unsubscribe();
+  }, [loading, hasMore, events.length]);
+
+  return { id, eose, events, loadMore, loading, hasMore };
 }

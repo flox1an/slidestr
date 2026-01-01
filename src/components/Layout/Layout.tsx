@@ -6,11 +6,11 @@ import IconWallet from '../Icons/IconWallet';
 import { createImgProxyUrl } from '../nostrImageDownload';
 import { Outlet } from 'react-router-dom';
 import React from 'react';
-import { useLogOut } from '../../ngine/context';
-import { useSession, useNWC } from '../../ngine/state';
-import useProfile from '../../ngine/hooks/useProfile';
+import { useLogOut } from '../../context/NgineContext';
+import { useSession, useNWC } from '../../state/atoms';
+import useProfile from '../../hooks/useProfile';
 import WalletSettings from '../WalletSettings/WalletSettings';
-import { getBalanceViaNWC } from '../../ngine/nwc';
+import { getBalanceViaNWC } from '../../nostr/nwc';
 
 const formatBalance = (sats: number): string => {
   if (sats >= 1000000) return (sats / 1000000).toFixed(1) + 'M';

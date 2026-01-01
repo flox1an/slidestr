@@ -2,7 +2,7 @@ import { appName, topics } from '../components/env';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { Settings } from './useNav';
-import { ProfileContent } from '../ngine/hooks/useProfile';
+import { ProfileContent } from '../hooks/useProfile';
 
 const useTitle = (settings: Settings, activeProfile?: ProfileContent) => {
   const [title, setTitle] = useState(appName);

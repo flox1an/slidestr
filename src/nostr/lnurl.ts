@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { kinds, type NostrEvent } from 'nostr-tools';
 import { bech32 } from 'bech32';
-import { ProfileContent } from './hooks/useProfile';
-import { unixNow } from './time';
+import { ProfileContent } from '../hooks/useProfile';
+import { unixNow } from '../utils/time';
 
 const BECH32_MAX_BYTES = 42000;
 

@@ -1,10 +1,10 @@
 import { NostrImage } from '@/components/nostrImageDownload';
-import { useSign } from '../ngine/context';
-import { useSession } from '../ngine/state';
+import { useSign } from '../context/NgineContext';
+import { useSession } from '../state/atoms';
 import { relayPool, eventStore } from '../nostr/core';
 import { getWriteRelays } from '../nostr/relays';
-import useLatestEvent from '../ngine/hooks/useLatestEvent';
-import { unixNow } from '../ngine/time';
+import useLatestEvent from '../hooks/useLatestEvent';
+import { unixNow } from '../utils/time';
 import type { NostrEvent } from 'nostr-tools';
 import { useEffect, useMemo, useState } from 'react';
 

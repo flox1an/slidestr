@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import useEvents from '../ngine/hooks/useEvents';
+import useEvents from '../hooks/useEvents';
 import { nip19 } from 'nostr-tools';
 
 const KIND_PEOPLE_LIST = 30000;

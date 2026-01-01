@@ -1,3 +1,7 @@
+export function unixNow() {
+  return Math.round(Date.now() / 1000);
+}
+
 export function timeDifference(current: number, previous: number) {
   const sPerMinute = 60;
   const sPerHour = sPerMinute * 60;

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
-import { useSign } from '../ngine/context';
-import { useSession, useNWC } from '../ngine/state';
-import { useLnurl, loadInvoice, createZapRequestEvent } from '../ngine/lnurl';
-import { payInvoiceViaNWC } from '../ngine/nwc';
-import useProfile from '../ngine/hooks/useProfile';
+import { useSign } from '../context/NgineContext';
+import { useSession, useNWC } from '../state/atoms';
+import { useLnurl, loadInvoice, createZapRequestEvent } from '../nostr/lnurl';
+import { payInvoiceViaNWC } from '../nostr/nwc';
+import useProfile from '../hooks/useProfile';
 import { relayPool, eventStore, DEFAULT_RELAYS } from '../nostr/core';
-import { getWriteRelays } from '../nostr/relays';
+import { getWriteRelays, getInboxRelays } from '../nostr/relays';
 import { NostrImage } from '../components/nostrImageDownload';
 import { nip19 } from 'nostr-tools';
 import useReposts from './useReposts';
@@ -108,12 +108,14 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
 
     try {
       const lnurlEncoded = authorProfile?.lud16 || '';
+      // Use author's inbox relays so they receive the zap receipt
+      const authorInboxRelays = getInboxRelays(currentImage.authorId);
       const zapRequest = createZapRequestEvent(
         session.pubkey,
         currentImage.authorId,
         currentImage.noteId,
         amount * 1000,
-        DEFAULT_RELAYS,
+        authorInboxRelays,
         lnurlEncoded,
         comment
       );
@@ -158,14 +160,15 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     }
 
     try {
-      // Create zap request
+      // Create zap request using author's inbox relays
       const lnurlEncoded = authorProfile?.lud16 || '';
+      const authorInboxRelays = getInboxRelays(currentImage.authorId);
       const zapRequest = createZapRequestEvent(
         session.pubkey,
         currentImage.authorId,
         currentImage.noteId,
         amount * 1000, // Convert to msats
-        DEFAULT_RELAYS,
+        authorInboxRelays,
         lnurlEncoded,
         comment
       );

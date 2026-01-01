@@ -1,4 +1,4 @@
-import type { Currency, Rates } from './types';
+import type { Currency, Rates } from '../types/nostr';
 
 export function formatSats(n: number) {
   const intl = new Intl.NumberFormat('en', {

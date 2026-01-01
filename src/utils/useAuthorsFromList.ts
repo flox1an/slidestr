@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import useEvent from '../ngine/hooks/useEvent';
+import useEvent from '../hooks/useEvent';
 import { nip19 } from 'nostr-tools';
 
 const useAuthorsFromList = (listAddr?: string): string[] => {

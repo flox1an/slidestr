@@ -4,7 +4,7 @@ import { kinds } from 'nostr-tools';
 import { combineLatest, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { eventStore } from '../../nostr/core';
+import { eventStore } from '../nostr/core';
 import { ProfileContent } from './useProfile';
 
 export default function useProfiles(pubkeys: string[]): ProfileContent[] {

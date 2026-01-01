@@ -27,10 +27,10 @@ import {
   restoreAccountsToManager,
 } from '../nostr/accountPersistence';
 
-import useRates from './hooks/useRates';
-import useLatestEvent from './hooks/useLatestEvent';
-import { sessionAtom, relayListAtom, followsAtom, ratesAtom } from './state';
-import { Links } from './types';
+import useRates from '../hooks/useRates';
+import useLatestEvent from '../hooks/useLatestEvent';
+import { sessionAtom, relayListAtom, followsAtom, ratesAtom } from '../state/atoms';
+import { Links } from '../types/nostr';
 import { getNip05For } from '../utils/nip05';
 
 // Create AccountManager and EventFactory at module level

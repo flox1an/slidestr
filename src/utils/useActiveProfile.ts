@@ -1,7 +1,7 @@
 import { Settings } from './useNav';
 import { NostrImage } from '../components/nostrImageDownload';
 import { nip19 } from 'nostr-tools';
-import useProfile from '../ngine/hooks/useProfile';
+import useProfile from '../hooks/useProfile';
 
 const useActiveProfile = (settings: Settings, activeImage?: NostrImage) => {
   const activeNpub = settings.npubs.length == 1 ? settings.npubs[0] : activeImage && activeImage?.author;

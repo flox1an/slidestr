@@ -2,7 +2,7 @@ import './App.css';
 import { createBrowserRouter, Navigate, RouterProvider, useLocation } from 'react-router-dom';
 import { Provider } from 'jotai';
 import { defaultHashTags } from './components/env';
-import { NgineProvider } from './ngine/context';
+import { NgineProvider } from './context/NgineContext';
 import Layout from './components/Layout/Layout';
 import SlideShow from './components/SlideShow';
 

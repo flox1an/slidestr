@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import type { NostrEvent } from 'nostr-tools';
 
 import useLatestEvent from './useLatestEvent';
-import { FiatCurrency, RateSymbol, Rates } from '../types';
+import { FiatCurrency, RateSymbol, Rates } from '../types/nostr';
 
 const SNORT_PUBKEY = '84de35e2584d2b144aae823c9ed0b0f3deda09648530b93d1a2a146d1dea9864';
 

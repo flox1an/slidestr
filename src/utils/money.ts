@@ -1,4 +1,4 @@
-import { Rates } from './types';
+import { Rates } from '../types/nostr';
 
 export function convertSatsToFiat(amt: string, rates: Rates): string {
   const inBtc = Number(amt) / 1e8;

@@ -109,3 +109,15 @@ export function syncUserRelays(pubkey: string): void {
 export function getDefaultRelays(): string[] {
   return DEFAULT_RELAYS;
 }
+
+/**
+ * Gets an author's inbox (read) relays combined with default relays
+ * When sending events TO a specific author (like zap receipts), use their read relays
+ * plus default relays for redundancy
+ */
+export function getInboxRelays(pubkey: string): string[] {
+  const relays = getUserRelays(pubkey);
+  const authorRelays = relays?.read || [];
+  // Combine author inbox relays with default relays, removing duplicates
+  return [...new Set([...authorRelays, ...DEFAULT_RELAYS])];
+}

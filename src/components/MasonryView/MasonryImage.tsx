@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import { MouseEventHandler, useMemo, useState } from 'react';
 import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
-import useProfile from '../../ngine/hooks/useProfile';
+import useProfile from '../../hooks/useProfile';
 import useNav from '../../utils/useNav';
 import LazyLoad from 'react-lazy-load';
 import uniq from 'lodash/uniq';
-import { timeDifference } from '../../utils/time';
-import { unixNow } from '../../ngine/time';
+import { timeDifference, unixNow } from '../../utils/time';
 import { useGlobalState } from '../../utils/globalState';
 
 interface MasonryImageProps {

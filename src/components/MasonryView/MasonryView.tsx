@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import './MasonryView.css';
 import { Settings } from '../../utils/useNav';
@@ -21,18 +21,22 @@ type MasonryViewProps = {
   currentImage: number | undefined;
   setCurrentImage: React.Dispatch<React.SetStateAction<number | undefined>>;
   setViewMode: React.Dispatch<React.SetStateAction<ViewMode>>;
+  loadMore?: () => void;
+  loading?: boolean;
+  hasMore?: boolean;
 };
 
 type MImage = NostrImage & {
   orgIndex: number;
 };
 
-const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: MasonryViewProps) => {
+const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewMode, loadMore, loading, hasMore }: MasonryViewProps) => {
   const { activeProfile, activeNpub } = useActiveProfile(settings);
   const title = useTitle(settings, activeProfile);
   const [_, setState] = useGlobalState();
   const { width } = useWindowSize();
   const [searchText, setSearchText] = useState<string | undefined>(undefined);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const columnCount = Math.max(2, Math.min(6, Math.floor((width || 800) / 230)));
   const sortedImages = useMemo(
@@ -102,6 +106,26 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
     },
   });
 
+  // Infinite scroll: load more when sentinel comes into view
+  useEffect(() => {
+    if (!loadMore || !hasMore || loading) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          loadMore();
+        }
+      },
+      { rootMargin: '400px' } // Start loading 400px before reaching the bottom
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [loadMore, hasMore, loading]);
+
   useEffect(() => {
     document.body.addEventListener('keydown', onKeyDown);
     setState({ activeImage: undefined });
@@ -130,29 +154,38 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
       {searchText !== undefined ? (
         <SearchResults searchText={searchText} setSearchText={setSearchText} setViewMode={setViewMode}></SearchResults>
       ) : (
-        <div
-          className="mason-imagegrid"
-          style={{
-            gridTemplateColumns: `repeat(${columnCount}, calc((100% - 24px - (${columnCount} - 1) * 12px ) / ${columnCount})`,
-          }}
-        >
-          {sortedImages.map((columnImages, colIdx) => (
-            <div className="column" key={colIdx}>
-              {columnImages.map(image => (
-                <MasonryImage
-                  index={image.orgIndex}
-                  key={image.url}
-                  image={image}
-                  onClick={e => {
-                    e.stopPropagation();
-                    setCurrentImage(image.orgIndex);
-                    setViewMode('scroll');
-                  }}
-                ></MasonryImage>
-              ))}
+        <>
+          <div
+            className="mason-imagegrid"
+            style={{
+              gridTemplateColumns: `repeat(${columnCount}, calc((100% - 24px - (${columnCount} - 1) * 12px ) / ${columnCount})`,
+            }}
+          >
+            {sortedImages.map((columnImages, colIdx) => (
+              <div className="column" key={colIdx}>
+                {columnImages.map(image => (
+                  <MasonryImage
+                    index={image.orgIndex}
+                    key={image.url}
+                    image={image}
+                    onClick={e => {
+                      e.stopPropagation();
+                      setCurrentImage(image.orgIndex);
+                      setViewMode('scroll');
+                    }}
+                  ></MasonryImage>
+                ))}
+              </div>
+            ))}
+          </div>
+          {/* Sentinel for infinite scroll */}
+          <div ref={sentinelRef} style={{ height: '1px', width: '100%' }} />
+          {loading && (
+            <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
+              Loading more...
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );

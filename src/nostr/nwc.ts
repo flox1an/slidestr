@@ -1,7 +1,7 @@
 import { nip04, finalizeEvent } from 'nostr-tools';
 import type { NostrEvent } from 'nostr-tools';
-import { relayPool } from '../nostr/core';
-import type { NWCConnection } from './types';
+import { relayPool } from './core';
+import type { NWCConnection } from '../types/nostr';
 import { filter, firstValueFrom, timeout } from 'rxjs';
 
 // Parse nostr+walletconnect:// URI

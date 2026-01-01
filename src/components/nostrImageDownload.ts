@@ -1,7 +1,7 @@
 import type { NostrEvent, Filter } from 'nostr-tools';
 import { adultContentTagsMap, adultPublicKeysMap, blockedHashtags, imageProxy, mixedAdultPublicMaps } from './env';
 import uniq from 'lodash/uniq';
-import { unixNow } from '../ngine/time';
+import { unixNow } from '../utils/time';
 import { ContentType } from '../utils/useNav';
 
 export type Post = {

@@ -2,8 +2,8 @@ import { useState } from 'react';
 import './WalletSettings.css';
 import CloseButton from '../CloseButton/CloseButton';
 import { useAtom } from 'jotai';
-import { nwcAtom } from '../../ngine/state';
-import { parseNWCUri } from '../../ngine/nwc';
+import { nwcAtom } from '../../state/atoms';
+import { parseNWCUri } from '../../nostr/nwc';
 
 interface WalletSettingsProps {
   onClose: () => void;

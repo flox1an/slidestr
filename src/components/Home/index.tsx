@@ -7,9 +7,9 @@ import { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import useActiveProfile from '../../utils/useActiveProfile';
 import useTitle from '../../utils/useTitle';
-import { useSession } from '../../ngine/state';
+import { useSession } from '../../state/atoms';
 import { nip19 } from 'nostr-tools';
-import useProfile from '../../ngine/hooks/useProfile';
+import useProfile from '../../hooks/useProfile';
 
 const Home = () => {
   const { nav, currentSettings } = useNav();

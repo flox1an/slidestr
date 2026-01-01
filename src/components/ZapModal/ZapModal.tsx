@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import './ZapModal.css';
-import { useNWC } from '../../ngine/state';
+import { useNWC } from '../../state/atoms';
 import CloseButton from '../CloseButton/CloseButton';
 
 interface ZapModalProps {

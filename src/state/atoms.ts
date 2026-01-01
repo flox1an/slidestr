@@ -2,7 +2,7 @@ import { atom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import type { NostrEvent } from 'nostr-tools';
 
-import type { Relay, Rates, Session, Currency, NWCConnection } from './types';
+import type { Relay, Rates, Session, Currency, NWCConnection } from '../types/nostr';
 
 export const sessionAtom = atomWithStorage<Session | null>('ngine.session', null);
 export const relayListAtom = atomWithStorage<NostrEvent | null>('ngine.10002', null);

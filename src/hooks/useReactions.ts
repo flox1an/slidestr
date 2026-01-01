@@ -4,7 +4,7 @@ import { kinds } from 'nostr-tools';
 
 import useEvents from './useEvents';
 import { zapsSummary, ZapRequest } from '../nostr/nip57';
-import { ReactionKind } from '../types';
+import { ReactionKind } from '../types/nostr';
 
 export type ReactionEvents = {
   events: NostrEvent[];

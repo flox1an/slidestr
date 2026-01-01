@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { useAtom } from 'jotai';
 
-import { useSign } from '../../ngine/context';
-import { followsAtom, useSession } from '../../ngine/state';
+import { useSign } from '../../context/NgineContext';
+import { followsAtom, useSession } from '../../state/atoms';
 import { relayPool, eventStore } from '../../nostr/core';
 import { getWriteRelays } from '../../nostr/relays';
 

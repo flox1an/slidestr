@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './Login.css';
-import { useBunkerLogin, useExtensionLogin } from '../../ngine/context';
+import { useBunkerLogin, useExtensionLogin } from '../../context/NgineContext';
 import React from 'react';
 
 type LoginProps = {

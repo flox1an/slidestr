@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useObservableState } from 'observable-hooks';
 import { kinds } from 'nostr-tools';
 import { map } from 'rxjs/operators';
-import { eventStore } from '../../nostr/core';
+import { eventStore } from '../nostr/core';
 
 export interface ProfileContent {
   name?: string;

@@ -3,7 +3,7 @@ import { decode } from 'light-bolt11-decoder';
 import { kinds } from 'nostr-tools';
 import type { NostrEvent } from 'nostr-tools';
 
-import { unixNow } from '../time';
+import { unixNow } from '../utils/time';
 
 // Helper to get tag value from event
 function getTagValue(event: NostrEvent, tagName: string): string | undefined {

@@ -27,15 +27,15 @@ import IconHeart from './Icons/IconHeart';
 import IconBolt from './Icons/IconBolt';
 import ZapModal from './ZapModal/ZapModal';
 import WalletSettings from './WalletSettings/WalletSettings';
-import useEvents from '../ngine/hooks/useEvents';
+import useEvents from '../hooks/useEvents';
 import MasonryView from './MasonryView/MasonryView';
 import useAuthorsFromList from '../utils/useAuthorsFromList';
 import useWindowSize from '../utils/useWindowSize';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { followsAtom, useSession } from '../ngine/state';
+import { followsAtom, useSession } from '../state/atoms';
 import IconRepost from './Icons/IconRepost';
-import useProfile from '../ngine/hooks/useProfile';
+import useProfile from '../hooks/useProfile';
 import IconBookmark from './Icons/IconBookmark';
 import useBookMarks from '../utils/useBookMarks';
 import IconFolderPlus from './Icons/IconFolderPlus';
@@ -139,7 +139,7 @@ const SlideShow = () => {
     settings.topic,
   ]);
 
-  const { events } = useEvents(filter, {
+  const { events, loadMore, loading, hasMore } = useEvents(filter, {
     // when seeing global, close stream because of too many updates.
     closeOnEose: settings.npubs.length == 0 && settings.tags.length == 0,
   });
@@ -440,6 +440,9 @@ const SlideShow = () => {
           setCurrentImage={setImageIdx}
           currentImage={imageIdx}
           setViewMode={setViewMode}
+          loadMore={loadMore}
+          loading={loading}
+          hasMore={hasMore}
         ></MasonryView>
       )}
       {viewMode == 'scroll' && (

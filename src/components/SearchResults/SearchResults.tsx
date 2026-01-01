@@ -1,17 +1,17 @@
 import { useMemo } from 'react';
-import { useNDK } from '../../ngine/context';
-import useEvents from '../../ngine/hooks/useEvents';
+import { useNDK } from '../../context/NgineContext';
+import useEvents from '../../hooks/useEvents';
 import { kinds } from 'nostr-tools';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { createImgProxyUrl, urlFix } from '../nostrImageDownload';
 import { nip19 } from 'nostr-tools';
-import { ProfileContent } from '../../ngine/hooks/useProfile';
+import { ProfileContent } from '../../hooks/useProfile';
 import { ViewMode } from '../SlideShow';
 import './SearchResults.css';
 import { defaultHashTags, hashtags, publicUrl, topics, visibleHashTags } from '../env';
 import useNav from '../../utils/useNav';
 import usePeopleLists from '../../utils/useLists';
-import { useSession } from '../../ngine/state';
+import { useSession } from '../../state/atoms';
 import IconList from '../Icons/IconList';
 
 type SearchResultsProps = {
