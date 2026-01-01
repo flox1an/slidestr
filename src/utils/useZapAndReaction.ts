@@ -27,7 +27,8 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
 
   const [zapState, setZapState] = useState<ZapState>('none');
   const [heartState, setHeartState] = useState<HeartState>('none');
-  const checkedRef = useRef<string | null>(null);
+  const checkedLikeRef = useRef<string | null>(null);
+  const checkedZapRef = useRef<string | null>(null);
 
   const repostState = useMemo(
     () => reposts.some(r => r == currentImageData?.post.event.id),
@@ -36,7 +37,6 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
 
   // Check if user has liked the current image
   useEffect(() => {
-    setZapState('none');
     setHeartState('none');
 
     if (!currentImageData?.noteId || !userNPub) return;
@@ -48,8 +48,8 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     }
 
     // Skip if we already checked this noteId
-    if (checkedRef.current === currentImageData.noteId) return;
-    checkedRef.current = currentImageData.noteId;
+    if (checkedLikeRef.current === currentImageData.noteId) return;
+    checkedLikeRef.current = currentImageData.noteId;
 
     // Query relays for user's reactions to this note
     const authorPubkey = nip19.decode(userNPub).data as string;
@@ -64,6 +64,54 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
         complete: () => {
           if (currentImageData.post.wasLiked === undefined) {
             currentImageData.post.wasLiked = false;
+          }
+        },
+      });
+
+    return () => sub.unsubscribe();
+  }, [currentImageData, userNPub]);
+
+  // Check if user has zapped the current image
+  useEffect(() => {
+    setZapState('none');
+
+    if (!currentImageData?.noteId || !userNPub) return;
+
+    // Already cached
+    if (currentImageData.post.wasZapped !== undefined) {
+      setZapState(currentImageData.post.wasZapped ? 'zapped' : 'none');
+      return;
+    }
+
+    // Skip if we already checked this noteId
+    if (checkedZapRef.current === currentImageData.noteId) return;
+    checkedZapRef.current = currentImageData.noteId;
+
+    // Query relays for zap receipts (kind 9735) on this note
+    // We check the 'description' tag which contains the zap request with the sender's pubkey
+    const userPubkey = nip19.decode(userNPub).data as string;
+    const sub = relayPool
+      .subscription(DEFAULT_RELAYS, [{ kinds: [9735], '#e': [currentImageData.noteId] }])
+      .subscribe({
+        next: (event) => {
+          if (typeof event === 'string') return;
+          // Parse the description tag to find the zap request
+          const descTag = event.tags.find((t: string[]) => t[0] === 'description');
+          if (descTag && descTag[1]) {
+            try {
+              const zapRequest = JSON.parse(descTag[1]);
+              if (zapRequest.pubkey === userPubkey) {
+                currentImageData.post.wasZapped = true;
+                setZapState('zapped');
+              }
+            } catch {
+              // Invalid JSON in description tag
+            }
+          }
+        },
+        complete: () => {
+          if (currentImageData.post.wasZapped === undefined) {
+            currentImageData.post.wasZapped = false;
           }
         },
       });
@@ -202,9 +250,7 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
       }
 
       setZapState('zapped');
-
-      // Reset after animation
-      setTimeout(() => setZapState('none'), 2000);
+      currentImage.post.wasZapped = true;
     } catch (err) {
       console.error('Zap failed:', err);
       setZapState('error');

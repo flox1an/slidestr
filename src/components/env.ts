@@ -495,7 +495,8 @@ export const adultNPubs = [
   'npub16fsxfvylsvlmv9fz3k7rga3wxl50plm8q708wgkwdr555lczlc5qu7xw8z',
   'npub1c7jh67m65jdrax540j7vxnqdczgr8k678d97lh6k26feztg5pycqxtwjya',
   'npub1k47ey83x7re00ertnsku3dtpgk236y7xde6lyy99hdf4jx8nfk6sl6nlat',
-  'npub1psleqk9w3ce8c9mm3axuwl3qxdjqkg3wphqlkxkruztjwl9zakgqdjhua8'
+  'npub1psleqk9w3ce8c9mm3axuwl3qxdjqkg3wphqlkxkruztjwl9zakgqdjhua8',
+  'npub182pf3uzmgttdz5emw99wruceezjm69nzgqrs8tnrrecpfxtemn5qtdg5xp'
 ];
 
 const adultPublicKeys = adultNPubs.map(npub => (nip19.decode(npub).data as string).toLowerCase());
