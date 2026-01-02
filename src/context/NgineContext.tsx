@@ -13,7 +13,7 @@ import {
   ReadonlyAccount,
 } from 'applesauce-accounts/accounts';
 import { ExtensionSigner, NostrConnectSigner, PrivateKeySigner } from 'applesauce-signers';
-import { EventFactory } from 'applesauce-factory';
+import { EventFactory } from 'applesauce-core';
 import { AccountsProvider, EventStoreProvider, FactoryProvider } from 'applesauce-react/providers';
 import { useActiveAccount } from 'applesauce-react/hooks';
 
