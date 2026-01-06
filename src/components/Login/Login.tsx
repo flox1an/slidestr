@@ -1,59 +1,45 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import './Login.css';
-import { useBunkerLogin, useExtensionLogin } from '../../context/NgineContext';
-import React from 'react';
+import { useExtensionLogin } from '../../context/NgineContext';
+import { QRCodeLogin } from './QRCodeLogin';
+import { useAtom } from 'jotai';
+import { sessionAtom } from '../../state/atoms';
+import { syncUserRelays } from '../../nostr/relays';
+import { AccountsContext } from 'applesauce-react';
 
 type LoginProps = {
   onClose: () => void;
 };
 
 const Login = ({ onClose }: LoginProps) => {
-  const [address, setAddress] = useState('');
-  const bunkerLogin = useBunkerLogin();
   const extensionLogin = useExtensionLogin();
-  /*
+  const accountManager = useContext(AccountsContext);
+  const [, setSession] = useAtom(sessionAtom);
+  const [error, setError] = useState<string | null>(null);
 
-  const onLogin = async () => {
-    const user = await bunkerLogin('florian@nsec.app'); ///bunker://b7c6f6915cfa9a62fff6a1f02604de88c23c6c6c6d1b8f62c7cc10749f307e81?relay=wss://relay.nsec.app');  //florian@nsec.app
-    //const user = await extensionLogin();
-     if (user) {
-      
-      console.log(user.npub);
-      setState({ userNPub: user.npub, profile: user.profile });
-      }
-      else {
-        console.error('Error loging in');
-      }
-/*
-    setAutoLogin(true);
-    
-    
-
-    const result = await nip);
-    if (!result) {
-      console.error('Login failed.');
-      return;
+  const handleQRLogin = () => {
+    const active = accountManager?.active;
+    if (active) {
+      setSession({
+        method: 'nip46',
+        pubkey: active.pubkey,
+      });
+      syncUserRelays(active.pubkey);
     }
+    onClose();
+  };
 
-    setState({ userNPub: result.npub });
-};
-*/
-  const loginWithAddress = async () => {
-    const user = await bunkerLogin(address);
-    if (user) {
-      onClose();
-    } else {
-      console.error('Error loging in');
-    }
+  const handleQRError = (errorMessage: string) => {
+    setError(errorMessage);
   };
 
   const loginWithExtension = async () => {
-    const user = await extensionLogin();
-    console.log(user);
-    if (user) {
+    setError(null);
+    const pubkey = await extensionLogin();
+    if (pubkey) {
       onClose();
     } else {
-      console.error('Error loging in');
+      setError('Extension login failed');
     }
   };
 
@@ -63,17 +49,15 @@ const Login = ({ onClose }: LoginProps) => {
         ✕
       </div>
       <h2>Login</h2>
-      <div className="login-address">
-        <input
-          type="text"
-          placeholder="Nostr Address / Bunker URL"
-          value={address}
-          onChange={e => setAddress(e.target.value)}
-          onKeyDown={e => e.stopPropagation()}
-          onKeyUp={e => e.stopPropagation()}
-        ></input>
-        <button onClick={() => loginWithAddress()}>Login</button>
+
+      {error && <div className="login-error">{error}</div>}
+
+      <QRCodeLogin onLogin={handleQRLogin} onError={handleQRError} />
+
+      <div className="login-divider">
+        <span>or</span>
       </div>
+
       <div className="login-extension">
         <button onClick={() => loginWithExtension()}>Login with extension</button>
       </div>
