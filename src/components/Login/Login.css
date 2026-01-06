@@ -75,4 +75,9 @@
   position: absolute;
   right: 1.2em;
   top: 1em;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: inherit;
+  padding: 0;
 }

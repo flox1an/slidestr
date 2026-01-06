@@ -45,9 +45,9 @@ const Login = ({ onClose }: LoginProps) => {
 
   return (
     <div className="login-dialog">
-      <div className="close-button" onClick={() => onClose()}>
+      <button className="close-button" onClick={onClose} aria-label="Close login dialog">
         ✕
-      </div>
+      </button>
       <h2>Login</h2>
 
       {error && <div className="login-error">{error}</div>}
