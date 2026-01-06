@@ -9,65 +9,14 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  gap: 24px;
+  gap: 16px;
+  min-width: 280px;
 }
 
 .login-dialog h2 {
   text-align: center;
   margin-top: 0px;
-}
-
-.login-dialog input[type='text'] {
-  min-width: 20em;
-  display: block;
-  width: 100%;
-  background-color: #444;
-  color: #fff;
-  border-radius: 8px;
-  border: 0px;
-  height: 3em;
-  font-family: unset;
-  font-size: unset;
-  padding: 0.1em;
-  padding-left: 1em;
-  box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-  .login-dialog input[type='text'] {
-    min-width: 13em;
-  }
-}
-
-.login-dialog input[type='text']::placeholder {
-  color: #888;
-  opacity: 1;
-}
-
-.login-dialog input[type='text']:active,
-.login-dialog input[type='text']:focus {
-  border: 0px;
-  outline: 0px;
-}
-
-.login-dialog .login-address {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-}
-
-.login-dialog button,
-.login-dialog button:visited,
-.login-dialog button:active {
-  background-color: rgb(99, 19, 173);
-  color: #fff;
-  height: 3em;
-  padding-left: 1em;
-  padding-right: 1em;
-}
-
-.login-dialog .login-extension {
-  align-self: center;
+  margin-bottom: 0px;
 }
 
 .login-dialog .close-button {
@@ -80,4 +29,146 @@
   color: inherit;
   font-size: inherit;
   padding: 0;
+}
+
+.login-error {
+  background-color: rgba(255, 100, 100, 0.2);
+  color: #ff6b6b;
+  padding: 0.5em 1em;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+/* QR Login Styles */
+.qr-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.qr-login-header {
+  text-align: center;
+}
+
+.qr-login-icon {
+  font-size: 2em;
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.qr-login-header p {
+  margin: 0;
+  color: #fff;
+  font-size: 0.95em;
+}
+
+.qr-login-apps {
+  color: #888;
+  font-size: 0.8em;
+  display: block;
+  margin-top: 0.25em;
+}
+
+.qr-code-container {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.qr-loading {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #ddd;
+  border-top-color: rgb(99, 19, 173);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.qr-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.qr-action-btn {
+  background-color: transparent !important;
+  color: #888 !important;
+  border: 1px solid #444 !important;
+  padding: 0.5em 1em;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: all 0.2s;
+  height: auto !important;
+}
+
+.qr-action-btn:hover {
+  background-color: #333 !important;
+  color: #fff !important;
+}
+
+.qr-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Divider */
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  color: #666;
+  font-size: 0.85em;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: #444;
+}
+
+/* Extension Button */
+.login-dialog button,
+.login-dialog button:visited,
+.login-dialog button:active {
+  background-color: rgb(99, 19, 173);
+  color: #fff;
+  height: 3em;
+  padding-left: 1em;
+  padding-right: 1em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.login-dialog button:hover {
+  background-color: rgb(119, 39, 193);
+}
+
+.login-extension {
+  display: flex;
+  justify-content: center;
+}
+
+.login-extension button {
+  width: 100%;
 }
