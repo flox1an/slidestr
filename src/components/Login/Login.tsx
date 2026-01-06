@@ -1,11 +1,11 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import './Login.css';
 import { useExtensionLogin } from '../../context/NgineContext';
 import { QRCodeLogin } from './QRCodeLogin';
 import { useAtom } from 'jotai';
 import { sessionAtom } from '../../state/atoms';
 import { syncUserRelays } from '../../nostr/relays';
-import { AccountsContext } from 'applesauce-react';
+import { useAccountManager } from 'applesauce-react/hooks';
 
 type LoginProps = {
   onClose: () => void;
@@ -13,7 +13,7 @@ type LoginProps = {
 
 const Login = ({ onClose }: LoginProps) => {
   const extensionLogin = useExtensionLogin();
-  const accountManager = useContext(AccountsContext);
+  const accountManager = useAccountManager(false);
   const [, setSession] = useAtom(sessionAtom);
   const [error, setError] = useState<string | null>(null);
 

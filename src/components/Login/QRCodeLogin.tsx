@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef, useCallback, useContext } from 'react';
+import { useEffect, useState, useRef, useCallback, useLayoutEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { NostrConnectSigner } from 'applesauce-signers';
 import { NostrConnectAccount } from 'applesauce-accounts/accounts';
-import { AccountsContext } from 'applesauce-react';
+import { useAccountManager } from 'applesauce-react/hooks';
 import { saveAccountToStorage, saveActiveAccount } from '../../nostr/accountPersistence';
 import { DEFAULT_RELAYS, subscriptionMethod, publishMethod } from '../../nostr/core';
 import { appName, publicUrl } from '../env';
@@ -22,16 +22,20 @@ interface QRCodeLoginProps {
 }
 
 export function QRCodeLogin({ onLogin, onError }: QRCodeLoginProps) {
-  const accountManager = useContext(AccountsContext);
+  const accountManager = useAccountManager();
   const [nostrConnectUri, setNostrConnectUri] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const signerRef = useRef<NostrConnectSigner | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onLoginRef = useRef(onLogin);
+  const onErrorRef = useRef(onError);
 
-  if (!accountManager) {
-    throw new Error('QRCodeLogin must be used within AccountsProvider');
-  }
+  // Keep refs updated with latest callbacks
+  useLayoutEffect(() => {
+    onLoginRef.current = onLogin;
+    onErrorRef.current = onError;
+  });
 
   const generateQRCode = useCallback(async () => {
     if (abortControllerRef.current) {
@@ -74,7 +78,7 @@ export function QRCodeLogin({ onLogin, onError }: QRCodeLoginProps) {
       saveAccountToStorage(account, 'bunker', bunkerUri);
       saveActiveAccount(pubkey);
 
-      onLogin();
+      onLoginRef.current();
     } catch (error) {
       const isAbort =
         error instanceof Error &&
@@ -85,9 +89,9 @@ export function QRCodeLogin({ onLogin, onError }: QRCodeLoginProps) {
         return;
       }
       console.error('QR code login failed:', error);
-      onError(error instanceof Error ? error.message : 'Connection failed');
+      onErrorRef.current(error instanceof Error ? error.message : 'Connection failed');
     }
-  }, [accountManager, onLogin, onError]);
+  }, [accountManager]);
 
   useEffect(() => {
     generateQRCode();
