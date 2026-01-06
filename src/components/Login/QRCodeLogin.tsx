@@ -27,6 +27,7 @@ export function QRCodeLogin({ onLogin, onError }: QRCodeLoginProps) {
   const [copied, setCopied] = useState(false);
   const signerRef = useRef<NostrConnectSigner | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   if (!accountManager) {
     throw new Error('QRCodeLogin must be used within AccountsProvider');
@@ -95,6 +96,9 @@ export function QRCodeLogin({ onLogin, onError }: QRCodeLoginProps) {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
     };
   }, [generateQRCode]);
 
@@ -106,10 +110,13 @@ export function QRCodeLogin({ onLogin, onError }: QRCodeLoginProps) {
 
   const handleCopy = async () => {
     if (!nostrConnectUri) return;
+    if (copyTimeoutRef.current) {
+      clearTimeout(copyTimeoutRef.current);
+    }
     try {
       await navigator.clipboard.writeText(nostrConnectUri);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
