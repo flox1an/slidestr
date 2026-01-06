@@ -79,7 +79,7 @@ const AuthorProfile = ({
         )}
 
         {externalLink && npub && (
-          <a target="_blank" href={`https://nostrapp.link/#${npub}`}>
+          <a target="_blank" href={`https://primal.net/p/${nip19.nprofileEncode({ pubkey: nip19.decode(npub).data as string })}`}>
             <IconLink></IconLink>
           </a>
         )}
