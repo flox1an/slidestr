@@ -5,7 +5,6 @@ import GridImage from './GridImage';
 import useNav, { Settings } from '../../utils/useNav';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { useSwipeable } from 'react-swipeable';
-import { Helmet } from 'react-helmet';
 import useActiveProfile from '../../utils/useActiveProfile';
 import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
@@ -22,7 +21,7 @@ type GridViewProps = {
 
 const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode }: GridViewProps) => {
   const { activeProfile, activeNpub } = useActiveProfile(settings);
-  const title = useTitle(settings, activeProfile);
+  useTitle(settings, activeProfile);
   const [_, setState] = useGlobalState();
   const showNextImage = () => {
     setCurrentImage(idx => (idx !== undefined ? idx + 1 : 0));
@@ -82,10 +81,6 @@ const GridView = ({ settings, images, currentImage, setCurrentImage, setViewMode
 
   return (
     <div className="gridview" {...swipeHandlers}>
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
-
       <PageHeader
         setViewMode={setViewMode}
         searchText={searchText}

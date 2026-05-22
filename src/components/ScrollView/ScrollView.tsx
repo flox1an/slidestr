@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import { Settings } from '../../utils/useNav';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
-import { Helmet } from 'react-helmet';
 import useActiveProfile from '../../utils/useActiveProfile';
 import ScrollImage from './ScrollImage';
 import { ViewMode } from '../SlideShow';
@@ -24,7 +23,7 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
   const [state, setState] = useGlobalState();
   const [showInfoPanel, setShowInfoPanel] = useState(false);
   const { activeProfile, activeNpub } = useActiveProfile(settings, state.activeImage);
-  const title = useTitle(settings, activeProfile);
+  useTitle(settings, activeProfile);
 
   useEffect(() => {
     if (currentImage) {
@@ -46,10 +45,6 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
 
   return (
     <div ref={containerRef} className="scrollview" tabIndex={0}>
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
-
       {images.map((image, idx) => (
         <ScrollImage
           key={image.url}

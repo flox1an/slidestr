@@ -4,7 +4,6 @@ import './MasonryView.css';
 import { Settings } from '../../utils/useNav';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { useSwipeable } from 'react-swipeable';
-import { Helmet } from 'react-helmet';
 import useActiveProfile from '../../utils/useActiveProfile';
 import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
@@ -32,7 +31,7 @@ type MImage = NostrImage & {
 
 const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewMode, loadMore, loading, hasMore }: MasonryViewProps) => {
   const { activeProfile, activeNpub } = useActiveProfile(settings);
-  const title = useTitle(settings, activeProfile);
+  useTitle(settings, activeProfile);
   const [_, setState] = useGlobalState();
   const { width } = useWindowSize();
   const [searchText, setSearchText] = useState<string | undefined>(undefined);
@@ -142,9 +141,6 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
 
   return (
     <div className="mason-view" {...swipeHandlers}>
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
       <PageHeader
         settings={settings}
         setViewMode={setViewMode}

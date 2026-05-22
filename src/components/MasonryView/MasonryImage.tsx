@@ -3,10 +3,10 @@ import { MouseEventHandler, useMemo, useState } from 'react';
 import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
 import useProfile from '../../hooks/useProfile';
 import useNav from '../../utils/useNav';
-import LazyLoad from 'react-lazy-load';
 import uniq from 'lodash/uniq';
 import { timeDifference, unixNow } from '../../utils/time';
 import { useGlobalState } from '../../utils/globalState';
+import LazyLoad from '../LazyLoad';
 
 interface MasonryImageProps {
   image: NostrImage;

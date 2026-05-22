@@ -1,6 +1,6 @@
 import { MouseEventHandler, SyntheticEvent, useState } from 'react';
 import { NostrImage, createImgProxyUrl, isVideo } from '../nostrImageDownload';
-import LazyLoad from 'react-lazy-load';
+import LazyLoad from '../LazyLoad';
 
 interface GridImageProps {
   image: NostrImage;

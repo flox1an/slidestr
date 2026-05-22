@@ -4,7 +4,6 @@ import './Home.css';
 import usePeopleLists from '../../utils/useLists';
 import { createImgProxyUrl } from '../nostrImageDownload';
 import { useMemo, useState } from 'react';
-import { Helmet } from 'react-helmet';
 import useActiveProfile from '../../utils/useActiveProfile';
 import useTitle from '../../utils/useTitle';
 import { useSession } from '../../state/atoms';
@@ -14,7 +13,7 @@ import useProfile from '../../hooks/useProfile';
 const Home = () => {
   const { nav, currentSettings } = useNav();
   const { activeProfile } = useActiveProfile(currentSettings);
-  const title = useTitle(currentSettings, activeProfile);
+  useTitle(currentSettings, activeProfile);
   const [showAdult, setShowAdult] = useState(currentSettings.showAdult || false);
   const topicKeys = useMemo(() => Object.keys(topics).filter(tk => !topics[tk].nsfw || showAdult), [showAdult]);
   const session = useSession();
@@ -24,9 +23,6 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
       <div className="home">
         <h2>Topics</h2>
         <div className="topics">

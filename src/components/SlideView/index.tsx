@@ -4,7 +4,6 @@ import Slide from './Slide';
 import { NostrImage, urlFix } from '../nostrImageDownload';
 import useDebouncedEffect from '../../utils/useDebouncedEffect';
 import { useSwipeable } from 'react-swipeable';
-import { Helmet } from 'react-helmet';
 import IconPause from '../Icons/IconPause';
 import IconSpinner from '../Icons/IconSpinner';
 import { Settings } from '../../utils/useNav';
@@ -29,7 +28,7 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
   const [slideShowStarted, setSlideShowStarted] = useState(false);
   const [activeContent, setActiveContent] = useState<string | undefined>(undefined);
   const { activeProfile } = useActiveProfile(settings);
-  const title = useTitle(settings, activeProfile);
+  useTitle(settings, activeProfile);
 
   const queueNextImage = (waitTime: number) => {
     clearTimeout(viewTimeoutHandle.current);
@@ -152,10 +151,6 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
 
   return (
     <div {...swipeHandlers} onClick={() => setPaused(p => !p)} style={{ overflow: 'hidden' }}>
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
-
       {paused && (
         <div className="centerSymbol">
           <IconPause />

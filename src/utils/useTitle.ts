@@ -23,6 +23,10 @@ const useTitle = (settings: Settings, activeProfile?: ProfileContent) => {
     }
   }, [activeProfile, settings.npubs, settings.tags, topic, location]);
 
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
   return title;
 };
 
