@@ -358,6 +358,8 @@ const SlideShow = () => {
             setShowZapModal(false);
             setShowWalletSettings(true);
           }}
+          eventId={state.activeImage.noteId}
+          userPubkey={session?.pubkey}
         />
       )}
       {showWalletSettings && <WalletSettings onClose={() => setShowWalletSettings(false)} />}

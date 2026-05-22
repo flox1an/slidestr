@@ -2,8 +2,14 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useObservable, useSubscription } from 'observable-hooks';
 import { createTimelineLoader, TimelineLoader } from 'applesauce-loaders/loaders';
 import type { Filter, NostrEvent } from 'nostr-tools';
+import { throttleTime, asyncScheduler } from 'rxjs';
 import { eventStore, relayPool, cacheRequest, DEFAULT_RELAYS } from '../nostr/core';
 import { hashSha256 } from '../utils/hash';
+
+// Batch timeline updates to prevent render storms from rapid relay messages
+// leading: true = emit first event immediately for fast initial render
+// trailing: true = emit final state after throttle window closes
+const TIMELINE_THROTTLE_MS = 100;
 
 export interface SubscriptionOptions {
   disable?: boolean;
@@ -67,9 +73,12 @@ export default function useEvents(
     };
   }, [id, opts?.disable]);
 
-  // Create observable for timeline from event store
+  // Create observable for timeline from event store with throttling
+  // This prevents render storms when many events arrive in rapid succession
   const timeline$ = useObservable(
-    () => eventStore.timeline(normalizedFilter),
+    () => eventStore.timeline(normalizedFilter).pipe(
+      throttleTime(TIMELINE_THROTTLE_MS, asyncScheduler, { leading: true, trailing: true })
+    ),
     [normalizedFilter]
   );
 

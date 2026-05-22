@@ -19,7 +19,7 @@ const PageHeader = ({ settings, setViewMode, searchText, setSearchText }: PageHe
   const { activeProfile, activeNpub } = useActiveProfile(settings);
   const [editMode, setEditMode] = useState(false);
   const [title, setTitle] = useState('Gallery');
-  const searchInputRef = useRef<number | null>(null); // Create a ref for the timeout
+  const searchInputRef = useRef<ReturnType<typeof setTimeout> | null>(null); // Create a ref for the timeout
   const [internalSearchText, setInternalSearchText] = useState(searchText);
   const { nav, currentSettings } = useNav();
 

@@ -3,7 +3,8 @@ import { QRCodeSVG } from 'qrcode.react';
 import { NostrConnectSigner } from 'applesauce-signers';
 import { NostrConnectAccount } from 'applesauce-accounts/accounts';
 import { useAccountManager } from 'applesauce-react/hooks';
-import { saveAccountToStorage, saveActiveAccount } from '../../nostr/accountPersistence';
+import { saveAccountToStorage, saveActiveAccount, type BunkerPersistData } from '../../nostr/accountPersistence';
+import { bytesToHex } from '@noble/hashes/utils';
 import { DEFAULT_RELAYS, subscriptionMethod, publishMethod } from '../../nostr/core';
 import { appName, publicUrl } from '../env';
 
@@ -73,9 +74,16 @@ export function QRCodeLogin({ onLogin, onError }: QRCodeLoginProps) {
       if (!remotePubkey) {
         throw new Error('Failed to get remote signer pubkey');
       }
-      const bunkerUri = buildBunkerUri(remotePubkey, DEFAULT_RELAYS, signer.secret);
+      // Build bunkerUri WITHOUT the secret - secret is single-use for initial pairing only
+      // Session persistence relies on the localKey (local signer private key)
+      const bunkerUri = buildBunkerUri(remotePubkey, DEFAULT_RELAYS);
 
-      saveAccountToStorage(account, 'bunker', bunkerUri);
+      // Save bunker URI and local signer key for session persistence across reloads
+      const persistData: BunkerPersistData = {
+        bunkerUri,
+        localKey: bytesToHex(signer.signer.key),
+      };
+      saveAccountToStorage(account, 'bunker', JSON.stringify(persistData));
       saveActiveAccount(pubkey);
 
       onLoginRef.current();

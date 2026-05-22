@@ -1,17 +1,22 @@
 import type { IAccount } from 'applesauce-accounts';
 import { type AccountManager } from 'applesauce-accounts';
 import { ExtensionAccount, NostrConnectAccount } from 'applesauce-accounts/accounts';
-import { ExtensionSigner, NostrConnectSigner } from 'applesauce-signers';
+import { ExtensionSigner, NostrConnectSigner, PrivateKeySigner } from 'applesauce-signers';
 
 const STORAGE_KEY_ACCOUNTS = 'slidestr:accounts';
 const STORAGE_KEY_ACTIVE = 'slidestr:active-account';
 
 export type AccountMethod = 'extension' | 'nsec' | 'bunker' | 'npub';
 
+export interface BunkerPersistData {
+  bunkerUri: string;
+  localKey: string; // hex-encoded local signer private key for session persistence
+}
+
 export interface PersistedAccount {
   pubkey: string;
   method: AccountMethod;
-  data?: string; // bunker URI (for bunker accounts) - nsec is NOT stored for security
+  data?: string; // JSON BunkerPersistData (for bunker accounts) - nsec is NOT stored for security
   createdAt: number;
 }
 
@@ -205,11 +210,28 @@ export async function restoreAccount(
 
       case 'bunker': {
         if (!accountData.data) {
-          console.warn('Bunker URI missing for account');
+          console.warn('Bunker data missing for account');
           return null;
         }
         try {
-          const signer = await NostrConnectSigner.fromBunkerURI(accountData.data);
+          // Parse the persisted bunker data (bunkerUri + localKey)
+          let bunkerUri: string;
+          let localSigner: PrivateKeySigner | undefined;
+
+          try {
+            const parsed = JSON.parse(accountData.data) as BunkerPersistData;
+            bunkerUri = parsed.bunkerUri;
+            if (parsed.localKey) {
+              localSigner = PrivateKeySigner.fromKey(parsed.localKey);
+            }
+          } catch {
+            // Fallback for legacy format (plain bunker URI string)
+            bunkerUri = accountData.data;
+          }
+
+          const signer = await NostrConnectSigner.fromBunkerURI(bunkerUri, {
+            signer: localSigner,
+          });
           const pubkey = await signer.getPublicKey();
           // Verify pubkey matches stored pubkey
           if (pubkey !== accountData.pubkey) {

@@ -132,3 +132,28 @@ button.zap-setup-link {
 .zap-copy-btn:hover {
   background: #333;
 }
+
+.qr-container.payment-success {
+  background: #f7931a;
+  min-height: 200px;
+  align-items: center;
+}
+
+.success-icon {
+  font-size: 80px;
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

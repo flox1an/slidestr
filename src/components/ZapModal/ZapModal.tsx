@@ -3,22 +3,26 @@ import { QRCodeSVG } from 'qrcode.react';
 import './ZapModal.css';
 import { useNWC } from '../../state/atoms';
 import CloseButton from '../CloseButton/CloseButton';
+import { relayPool, DEFAULT_RELAYS } from '../../nostr/core';
 
 interface ZapModalProps {
   onClose: () => void;
   onZap: (amount: number, comment?: string) => Promise<void>;
   onGenerateInvoice?: (amount: number, comment?: string) => Promise<string | null>;
   onOpenSettings: () => void;
+  eventId?: string;
+  userPubkey?: string;
 }
 
 const PRESET_AMOUNTS = [21, 100, 500, 1000];
 
-const ZapModal = ({ onClose, onZap, onGenerateInvoice, onOpenSettings }: ZapModalProps) => {
+const ZapModal = ({ onClose, onZap, onGenerateInvoice, onOpenSettings, eventId, userPubkey }: ZapModalProps) => {
   const [selectedAmount, setSelectedAmount] = useState(21);
   const [comment, setComment] = useState('');
   const [isZapping, setIsZapping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [invoice, setInvoice] = useState<string | null>(null);
+  const [paymentReceived, setPaymentReceived] = useState(false);
   const nwc = useNWC();
 
   useEffect(() => {
@@ -28,6 +32,43 @@ const ZapModal = ({ onClose, onZap, onGenerateInvoice, onOpenSettings }: ZapModa
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
+
+  // Subscribe to zap receipts when QR code is shown
+  useEffect(() => {
+    if (!invoice || !eventId || !userPubkey) return;
+
+    const sub = relayPool
+      .subscription(DEFAULT_RELAYS, [{ kinds: [9735], '#e': [eventId] }])
+      .subscribe({
+        next: (event) => {
+          if (typeof event === 'string') return;
+          // Parse the description tag to find our zap request
+          const descTag = event.tags.find((t: string[]) => t[0] === 'description');
+          if (descTag && descTag[1]) {
+            try {
+              const zapRequest = JSON.parse(descTag[1]);
+              if (zapRequest.pubkey === userPubkey) {
+                setPaymentReceived(true);
+              }
+            } catch {
+              // Invalid JSON in description tag
+            }
+          }
+        },
+      });
+
+    return () => sub.unsubscribe();
+  }, [invoice, eventId, userPubkey]);
+
+  // Close modal after payment is received (with brief delay to show success)
+  useEffect(() => {
+    if (paymentReceived) {
+      const timeout = setTimeout(() => {
+        onClose();
+      }, 1500);
+      return () => clearTimeout(timeout);
+    }
+  }, [paymentReceived, onClose]);
 
   const handleZap = async () => {
     setIsZapping(true);
@@ -72,16 +113,25 @@ const ZapModal = ({ onClose, onZap, onGenerateInvoice, onOpenSettings }: ZapModa
         <CloseButton onClick={onClose} />
 
         {invoice ? (
-          <>
-            <h3>Scan to Zap</h3>
-            <div className="qr-container">
-              <QRCodeSVG value={invoice.toUpperCase()} size={200} />
-            </div>
-            <p className="qr-hint">Scan with your Lightning wallet</p>
-            <button className="zap-copy-btn" onClick={copyInvoice}>
-              Copy Invoice
-            </button>
-          </>
+          paymentReceived ? (
+            <>
+              <h3>Payment Received!</h3>
+              <div className="qr-container payment-success">
+                <span className="success-icon">⚡</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3>Scan to Zap</h3>
+              <div className="qr-container">
+                <QRCodeSVG value={invoice.toUpperCase()} size={200} />
+              </div>
+              <p className="qr-hint">Scan with your Lightning wallet</p>
+              <button className="zap-copy-btn" onClick={copyInvoice}>
+                Copy Invoice
+              </button>
+            </>
+          )
         ) : (
           <>
             <h3>Zap</h3>

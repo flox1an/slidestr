@@ -22,7 +22,7 @@ const MasonryImage = ({ image, onClick, index }: MasonryImageProps) => {
   const [state, setState] = useGlobalState();
 
   useEffect(() => {
-    let timeoutId: number;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
     if (showInfo) {
       setShouldShowInfo(true);

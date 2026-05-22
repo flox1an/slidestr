@@ -25,7 +25,9 @@ import {
   saveActiveAccount,
   removeAccountFromStorage,
   restoreAccountsToManager,
+  type BunkerPersistData,
 } from '../nostr/accountPersistence';
+import { bytesToHex } from '@noble/hashes/utils';
 
 import useRates from '../hooks/useRates';
 import useLatestEvent from '../hooks/useLatestEvent';
@@ -211,19 +213,25 @@ export const NgineProvider = ({ links, children, enableFiatRates = false }: Ngin
       const asURL = new URL(url);
       const relays = asURL.searchParams.getAll('relay');
       const pubkey = asURL.pathname.replace(/^\/\//, '');
-      return { relays, pubkey, bunkerUri: url };
+      // Build bunkerUri WITHOUT the secret for persistence - secret is single-use for initial pairing
+      const cleanParams = new URLSearchParams();
+      relays.forEach(r => cleanParams.append('relay', r));
+      const bunkerUriForPersistence = `bunker://${pubkey}?${cleanParams.toString()}`;
+      // Return original URL for initial connection (may have secret), clean one for persistence
+      return { relays, pubkey, bunkerUri: url, bunkerUriForPersistence };
     } else {
       // Handle NIP-05 addresses
       const user = await getNip05For(url);
       if (user) {
         const pubkey = user.pubkey;
         const relays = user.nip46 && user.nip46.length > 0 ? user.nip46 : ['wss://relay.nsecbunker.com'];
-        // Construct bunker URI from NIP-05 info
+        // Construct bunker URI from NIP-05 info (no secret needed)
         const bunkerUri = `bunker://${pubkey}?${relays.map(r => `relay=${encodeURIComponent(r)}`).join('&')}`;
         return {
           pubkey,
           relays,
           bunkerUri,
+          bunkerUriForPersistence: bunkerUri, // Same as bunkerUri since NIP-05 doesn't include secrets
         };
       }
     }
@@ -254,8 +262,12 @@ export const NgineProvider = ({ links, children, enableFiatRates = false }: Ngin
       accountManager.addAccount(account);
       accountManager.setActive(account);
 
-      // Save to storage (using the bunker URI)
-      saveAccountToStorage(account, 'bunker', bunkerUri);
+      // Save bunker URI (without secret) and local signer key for session persistence across reloads
+      const persistData: BunkerPersistData = {
+        bunkerUri: settings.bunkerUriForPersistence,
+        localKey: bytesToHex(signer.signer.key),
+      };
+      saveAccountToStorage(account, 'bunker', JSON.stringify(persistData));
       saveActiveAccount(pubkey);
 
       setSession({
