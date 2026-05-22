@@ -4,7 +4,7 @@ import { NostrConnectSigner } from 'applesauce-signers';
 import { NostrConnectAccount } from 'applesauce-accounts/accounts';
 import { useAccountManager } from 'applesauce-react/hooks';
 import { saveAccountToStorage, saveActiveAccount, type BunkerPersistData } from '../../nostr/accountPersistence';
-import { bytesToHex } from '@noble/hashes/utils';
+import { bytesToHex } from '@noble/hashes/utils.js';
 import { DEFAULT_RELAYS, subscriptionMethod, publishMethod } from '../../nostr/core';
 import { appName, publicUrl } from '../env';
 

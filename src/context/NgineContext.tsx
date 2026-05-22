@@ -13,8 +13,7 @@ import {
   ReadonlyAccount,
 } from 'applesauce-accounts/accounts';
 import { ExtensionSigner, NostrConnectSigner, PrivateKeySigner } from 'applesauce-signers';
-import { EventFactory } from 'applesauce-core';
-import { AccountsProvider, EventStoreProvider, FactoryProvider } from 'applesauce-react/providers';
+import { AccountsProvider, EventStoreProvider } from 'applesauce-react/providers';
 import { useActiveAccount } from 'applesauce-react/hooks';
 
 // Local imports
@@ -27,7 +26,7 @@ import {
   restoreAccountsToManager,
   type BunkerPersistData,
 } from '../nostr/accountPersistence';
-import { bytesToHex } from '@noble/hashes/utils';
+import { bytesToHex } from '@noble/hashes/utils.js';
 
 import useRates from '../hooks/useRates';
 import useLatestEvent from '../hooks/useLatestEvent';
@@ -35,13 +34,12 @@ import { sessionAtom, relayListAtom, followsAtom, ratesAtom } from '../state/ato
 import { Links } from '../types/nostr';
 import { getNip05For } from '../utils/nip05';
 
-// Create AccountManager and EventFactory at module level
+// Create AccountManager at module level
 const accountManager = new AccountManager();
 registerCommonAccountTypes(accountManager);
-const factory = new EventFactory({ signer: accountManager.signer });
 
 // Export for use elsewhere
-export { accountManager, factory };
+export { accountManager };
 
 interface NgineContextProps {
   nip07Login: () => Promise<string | undefined>;
@@ -401,8 +399,7 @@ export const NgineProvider = ({ links, children, enableFiatRates = false }: Ngin
   return (
     <AccountsProvider manager={accountManager}>
       <EventStoreProvider eventStore={eventStore}>
-        <FactoryProvider factory={factory}>
-          <NgineContext.Provider
+        <NgineContext.Provider
             value={{
               nip07Login,
               nip46Login,
@@ -420,9 +417,8 @@ export const NgineProvider = ({ links, children, enableFiatRates = false }: Ngin
               children
             )}
           </NgineContext.Provider>
-        </FactoryProvider>
-      </EventStoreProvider>
-    </AccountsProvider>
+        </EventStoreProvider>
+      </AccountsProvider>
   );
 };
 

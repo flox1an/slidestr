@@ -19,7 +19,7 @@ export function useLnurl(profile: ProfileContent | undefined) {
   const [data, setData] = useState<LNURLService | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const lastKey = useRef<string | undefined>();
+  const lastKey = useRef<string | undefined>(undefined);
 
   const key = profile?.lud16;
 

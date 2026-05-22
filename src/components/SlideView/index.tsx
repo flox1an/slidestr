@@ -22,9 +22,9 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
   const [activeImages, setActiveImages] = useState<NostrImage[]>([]);
   const history = useRef<NostrImage[]>([]);
   const [paused, setPaused] = useState(false);
-  const upcomingImage = useRef<NostrImage>();
+  const upcomingImage = useRef<NostrImage>(undefined);
   const [loading, setLoading] = useState(true);
-  const viewTimeoutHandle = useRef<ReturnType<typeof setTimeout>>();
+  const viewTimeoutHandle = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [activeNpub, setActiveNpub] = useState<string | undefined>(undefined);
   const [slideShowStarted, setSlideShowStarted] = useState(false);
   const [activeContent, setActiveContent] = useState<string | undefined>(undefined);

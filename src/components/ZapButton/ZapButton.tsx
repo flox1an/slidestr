@@ -15,7 +15,7 @@ interface ZapButtonProps {
 const LONG_PRESS_DURATION = 500;
 
 const ZapButton = ({ zapState, totalSats, onQuickZap, onOpenModal, disabled }: ZapButtonProps) => {
-  const pressTimer = useRef<ReturnType<typeof setTimeout>>();
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const isLongPressRef = useRef(false);
 
   useEffect(() => {
