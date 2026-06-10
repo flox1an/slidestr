@@ -33,42 +33,145 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.top-right-controls img.profile {
-  width: 3em;
-  height: 3em;
-  border-radius: 12px;
-  margin-left: 0.5em;
-  vertical-align: middle;
-  cursor: pointer;
+.account-menu {
+  position: relative;
 }
 
-.top-right-controls .wallet-btn-header {
+.account-menu-trigger {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 6px;
   cursor: pointer;
-  width: 48px;
-  height: 48px;
-  padding: 0;
+  padding: 4px 8px 4px 4px;
   border: none;
-  background: transparent;
-  border-radius: 50%;
+  border-radius: 14px;
   transition: background-color 0.2s;
 }
 
-.top-right-controls .wallet-btn-header:hover {
+.account-menu-trigger:hover,
+.account-menu-trigger[aria-expanded='true'] {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.top-right-controls .wallet-btn-header svg {
+.account-menu-trigger img.profile,
+.profile-fallback {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+
+.account-menu-trigger img.profile {
+  display: block;
+  object-fit: cover;
+}
+
+.profile-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.profile-fallback svg {
   width: 24px;
   height: 24px;
+}
+
+.account-chevron {
+  display: inline-flex;
+  align-items: center;
   color: white;
 }
 
-.top-right-controls .wallet-balance {
-  font-size: 14px;
-  font-weight: 500;
+.account-chevron svg {
+  width: 18px;
+  height: 18px;
+}
+
+.account-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(280px, calc(100vw - 32px));
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(20, 20, 22, 0.96);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38);
   color: white;
+  backdrop-filter: blur(14px);
+}
+
+.account-menu-user {
+  padding: 8px 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 6px;
+}
+
+.account-menu-label {
+  margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.account-menu-name,
+.account-menu-npub {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-menu-name {
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.account-menu-npub {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.account-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.account-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.account-menu-item.danger:hover {
+  background-color: rgba(255, 82, 82, 0.18);
+}
+
+.account-menu-item svg {
+  flex: 0 0 auto;
+}
+
+.account-menu-item span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.account-menu-item small {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  font-weight: 500;
 }
