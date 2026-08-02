@@ -16,6 +16,7 @@ import { adultContentTagsMap, adultNPubs, blockedPublicKeysMap, mixedAdultNPubs,
 import SlideView from './SlideView';
 import { nip19 } from 'nostr-tools';
 import uniqBy from 'lodash/uniqBy';
+import { getSeenRelays } from 'applesauce-core/helpers';
 import AdultContentInfo from './AdultContentInfo';
 import useNav, { ContentType } from '../utils/useNav';
 import { useGlobalState } from '../utils/globalState';
@@ -175,20 +176,23 @@ const SlideShow = () => {
             }
           }
 
-          // Convert reposts to the original event
+          const relayHints = [...(getSeenRelays(event) ?? [])];
+
+          // Convert reposts to the original event while retaining its relay hint.
           if (event.kind === 6 && event.content) {
             try {
               const repostedEvent = JSON.parse(event.content);
               if (repostedEvent) {
+                const repostRelayHint = event.tags.find(t => t[0] === 'e')?.[2];
                 event = repostedEvent;
-                //event.isRepost = true;
+                if (repostRelayHint) relayHints.unshift(repostRelayHint);
               }
-            } catch (e) {
-              // ingore, the content is no valid json
+            } catch {
+              // Ignore invalid repost content.
             }
           }
 
-          return { event };
+          return { event, relayHints };
         })
     );
   }, [events]);
@@ -283,6 +287,7 @@ const SlideShow = () => {
               timestamp: p.event.created_at,
               noteId: p.event.id || '',
               tags: p.event.tags?.filter((t: string[]) => t[0] === 't').map((t: string[]) => t[1].toLowerCase()) || [],
+              relayHints: p.relayHints,
             }));
         })
         .filter(i => settings.type == 'all' || settings.type == i.type),

@@ -6,6 +6,7 @@ import { ContentType } from '../utils/useNav';
 
 export type Post = {
   event: NostrEvent;
+  relayHints: string[];
   wasZapped?: boolean;
   wasLiked?: boolean;
 };
@@ -20,6 +21,7 @@ export type NostrImage = {
   noteId: string;
   type: ContentType;
   post: Post;
+  relayHints: string[];
 };
 
 export const buildFilter = (tags: string[], authors: string[], withReposts = false) => {

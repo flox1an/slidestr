@@ -5,10 +5,11 @@ import { useLnurl, loadInvoice, createZapRequestEvent } from '../nostr/lnurl';
 import { payInvoiceViaNWC } from '../nostr/nwc';
 import useProfile from '../hooks/useProfile';
 import { relayPool, eventStore, DEFAULT_RELAYS } from '../nostr/core';
-import { getWriteRelays, getInboxRelays } from '../nostr/relays';
+import { getEventRelayHint, getInboxRelays, getPublicationRelays } from '../nostr/relays';
 import { NostrImage } from '../components/nostrImageDownload';
-import { nip19 } from 'nostr-tools';
+import { kinds, nip19 } from 'nostr-tools';
 import useReposts from './useReposts';
+import useLatestEvent from '../hooks/useLatestEvent';
 
 export type HeartState = 'none' | 'liked' | 'liking';
 export type ZapState = 'none' | 'zapped' | 'zapping' | 'error';
@@ -20,6 +21,15 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
   const session = useSession();
   const reposts = useReposts(userNPub);
   const nwc = useNWC();
+
+  // Load the target author's NIP-65 relay list before publishing an interaction.
+  useLatestEvent(
+    {
+      kinds: [kinds.RelayList],
+      authors: currentImageData?.authorId ? [currentImageData.authorId] : [],
+    },
+    { disable: !currentImageData?.authorId, closeOnEose: true }
+  );
 
   // Get author profile for LNURL
   const authorProfile = useProfile(currentImageData?.authorId || '');
@@ -123,13 +133,15 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     setHeartState('liking');
     if (!session?.pubkey) return;
 
+    const relayHint = getEventRelayHint(currentImage.post.event, currentImage.relayHints);
     const unsigned = {
       kind: 7, // Reaction
       created_at: Math.floor(Date.now() / 1000),
       content: '+',
       tags: [
-        ['e', currentImage.noteId],
+        ['e', currentImage.noteId, relayHint ?? ''],
         ['p', currentImage.authorId],
+        ['k', String(currentImage.post.event.kind)],
       ],
     };
 
@@ -139,7 +151,7 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
       return;
     }
 
-    await relayPool.publish(getWriteRelays(session.pubkey), signed);
+    await relayPool.publish(getPublicationRelays(session.pubkey, [currentImage.authorId]), signed);
     eventStore.add(signed);
     setHeartState('liked');
     currentImage.post.wasLiked = true;
@@ -263,8 +275,11 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     const orgEvent = currentImageData?.post.event;
     if (!orgEvent || !orgEvent.id) return;
 
-    // Use a default relay URL since nostr-tools events don't track relay origin
-    const relayUrl = 'wss://relay.damus.io';
+    const relayUrl = getEventRelayHint(orgEvent, currentImageData.relayHints);
+    if (!relayUrl) {
+      console.warn('Cannot repost event without a source relay:', orgEvent.id);
+      return;
+    }
 
     const unsigned = {
       kind: 6, // Repost
@@ -279,7 +294,7 @@ const useZapsAndReations = (currentImageData?: NostrImage, userNPub?: string) =>
     const signed = await sign(unsigned);
     if (!signed) return;
 
-    await relayPool.publish(getWriteRelays(session.pubkey), signed);
+    await relayPool.publish(getPublicationRelays(session.pubkey, [orgEvent.pubkey]), signed);
     eventStore.add(signed);
   };
 

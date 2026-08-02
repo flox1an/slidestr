@@ -4,7 +4,6 @@
     "wss://nos.lol",
     "wss://relay.primal.net",
     "wss://relay.nostr.band",
-    "wss://relay.damus.io"
   ],
   "servers": [
     "https://blossom.band/",

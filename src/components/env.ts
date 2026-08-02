@@ -566,7 +566,6 @@ export const spamAccounts = [];
 
 export const defaultRelays = [
   // 'ws://localhost:4869',
-  'wss://relay.damus.io',
   'wss://relay.snort.social',
   'wss://nos.lol',
   'wss://nostr.wine',
