@@ -1,31 +1,29 @@
-# use the official Bun image
-# see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:1 as base
-WORKDIR /usr/src/app
-
-# install dependencies into temp directory
-# this will cache them and speed up future builds
-FROM base AS install
-RUN mkdir -p /temp/dev
-COPY package.json bun.lockb /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
-
-# install with --production (exclude devDependencies)
-RUN mkdir -p /temp/prod
-COPY package.json bun.lockb /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
-
-# copy node_modules from temp directory
-# then copy all (non-ignored) project files into the image
-FROM base AS prerelease
-COPY --from=install /temp/dev/node_modules node_modules
+# syntax=docker/dockerfile:1
+# Build im Node-Container, Auslieferung als nginx:alpine. Laeuft auf dem Forgejo-Runner
+# (home-network, Ticket 040); gleiche nginx-Konfiguration wie ops/static-site.
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
+RUN npm run build
 
-# [optional] tests & build
-ENV NODE_ENV=production
-RUN bun test
-RUN bun run build
-
-# copy production dependencies and source code into final image
-FROM nginx:latest AS release
-COPY --from=prerelease /usr/src/app/dist /usr/share/nginx/html
+FROM nginx:alpine
+COPY <<'EOF' /etc/nginx/conf.d/default.conf
+server {
+  listen 80;
+  root /usr/share/nginx/html;
+  index index.html;
+  location /assets/ {
+    expires 30d;
+    add_header Cache-Control "public, immutable";
+  }
+  location = /index.html {
+    add_header Cache-Control "no-cache";
+  }
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+}
+EOF
+COPY --from=build /app/dist /usr/share/nginx/html/
