@@ -25,7 +25,9 @@ ensureCache();
 
 export async function cacheRequest(filters: Filter[]) {
   const db = await ensureCache();
-  return getEventsForFilters(db, filters);
+  // Cache wird nur aus dem verifizierten EventStore befuellt (persistEventsToCache),
+  // daher ist der RumorEvent-Zweig von nostr-idbs StoredEvent hier ausgeschlossen.
+  return getEventsForFilters(db, filters) as Promise<NostrEvent[]>;
 }
 
 // Initialize EventStore and RelayPool as singletons
