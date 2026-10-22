@@ -2,6 +2,7 @@
 # Build im Node-Container, Auslieferung als nginx:alpine. Laeuft auf dem Forgejo-Runner
 # (home-network, Ticket 040); gleiche nginx-Konfiguration wie ops/static-site.
 FROM node:22-alpine AS build
+RUN apk update && apk upgrade --no-cache && apk add --no-cache ca-certificates && update-ca-certificates
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -9,11 +10,16 @@ COPY . .
 RUN npm run build
 
 FROM nginx:alpine
+RUN apk update && apk upgrade --no-cache && apk add --no-cache ca-certificates && update-ca-certificates
 COPY <<'EOF' /etc/nginx/conf.d/default.conf
 server {
   listen 80;
   root /usr/share/nginx/html;
   index index.html;
+  location = /.well-known/nostr.json {
+    add_header Access-Control-Allow-Origin "*" always;
+  }
+
   location /assets/ {
     expires 30d;
     add_header Cache-Control "public, immutable";
