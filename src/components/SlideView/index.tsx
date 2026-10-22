@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import Slide from './Slide';
 import { NostrImage, urlFix } from '../nostrImageDownload';
@@ -30,44 +30,7 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
   const { activeProfile } = useActiveProfile(settings);
   useTitle(settings, activeProfile);
 
-  const queueNextImage = (waitTime: number) => {
-    clearTimeout(viewTimeoutHandle.current);
-    viewTimeoutHandle.current = setTimeout(() => {
-      if (!paused) {
-        setLoading(false);
-        animateImages();
-        queueNextImage(8000);
-      }
-    }, waitTime);
-  };
-
-  const nextImage = () => {
-    setPaused(false);
-    setActiveImages([]);
-    queueNextImage(0);
-  };
-
-  const previousImage = () => {
-    setPaused(false);
-
-    if (history.current.length > 1) {
-      const previousImage = history.current.pop(); // remove current image
-      previousImage && images.current.push(previousImage); // add current image back to the pool
-      const lastImage = history.current[history.current.length - 1]; // show preview image but leave in the history
-      if (lastImage) {
-        setActiveImages([lastImage]);
-        upcomingImage.current = lastImage;
-        queueNextImage(8000); // queue next image for 8s after showing this one
-      }
-    }
-  };
-
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => nextImage(),
-    onSwipedRight: () => previousImage(),
-  });
-
-  const animateImages = () => {
+  const animateImages = useCallback(() => {
     console.log(`animateImages ${images.current.length}`);
 
     setActiveImages(activeImages => {
@@ -90,7 +53,49 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
       }
       return newActiveImages;
     });
+  }, [images]);
+
+  const queueNextImage = useCallback(
+    (waitTime: number) => {
+      clearTimeout(viewTimeoutHandle.current);
+      viewTimeoutHandle.current = setTimeout(() => {
+        if (!paused) {
+          setLoading(false);
+          animateImages();
+          queueNextImage(8000);
+        }
+      }, waitTime);
+    },
+    [paused, animateImages]
+  );
+
+  const nextImage = () => {
+    setPaused(false);
+    setActiveImages([]);
+    queueNextImage(0);
   };
+
+  const previousImage = () => {
+    setPaused(false);
+
+    if (history.current.length > 1) {
+      const previousImage = history.current.pop(); // remove current image
+      if (previousImage) {
+        images.current.push(previousImage); // add current image back to the pool
+      }
+      const lastImage = history.current[history.current.length - 1]; // show preview image but leave in the history
+      if (lastImage) {
+        setActiveImages([lastImage]);
+        upcomingImage.current = lastImage;
+        queueNextImage(8000); // queue next image for 8s after showing this one
+      }
+    }
+  };
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => nextImage(),
+    onSwipedRight: () => previousImage(),
+  });
 
   useEffect(() => {
     // console.log(`slideShowStarted = ${slideShowStarted}, images = ${images.current.length}`);
@@ -100,7 +105,7 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
       setSlideShowStarted(true);
       queueNextImage(100);
     }
-  }, [images.current.length]);
+  }, [images.current.length, images, queueNextImage, slideShowStarted]);
 
   const onKeyDown = (event: KeyboardEvent) => {
     const target = event.target as HTMLElement;
@@ -127,6 +132,9 @@ const SlideView = ({ settings, images, setViewMode }: SlideViewProps) => {
       console.log(`cleaning timeout in useEffect[] destructor `);
       clearTimeout(viewTimeoutHandle.current);
     };
+    // Absichtlich nur beim Mount: Re-Registrierung wuerde im Cleanup den
+    // ausstehenden Slide-Timer killen.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useDebouncedEffect(

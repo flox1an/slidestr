@@ -34,6 +34,9 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
       deletable: (previousDeletable.includes(tag) || userTags.includes(tag)) && !currentSettings.tags.includes(tag),
     }));
     setSelectedTags([...selected]);
+    // selectedTags als Dep wuerde eine Schleife erzeugen: der Effect schreibt
+    // per setSelectedTags genau diesen State und wuerde sich selbst triggern.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSettings, userTags]);
 
   const selectTag = (tagName: string) => {
@@ -44,7 +47,7 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
     }
   };
 
-  const onEditKeyDown = (e: any) => {
+  const onEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const target = e.target as HTMLElement;
     if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
       return; // Do not handle key events if focused on an input or textarea
@@ -52,7 +55,7 @@ const TagEditor = ({ selectedTags, setSelectedTags }: TagEditorProps) => {
 
     e.stopPropagation();
     if (e.key === 'Enter') {
-      const newTag = (e.target.value as string).toLowerCase();
+      const newTag = (e.target as HTMLInputElement).value.toLowerCase();
       setUserTags([...userTags, newTag]);
       setSelectedTags([...selectedTags, { name: newTag, selected: true, deletable: true }]);
       setEditMode(false);

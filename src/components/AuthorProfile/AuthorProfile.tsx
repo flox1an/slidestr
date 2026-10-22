@@ -42,9 +42,9 @@ const AuthorProfile = ({
         <div
           className="author-image"
           onClick={() => {
-            setViewMode && setViewMode('grid');
+            setViewMode?.('grid');
             if (npub) {
-              onBeforeNavigate && onBeforeNavigate();
+              onBeforeNavigate?.();
               nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined, topic: undefined, follows: false });
             }
           }}
@@ -56,9 +56,9 @@ const AuthorProfile = ({
         <span
           className="author-name"
           onClick={() => {
-            setViewMode && setViewMode('grid');
+            setViewMode?.('grid');
             if (npub) {
-              onBeforeNavigate && onBeforeNavigate();
+              onBeforeNavigate?.();
               nav({ ...currentSettings, tags: [], npubs: [npub], list: undefined, topic: undefined, follows: false });
             }
           }}

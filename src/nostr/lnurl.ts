@@ -157,7 +157,6 @@ export async function loadInvoice(payService: LNURLService, amount: number, comm
   }
 
   const baseUrl = `${callback.protocol}//${callback.host}${callback.pathname}`;
-  // @ts-ignore
   const queryJoined = [...query.entries()].map(v => `${v[0]}=${encodeURIComponent(v[1])}`).join('&');
   try {
     const rsp = await fetch(`${baseUrl}?${queryJoined}`);

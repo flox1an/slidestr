@@ -31,6 +31,9 @@ const ScrollView = ({ settings, images, currentImage, setCurrentImage, setViewMo
       window.location.hash = '#sc' + currentImage;
     }
     containerRef.current?.focus();
+    // Absichtlich nur beim Mount: Hash-Normalisierung und Autofocus gehoeren
+    // in die Initialisierung.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

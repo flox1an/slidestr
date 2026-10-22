@@ -22,7 +22,6 @@ export default function FollowButton({ pubkey, className, ...rest }: FollowButto
   const session = useSession();
   const [isBusy, setIsBusy] = useState(false);
   const [contacts, setContacts] = useAtom(followsAtom);
-  const loggedInUser = session?.pubkey;
   const canSign = !!session && session.method !== 'npub';
 
   const isFollowed = useMemo(() => {

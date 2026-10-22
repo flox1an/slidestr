@@ -71,6 +71,9 @@ export default function useEvents(
       subscriptionRef.current = null;
       loaderRef.current = null;
     };
+    // id = SHA-256 des Filters ersetzt die Objekt-Identitaet: Resubscribe nur
+    // bei inhaltlicher Aenderung, nicht bei jedem Render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, opts?.disable]);
 
   // Create observable for timeline from event store with throttling

@@ -1,15 +1,13 @@
-import { useEffect, useMemo, useState, useRef, useCallback } from 'react';
-import { NostrImage, urlFix } from '../nostrImageDownload';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { NostrImage } from '../nostrImageDownload';
 import './MasonryView.css';
 import { Settings } from '../../utils/useNav';
-import AuthorProfile from '../AuthorProfile/AuthorProfile';
 import { useSwipeable } from 'react-swipeable';
 import useActiveProfile from '../../utils/useActiveProfile';
 import { ViewMode } from '../SlideShow';
 import { useGlobalState } from '../../utils/globalState';
 import MasonryImage from './MasonryImage';
 import useWindowSize from '../../utils/useWindowSize';
-import { topics } from '../env';
 import useTitle from '../../utils/useTitle';
 import PageHeader from '../PageHeader/PageHeader';
 import SearchResults from '../SearchResults/SearchResults';
@@ -30,7 +28,7 @@ type MImage = NostrImage & {
 };
 
 const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewMode, loadMore, loading, hasMore }: MasonryViewProps) => {
-  const { activeProfile, activeNpub } = useActiveProfile(settings);
+  const { activeProfile } = useActiveProfile(settings);
   useTitle(settings, activeProfile);
   const [_, setState] = useGlobalState();
   const { width } = useWindowSize();
@@ -69,15 +67,15 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
     [images, columnCount] // settings is not used here, but we need to include it to trigger a re-render when it changes
   );
   // console.log(sortedImages);
-  const showNextImage = () => {
+  const showNextImage = useCallback(() => {
     setCurrentImage(idx => (idx !== undefined ? idx + 1 : 0));
-  };
+  }, [setCurrentImage]);
 
-  const showPreviousImage = () => {
+  const showPreviousImage = useCallback(() => {
     setCurrentImage(idx => (idx !== undefined && idx > 0 ? idx - 1 : idx));
-  };
+  }, [setCurrentImage]);
 
-  const onKeyDown = (event: KeyboardEvent) => {
+  const onKeyDown = useCallback((event: KeyboardEvent) => {
     //console.log(event);
     // Check if the focused element is an input or textarea
     const target = event.target as HTMLElement;
@@ -94,7 +92,7 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
     if (event.key === 'Escape') {
       setCurrentImage(undefined);
     }
-  };
+  }, [setCurrentImage, showNextImage, showPreviousImage]);
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
@@ -127,16 +125,21 @@ const MasonryView = ({ settings, images, currentImage, setCurrentImage, setViewM
 
   useEffect(() => {
     document.body.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.removeEventListener('keydown', onKeyDown);
+    };
+  }, [onKeyDown]);
+
+  useEffect(() => {
     setState({ activeImage: undefined });
 
     if (currentImage) {
       console.log('setting hash to #g' + currentImage);
       window.location.hash = '#g' + currentImage;
     }
-
-    return () => {
-      document.body.removeEventListener('keydown', onKeyDown);
-    };
+    // Absichtlich nur beim Mount: Hash-Normalisierung und Global-State-Reset
+    // gehoeren in die Initialisierung.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

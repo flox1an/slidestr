@@ -41,16 +41,12 @@ export function dedupe<T>(evs: T[]): T[] {
 export function parseJSON<T>(raw: string, def: T) {
   try {
     return JSON.parse(raw);
-  } catch (e) {
+  } catch {
     return def;
   }
 }
 
-interface MyObject {
-  [key: string]: any;
-}
-
-export function hashSha256(obj: MyObject): string {
+export function hashSha256(obj: object): string {
   const jsonString = JSON.stringify(obj);
 
   const hashBuffer = sha256(new TextEncoder().encode(jsonString));

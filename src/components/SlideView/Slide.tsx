@@ -15,11 +15,14 @@ type SlideProps = {
 const Slide = ({ url, paused, type, noteId, onAnimationEnded, animationDuration = 12 }: SlideProps) => {
   useEffect(() => {
     const handle = setTimeout(() => {
-      onAnimationEnded && onAnimationEnded();
+      onAnimationEnded?.();
     }, animationDuration * 1000);
     return () => {
       clearTimeout(handle);
     };
+    // Absichtlich nur beim Mount: Der Timer darf bei Parent-Re-Render
+    // (neue onAnimationEnded-Identitaet) nicht neu gestartet werden.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return type === 'image' ? (

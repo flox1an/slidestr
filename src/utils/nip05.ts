@@ -27,12 +27,12 @@ export interface NIP05Result {
   nip46?: { [pubkey: string]: string[] };
 }
 
-function parseNIP05Result(json: any): NIP05Result {
+function parseNIP05Result(json: Partial<NIP05Result>): NIP05Result {
   const result: NIP05Result = {
     names: {},
   };
 
-  for (const [name, pubkey] of Object.entries(json.names)) {
+  for (const [name, pubkey] of Object.entries(json.names ?? {})) {
     if (typeof name === 'string' && typeof pubkey === 'string') {
       result.names[name] = pubkey;
     }

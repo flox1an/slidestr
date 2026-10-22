@@ -20,7 +20,9 @@ const useBookMarks = (pubkey?: string, activeImage?: NostrImage) => {
   });
 
   useEffect(() => {
-    bookMarkListEvent != undefined && setBookMarkList(bookMarkListEvent);
+    if (bookMarkListEvent != undefined) {
+      setBookMarkList(bookMarkListEvent);
+    }
   }, [bookMarkListEvent]);
 
   const publishBookMarks = async (pubkey: string, tags: string[][]) => {

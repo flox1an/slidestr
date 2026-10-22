@@ -49,7 +49,7 @@ export function getZapRequest(zap: NostrEvent): NostrEvent | undefined {
         zapRequest = decodeURIComponent(zapRequest);
       }
       return JSON.parse(zapRequest);
-    } catch (e) {
+    } catch {
       console.warn('Invalid zap', zapRequest);
     }
   }
@@ -110,7 +110,6 @@ export function zapsSummary(zaps: NostrEvent[]): ZapsSummary {
   const zapRequests = zaps
     .map(parseZap)
     .filter(z => z !== null)
-    // @ts-ignore
     .sort((a, b) => b.amount - a.amount) as ZapRequest[];
   const total = zapRequests.reduce((acc, { amount }) => {
     return acc + amount;

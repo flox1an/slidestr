@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { useNDK } from '../../context/NgineContext';
 import useEvents from '../../hooks/useEvents';
 import { kinds } from 'nostr-tools';
 import AuthorProfile from '../AuthorProfile/AuthorProfile';
@@ -8,7 +7,7 @@ import { nip19 } from 'nostr-tools';
 import { ProfileContent } from '../../hooks/useProfile';
 import { ViewMode } from '../SlideShow';
 import './SearchResults.css';
-import { defaultHashTags, hashtags, publicUrl, topics, visibleHashTags } from '../env';
+import { hashtags, publicUrl, topics, visibleHashTags } from '../env';
 import useNav from '../../utils/useNav';
 import usePeopleLists from '../../utils/useLists';
 import { useSession } from '../../state/atoms';
@@ -21,7 +20,6 @@ type SearchResultsProps = {
 };
 
 function SearchResults({ searchText, setSearchText, setViewMode }: SearchResultsProps) {
-  const ndk = useNDK();
   const session = useSession();
   const lists = usePeopleLists(session?.pubkey);
   const { nav, currentSettings } = useNav();
@@ -52,7 +50,7 @@ function SearchResults({ searchText, setSearchText, setViewMode }: SearchResults
       Object.entries(topics)
         .map(t => ({ key: t[0], ...t[1] }))
         .filter(t => !t.nsfw || showAdult),
-    [topics, showAdult]
+    [showAdult]
   );
 
   const hashtagResult = useMemo(() => {
@@ -61,7 +59,7 @@ function SearchResults({ searchText, setSearchText, setViewMode }: SearchResults
     } else {
       return [];
     }
-  }, [hashtags, searchText]);
+  }, [lowerSearchText]);
 
   const topicResult = useMemo(() => {
     return lowerSearchText == undefined
@@ -72,7 +70,7 @@ function SearchResults({ searchText, setSearchText, setViewMode }: SearchResults
             (t.description && t.description.toLowerCase().indexOf(lowerSearchText) >= 0) ||
             t.tags.some(tag => tag.indexOf(lowerSearchText) >= 0)
         );
-  }, [allTopics, searchText]);
+  }, [allTopics, lowerSearchText]);
 
   const yourListsResult = useMemo(() => {
     return lowerSearchText == undefined
@@ -82,7 +80,7 @@ function SearchResults({ searchText, setSearchText, setViewMode }: SearchResults
             (t.name && t.name.toLowerCase().indexOf(lowerSearchText) >= 0) ||
             (t.description && t.description.toLowerCase().indexOf(lowerSearchText) >= 0)
         );
-  }, [lists, searchText]);
+  }, [lists, lowerSearchText]);
 
   return (
     <div className="search-results">

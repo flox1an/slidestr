@@ -12,7 +12,7 @@ import {
   PrivateKeyAccount,
   ReadonlyAccount,
 } from 'applesauce-accounts/accounts';
-import { ExtensionSigner, NostrConnectSigner, PrivateKeySigner } from 'applesauce-signers';
+import { NostrConnectSigner } from 'applesauce-signers';
 import { AccountsProvider, EventStoreProvider } from 'applesauce-react/providers';
 import { useActiveAccount } from 'applesauce-react/hooks';
 
@@ -101,7 +101,7 @@ function SessionProvider({ pubkey, children }: { pubkey: string; children: React
         setContacts(contacts);
       }
     }
-  }, [contacts]);
+  }, [contacts, contactList?.created_at, setContacts]);
 
   // Relays
   const relays = useLatestEvent(
@@ -124,7 +124,7 @@ function SessionProvider({ pubkey, children }: { pubkey: string; children: React
         syncUserRelays(pubkey);
       }
     }
-  }, [relays]);
+  }, [relays, relayList?.created_at, setRelayList, pubkey]);
 
   return children;
 }
@@ -161,7 +161,7 @@ function AccountRestoreInit() {
         }
       });
     }
-  }, [restored]);
+  }, [restored, setSession]);
 
   return null;
 }
@@ -180,7 +180,7 @@ export const NgineProvider = ({ links, children, enableFiatRates = false }: Ngin
 
   useEffect(() => {
     setRates(rates);
-  }, [rates]);
+  }, [rates, setRates]);
 
   async function nip07Login(): Promise<string | undefined> {
     try {

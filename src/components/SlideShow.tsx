@@ -1,5 +1,5 @@
 import './SlideShow.css';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   NostrImage,
   buildFilter,
@@ -36,10 +36,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { followsAtom, useSession } from '../state/atoms';
 import IconRepost from './Icons/IconRepost';
-import useProfile from '../hooks/useProfile';
 import IconBookmark from './Icons/IconBookmark';
 import useBookMarks from '../utils/useBookMarks';
-import IconFolderPlus from './Icons/IconFolderPlus';
 
 // type AlbyNostr = typeof window.nostr & { enabled: boolean };
 
@@ -97,11 +95,10 @@ const SlideShow = () => {
   const [imageIdx, setImageIdx] = useState<number | undefined>();
 
   const session = useSession();
-  const profile = useProfile(session?.pubkey || ' ');
   const userNPub = session ? (nip19.npubEncode(session?.pubkey) as string) : undefined;
   const { bookmarkClick, bookmarkState } = useBookMarks(session?.pubkey, state.activeImage);
 
-  const { zapClick, heartClick, zapState, heartState, repostClick, repostState, generateInvoice, hasNwc, hasLnurl } = useZapsAndReations(
+  const { zapClick, heartClick, zapState, heartState, repostClick, repostState, generateInvoice, hasLnurl } = useZapsAndReations(
     state.activeImage,
     userNPub
   );
@@ -110,8 +107,6 @@ const SlideShow = () => {
   const navigate = useNavigate();
   const listAuthors = useAuthorsFromList(settings.list);
   const [contacts] = useAtom(followsAtom);
-
-  function saveCollectionClick() {}
 
   const filter = useMemo(() => {
     const authorsToQuery = settings.follows
@@ -195,7 +190,7 @@ const SlideShow = () => {
           return { event, relayHints };
         })
     );
-  }, [events]);
+  }, [events, settings.showAdult, settings.showReplies, settings.tags.length]);
   /*
   useEffect(() => {
     const fetch = () => {
@@ -295,7 +290,7 @@ const SlideShow = () => {
     );
   }, [posts, settings.type]);
 
-  const onKeyDown = (event: KeyboardEvent) => {
+  const onKeyDown = useCallback((event: KeyboardEvent) => {
     // Check if the focused element is an input or textarea
     const target = event.target as HTMLElement;
     if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
@@ -313,14 +308,14 @@ const SlideShow = () => {
     if (event.key.toLowerCase() === 'x') {
       setViewMode('scroll');
     }
-  };
+  }, [nav, settings]);
 
   useEffect(() => {
     document.body.addEventListener('keydown', onKeyDown);
     return () => {
       document.body.removeEventListener('keydown', onKeyDown);
     };
-  }, []);
+  }, [onKeyDown]);
 
   /*
   useEffect(() => {

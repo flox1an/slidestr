@@ -29,6 +29,9 @@ export default function useProfiles(pubkeys: string[]): ProfileContent[] {
     return combineLatest(profileObservables).pipe(
       map(profiles => profiles.filter((p): p is ProfileContent => p !== undefined))
     );
+    // Key = verkettete Pubkeys: verhindert Re-Creation bei Array-Identitaetswechsel
+    // mit gleichem Inhalt.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pubkeys.join(',')]);
 
   return useObservableState(profiles$, []);

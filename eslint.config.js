@@ -21,6 +21,23 @@ export default [
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'react-refresh/only-export-components': 'warn',
+      // _-Prefixed Namen sind bewusst ungenutzt (Platzhalter-Parameter, Destructuring)
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+        },
+      ],
+    },
+  },
+  {
+    // Context-/Provider-Dateien exportieren Components zusammen mit Hooks und
+    // Context-Objekten - die Fast-Refresh-Warnung ist hier erwartbar.
+    files: ['src/context/**', 'src/utils/globalState.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
     },
   },
 ];

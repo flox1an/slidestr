@@ -90,7 +90,7 @@ export async function payInvoiceViaNWC(
     }
 
     return { preimage: result.result?.preimage || '' };
-  } catch (err) {
+  } catch {
     return { error: 'NWC request timed out' };
   }
 }
@@ -154,7 +154,7 @@ export async function getBalanceViaNWC(
     // Balance is returned in msats, convert to sats
     const balanceMsats = result.result?.balance || 0;
     return { balance: Math.floor(balanceMsats / 1000) };
-  } catch (err) {
+  } catch {
     return { error: 'NWC request timed out' };
   }
 }

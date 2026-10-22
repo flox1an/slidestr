@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react';
 
-declare global {
-  interface Window {
-    localStorage: any;
-  }
-}
-
 const useUserTags = (): [string[], (tags: string[]) => void] => {
   const [userTags, setUserTags] = useState<string[]>([]);
 

@@ -46,6 +46,9 @@ export default function useLatestEvent(
       sub.unsubscribe();
       subscriptionRef.current = null;
     };
+    // id = SHA-256 des Filters ersetzt die Objekt-Identitaet: Resubscribe nur
+    // bei inhaltlicher Aenderung, nicht bei jedem Render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, opts?.disable]);
 
   // Create observable for timeline from event store and return first (latest) event
