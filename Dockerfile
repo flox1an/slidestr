@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Build im Node-Container, Auslieferung als nginx:alpine. Laeuft auf dem Forgejo-Runner
-# (home-network, Ticket 040); gleiche nginx-Konfiguration wie ops/static-site.
+# gleiche nginx-Konfiguration wie ops/static-site.
 FROM node:22-alpine AS build
 RUN apk update && apk upgrade --no-cache && apk add --no-cache ca-certificates && update-ca-certificates
 WORKDIR /app
